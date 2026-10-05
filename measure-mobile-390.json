@@ -1,0 +1,83 @@
+{
+  "cardCount": 12,
+  "cards": [
+    {
+      "h": 649.3,
+      "i": 0,
+      "label": "Корпус C · 1 эт.",
+      "labelFont": "14px",
+      "labelHeight": 21.7,
+      "labelLines": 1,
+      "labelWs": "normal",
+      "left": 18,
+      "num": "№401",
+      "pricePerFont": "15px",
+      "pricePerText": "527 100 ₸ за м²",
+      "title": "1-комнатная",
+      "top": 780.8,
+      "w": 354
+    },
+    {
+      "h": 649.3,
+      "i": 1,
+      "label": "Корпус A · 4 эт.",
+      "labelFont": "14px",
+      "labelHeight": 21.7,
+      "labelLines": 1,
+      "labelWs": "normal",
+      "left": 18,
+      "num": "№19",
+      "pricePerFont": "15px",
+      "pricePerText": "540 400 ₸ за м²",
+      "title": "1-комнатная",
+      "top": 1454,
+      "w": 354
+    },
+    {
+      "h": 649.3,
+      "i": 2,
+      "label": "Корпус C · 4 эт.",
+      "labelFont": "14px",
+      "labelHeight": 21.7,
+      "labelLines": 1,
+      "labelWs": "normal",
+      "left": 18,
+      "num": "№422",
+      "pricePerFont": "15px",
+      "pricePerText": "543 400 ₸ за м²",
+      "title": "1-комнатная",
+      "top": 2127.3,
+      "w": 354
+    },
+    {
+      "h": 649.3,
+      "i": 3,
+      "label": "Корпус A · 5 эт.",
+      "labelFont": "14px",
+      "labelHeight": 21.7,
+      "labelLines": 1,
+      "labelWs": "normal",
+      "left": 18,
+      "num": "№25",
+      "pricePerFont": "15px",
+      "pricePerText": "544 900 ₸ за м²",
+      "title": "1-комнатная",
+      "top": 2800.6,
+      "w": 354
+    }
+  ],
+  "device": {
+    "dpr": 1,
+    "h": 844,
+    "w": 390
+  },
+  "firstCardTopAfterScroll": 780.8,
+  "tagHeights": [
+    26,
+    26,
+    26,
+    26
+  ],
+  "ulClass": "mt-8 grid gap-6 sm:grid-cols-2 xl:grid-cols-3",
+  "ulParentClass": ""
+}

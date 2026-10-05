@@ -56,7 +56,11 @@ export function ApartmentCard({
   return (
     <article
       className={cn(
-        'card card-hover flex flex-col overflow-hidden',
+        // h-full: a grid item stretches to its row, but the card inside did not,
+        // so cards whose tag row wrapped to two lines were 30px taller than their
+        // neighbours and the rows looked ragged. With the card filling the row,
+        // `mt-auto` on the action block lines the buttons up across the row too.
+        'card card-hover flex h-full flex-col overflow-hidden',
         isSold && 'opacity-70 hover:opacity-100',
       )}
     >
