@@ -15,6 +15,7 @@ data/leads/
 npm-debug.log*
 
 # generated QA artefacts (recreate with `npm run qa`)
+qa-report.md
 qa-report.json
 qa-screenshots/
 
