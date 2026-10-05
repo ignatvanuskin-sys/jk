@@ -90,6 +90,7 @@ const ru = {
     documents: 'Документы',
     faq: 'Вопросы',
     contacts: 'Контакты',
+    more: 'Ещё',
     openMenu: 'Открыть меню',
     closeMenu: 'Закрыть меню',
     mainMenu: 'Основное меню',

@@ -87,16 +87,20 @@ export default async function LocaleLayout({
   const locale: Locale = raw;
   const dict = getDictionary(locale);
 
+  // The top row carries the five sections a buyer actually shops by. Everything
+  // else — including "About the complex" — lives behind the "More" menu: at six
+  // top-level items the row no longer fits the fixed 82rem shell, and the phone
+  // number and CTA were being pushed past the right edge.
   const navItems = [
     { href: '/apartments', label: dict.nav.apartments },
     { href: '/floorplans', label: dict.nav.floorplans },
-    { href: '/complex', label: dict.nav.complex },
     { href: '/infrastructure', label: dict.nav.infrastructure },
     { href: '/location', label: dict.nav.location },
     { href: '/construction', label: dict.nav.construction },
   ];
 
   const moreItems = [
+    { href: '/complex', label: dict.nav.complex },
     { href: '/mortgage', label: dict.nav.mortgage },
     { href: '/commercial', label: dict.nav.commercial },
     { href: '/parking', label: dict.nav.parking },
@@ -129,7 +133,7 @@ export default async function LocaleLayout({
               brandShort: PROJECT.shortName,
               navItems,
               moreItems,
-              moreLabel: dict.nav.complex,
+              moreLabel: dict.nav.more,
               consult: dict.cta.getConsultation,
               phoneDisplay: CONTACTS.phoneDisplay,
               phoneHref: CONTACTS.phoneHref,

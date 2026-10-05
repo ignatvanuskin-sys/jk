@@ -89,6 +89,7 @@ const kz: Dictionary = {
     documents: 'Құжаттар',
     faq: 'Сұрақтар',
     contacts: 'Байланыс',
+    more: 'Тағы',
     openMenu: 'Мәзірді ашу',
     closeMenu: 'Мәзірді жабу',
     mainMenu: 'Негізгі мәзір',

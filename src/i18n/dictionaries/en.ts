@@ -85,6 +85,7 @@ const en: Dictionary = {
     documents: 'Documents',
     faq: 'FAQ',
     contacts: 'Contacts',
+    more: 'More',
     openMenu: 'Open menu',
     closeMenu: 'Close menu',
     mainMenu: 'Main menu',
