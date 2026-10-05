@@ -513,7 +513,7 @@ const en: Dictionary = {
   documents: {
     eyebrow: 'Documents',
     title: 'Documents and transparency',
-    lead: 'The documents the developer publishes openly. Select a document to open its preview.',
+    lead: 'The documents the developer publishes openly. Select a document to see what it covers and request a copy.',
     types: {
       permit: 'Construction permit',
       guarantee: 'Single Operator guarantee',
