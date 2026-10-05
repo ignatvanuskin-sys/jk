@@ -1,0 +1,37 @@
+node_modules/
+.next/
+out/
+build/
+dist/
+
+# env — never commit real secrets
+.env
+.env.local
+.env*.local
+
+# runtime artefacts
+data/leads/
+*.log
+npm-debug.log*
+
+# generated QA artefacts (recreate with `npm run qa`)
+qa-report.json
+qa-screenshots/
+
+# intermediate image-generation output — the committed sources live in
+# public/images/raw/*.jpg, the optimised set in public/images/*.jpg
+public/images/raw/media-output/
+
+# os
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# editors
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
