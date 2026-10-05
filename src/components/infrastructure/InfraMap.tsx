@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 
 import { cn } from '@/lib/cn';
+import { useRailOverflow } from '@/hooks/useRailOverflow';
 
 export type InfraCategoryKey =
   | 'education'
@@ -112,6 +113,7 @@ export function InfraMap({
   objectsCountLabel: string;
 }) {
   const [category, setCategory] = useState<InfraCategoryKey | 'all'>('all');
+  const { ref: railRef, more: railMore } = useRailOverflow([category]);
 
   const visible = useMemo(
     () =>
@@ -129,7 +131,11 @@ export function InfraMap({
           ~340px column instead of scrolling inside it — and on a phone the chips
           past the viewport became unreachable. */}
       <div className="min-w-0">
-        <div className="scroll-x -mx-1 flex gap-1.5 px-1 pb-3">
+        <div
+          ref={railRef}
+          data-rail-more={railMore ? 'true' : undefined}
+          className="scroll-x -mx-1 flex gap-1.5 px-1 pb-3"
+        >
           <button
             type="button"
             aria-pressed={category === 'all'}

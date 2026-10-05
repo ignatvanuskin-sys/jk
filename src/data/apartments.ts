@@ -298,6 +298,17 @@ function selectFeatured(): Apartment[] {
 
 export const FEATURED_UNITS: Apartment[] = selectFeatured();
 
+/**
+ * The date the prices and the availability figures are valid for.
+ *
+ * Without it "от 20,2 млн ₸" and "128 в продаже" read as permanent guarantees:
+ * a visitor has no way to tell whether the number is from this morning or from
+ * last spring, and neither does the sales team once the price list moves. An
+ * audit of the public site flagged exactly this. Update it together with
+ * `buildInventory()` — every week on a live project.
+ */
+export const INVENTORY_UPDATED_AT = '2026-10-05';
+
 /* ── Derived aggregates, computed once ────────────────────────────────────── */
 
 const available = APARTMENTS.filter((a) => a.status === 'available');

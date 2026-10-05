@@ -599,3 +599,18 @@ input[type="range"]::-moz-range-thumb {
     }
   }
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   HORIZONTAL RAIL AFFORDANCE
+
+   Chip rails scroll sideways, but nothing on screen said so: on a phone the row
+   simply looked cut off. A right-edge fade marks the continuation — but only
+   while the rail actually overflows, which useRailOverflow() reports as
+   data-rail-more. Painting the fade unconditionally would dim the last chip on
+   desktop, where all the chips fit and there is nothing to scroll to.
+   ───────────────────────────────────────────────────────────────────────────── */
+@layer components {
+  [data-rail-more='true'] {
+    mask-image: linear-gradient(to right, #000 calc(100% - 2.25rem), transparent 100%);
+  }
+}

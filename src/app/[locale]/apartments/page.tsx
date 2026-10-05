@@ -3,7 +3,12 @@ import { notFound } from 'next/navigation';
 
 import { isLocale, formatPriceCompact, type Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/get-dictionary';
-import { APARTMENTS, INVENTORY_STATS, UNIT_SUMMARIES } from '@/data/apartments';
+import {
+  APARTMENTS,
+  INVENTORY_STATS,
+  INVENTORY_UPDATED_AT,
+  UNIT_SUMMARIES,
+} from '@/data/apartments';
 import { BLOCKS, PROJECT } from '@/data/project';
 import { getSeoCopy } from '@/content/seo';
 import { breadcrumbSchema, buildMetadata, faqSchema, fillSeoTokens } from '@/lib/seo';
@@ -65,6 +70,9 @@ export default async function ApartmentsPage({ params }: PageProps) {
             label: dict.stats.items.area,
             value: `${INVENTORY_STATS.minArea}–${INVENTORY_STATS.maxArea} м²`,
           },
+          // Prices and availability are only actionable with the date they are
+          // valid for — see INVENTORY_UPDATED_AT.
+          { label: dict.common.updated, value: INVENTORY_UPDATED_AT },
         ]}
       />
 

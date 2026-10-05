@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries/ru';
-import { FEATURED_UNITS, INVENTORY_STATS } from '@/data/apartments';
+import { FEATURED_UNITS, INVENTORY_STATS, INVENTORY_UPDATED_AT } from '@/data/apartments';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { ApartmentCard } from '@/components/apartments/ApartmentCard';
 import { buildApartmentCardLabels } from '@/components/apartments/labels';
@@ -40,24 +40,32 @@ export function ApartmentsPreview({
           title={dict.apartments.title}
           lead={dict.apartments.lead}
           aside={
-            <dl className="flex gap-8">
-              <div>
-                <dt className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-muted">
-                  {dict.common.inProgress}
-                </dt>
-                <dd className="num mt-1.5 font-display text-3xl leading-none text-ink">
-                  {INVENTORY_STATS.available}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-muted">
-                  {dict.apartments.filters.stateProgram}
-                </dt>
-                <dd className="num mt-1.5 font-display text-3xl leading-none text-ink">
-                  {INVENTORY_STATS.stateProgramUnits}
-                </dd>
-              </div>
-            </dl>
+            <div>
+              <dl className="flex gap-8">
+                <div>
+                  <dt className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-muted">
+                    {dict.common.inProgress}
+                  </dt>
+                  <dd className="num mt-1.5 font-display text-3xl leading-none text-ink">
+                    {INVENTORY_STATS.available}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-muted">
+                    {dict.apartments.filters.stateProgram}
+                  </dt>
+                  <dd className="num mt-1.5 font-display text-3xl leading-none text-ink">
+                    {INVENTORY_STATS.stateProgramUnits}
+                  </dd>
+                </div>
+              </dl>
+              {/* An availability figure without a date reads as a permanent
+                  promise. The date is what tells the visitor — and the sales
+                  team — when the number must be refreshed. */}
+              <p className="mt-4 text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-muted">
+                {dict.common.updated} {INVENTORY_UPDATED_AT}
+              </p>
+            </div>
           }
         />
 

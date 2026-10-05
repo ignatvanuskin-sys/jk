@@ -4,7 +4,7 @@ import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries/ru';
 import { formatPriceCompact } from '@/i18n/config';
 import { PROJECT } from '@/data/project';
-import { INVENTORY_STATS } from '@/data/apartments';
+import { INVENTORY_STATS, INVENTORY_UPDATED_AT } from '@/data/apartments';
 import { MediaImage } from '@/components/ui/MediaImage';
 import { LeadButton } from '@/components/forms/LeadButton';
 
@@ -75,6 +75,12 @@ export function Hero({
             </div>
           ))}
         </dl>
+
+        {/* The availability count also rides on the catalogue button below. The
+            date is what keeps it from reading as a permanent guarantee. */}
+        <p className="mt-4 text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-paper/55">
+          {dict.common.updated} {INVENTORY_UPDATED_AT}
+        </p>
 
         <div className="mt-10 flex flex-wrap items-center gap-3">
           <Link href={`/${locale}/apartments`} className="btn btn-light px-7 py-4 text-[0.9375rem]">

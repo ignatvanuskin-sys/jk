@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 
 import type { Locale } from '@/i18n/config';
 import { cn } from '@/lib/cn';
+import { useRailOverflow } from '@/hooks/useRailOverflow';
 import type { ConstructionLabels } from '@/components/apartments/labels';
 
 export interface TimelineReport {
@@ -55,6 +56,9 @@ export function ConstructionTimeline({
   locale: Locale;
 }) {
   const [blockId, setBlockId] = useState<'a' | 'b' | 'c' | 'all'>('all');
+  // No deps: the rail always holds the same four chips, so there is nothing to
+  // re-measure on.
+  const { ref: railRef, more: railMore } = useRailOverflow();
 
   const visible = useMemo(
     () => (blockId === 'all' ? reports : reports.filter((r) => r.blockId === blockId)),
@@ -109,7 +113,11 @@ export function ConstructionTimeline({
         })}
       </div>
 
-      <div className="scroll-x -mx-1 mt-8 flex gap-1.5 px-1">
+      <div
+        ref={railRef}
+        data-rail-more={railMore ? 'true' : undefined}
+        className="scroll-x -mx-1 mt-8 flex gap-1.5 px-1"
+      >
         {(['all', 'a', 'b', 'c'] as const).map((value) => (
           <button
             key={value}
