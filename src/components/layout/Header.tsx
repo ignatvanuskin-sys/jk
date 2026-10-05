@@ -212,6 +212,9 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
             >
               {labels.consult}
             </LeadButton>
+            {/* Plain icons rather than filled squares: two 44px blocks sitting
+                6px apart made the whole header read as one heavy slab. The hit
+                area is still 44px, it just no longer paints. */}
             <a
               href={labels.whatsappHref}
               target="_blank"
@@ -219,7 +222,7 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
               aria-label={labels.whatsappLabel}
               className={cn(
                 'inline-flex size-11 shrink-0 touch-manipulation items-center justify-center rounded-xs transition-colors duration-200 md:hidden',
-                solid ? 'bg-bone text-pine' : 'bg-paper/90 text-pine',
+                solid ? 'text-pine hover:bg-bone' : 'text-paper hover:bg-paper/15',
               )}
             >
               <WhatsAppGlyph />
@@ -229,39 +232,51 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
                 aria-label={labels.openMenu}
                 className={cn(
                   'inline-flex size-11 shrink-0 cursor-pointer touch-manipulation items-center justify-center rounded-xs transition-colors duration-200 lg:hidden',
-                  solid ? 'bg-bone text-ink hover:bg-sand' : 'bg-paper/90 text-ink hover:bg-paper',
+                  solid ? 'text-ink hover:bg-bone' : 'text-paper hover:bg-paper/15',
                 )}
               >
-                <Menu className="size-5" aria-hidden="true" />
+                <Menu className="size-6" aria-hidden="true" />
               </SheetTrigger>
 
+              {/* Full width on a phone, a proper drawer from sm up. At 88vw the
+                  drawer left a 47px sliver of the page showing, which read as a
+                  broken takeover rather than a menu. */}
               <SheetContent
                 side="right"
                 showCloseButton={false}
-                className="w-[min(22rem,88vw)] gap-0 border-l border-line bg-paper p-0 sm:max-w-sm"
+                className="w-full gap-0 border-l-0 border-line bg-paper p-0 sm:w-[min(22rem,90vw)] sm:border-l"
               >
                 <SheetTitle className="sr-only">{labels.menu}</SheetTitle>
 
-                <div className="flex h-16 flex-none items-center justify-between border-b border-line px-5">
-                  <Logo brand={labels.brand} shortName={labels.brandShort} tone="ink" />
+                <div className="flex h-14 flex-none items-center justify-between border-b border-line px-4">
+                  <Logo
+                    brand={labels.brand}
+                    shortName={labels.brandShort}
+                    tone="ink"
+                    className="text-ink"
+                  />
                   <SheetClose
                     aria-label={labels.closeMenu}
-                    className="inline-flex size-11 cursor-pointer touch-manipulation items-center justify-center rounded-xs bg-bone text-ink transition-colors duration-200 hover:bg-sand"
+                    className="inline-flex size-11 shrink-0 cursor-pointer touch-manipulation items-center justify-center rounded-xs text-ink transition-colors duration-200 hover:bg-bone"
                   >
-                    <X className="size-5" aria-hidden="true" />
+                    <X className="size-6" aria-hidden="true" />
                   </SheetClose>
                 </div>
 
+                {/* 48px rows, all of them the same size. Previously the list ran
+                    1028px inside a 780px area, so the CTA and the language
+                    switcher sat ~250px below the fold, and the first row was 24px
+                    while the rest were 18px. */}
                 <nav
                   aria-label={labels.menu}
-                  className="flex-1 overflow-y-auto overscroll-contain px-5 pb-8 pt-2"
+                  className="flex-1 overflow-y-auto overscroll-contain-y px-1.5"
                 >
-                  <ul className="divide-y divide-line-soft border-b border-line-soft">
+                  <ul>
                     <li>
                       <Link
                         href={`/${locale}`}
                         onClick={() => setMenuOpen(false)}
-                        className="flex min-h-14 items-center font-display text-2xl leading-tight text-ink transition-colors duration-200"
+                        className="flex min-h-12 items-center rounded-xs px-3 text-[1.0625rem] text-ink transition-colors duration-200 hover:bg-bone"
                       >
                         {labels.homeLabel}
                       </Link>
@@ -271,39 +286,35 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
                         <Link
                           href={`/${locale}${item.href}`}
                           onClick={() => setMenuOpen(false)}
-                          className="flex min-h-14 items-center text-lg text-ink-soft transition-colors duration-200 hover:text-ink"
+                          className="flex min-h-12 items-center rounded-xs px-3 text-[1.0625rem] text-ink-soft transition-colors duration-200 hover:bg-bone hover:text-ink"
                         >
                           {item.label}
                         </Link>
                       </li>
                     ))}
                   </ul>
+                </nav>
 
-                  <div className="mt-6 flex flex-col gap-3">
-                    <LeadButton source="mobile-menu" variant="primary" fullWidth>
-                      {labels.consult}
-                    </LeadButton>
+                {/* Pinned actions. Most people open this menu to get in touch, so
+                    those controls never scroll away. The phone number is one tap
+                    away in the persistent bottom bar. */}
+                <div className="flex-none border-t border-line px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4">
+                  <LeadButton source="mobile-menu" variant="primary" fullWidth className="min-h-12">
+                    {labels.consult}
+                  </LeadButton>
+                  <div className="mt-3 flex items-center gap-3">
                     <a
                       href={labels.whatsappHref}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="btn btn-outline min-h-12 w-full touch-manipulation"
+                      className="btn btn-outline min-h-12 flex-1 touch-manipulation"
                     >
                       <WhatsAppGlyph />
                       {labels.whatsappLabel}
                     </a>
-                    <a
-                      href={labels.phoneHref}
-                      className="btn btn-outline num min-h-12 w-full touch-manipulation"
-                    >
-                      {labels.phoneDisplay}
-                    </a>
-                  </div>
-
-                  <div className="mt-6">
                     <LanguageSwitcher locale={locale} label={labels.switchLanguage} tone="dark" />
                   </div>
-                </nav>
+                </div>
               </SheetContent>
             </Sheet>
           </div>

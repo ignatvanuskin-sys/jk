@@ -44,7 +44,7 @@ export function LanguageSwitcher({
                 <span
                   aria-current="true"
                   className={cn(
-                    'inline-flex h-8 min-w-8 items-center justify-center rounded-xs px-2 text-[0.6875rem] font-semibold tracking-[0.08em]',
+                    'inline-flex h-11 min-w-11 items-center justify-center rounded-xs px-2.5 text-xs font-semibold tracking-[0.08em]',
                     tone === 'dark' ? 'bg-ink text-paper' : 'bg-paper text-ink',
                   )}
                 >
@@ -56,7 +56,7 @@ export function LanguageSwitcher({
                   href={hrefFor(target)}
                   lang={target}
                   className={cn(
-                    'inline-flex h-8 min-w-8 items-center justify-center rounded-xs px-2 text-[0.6875rem] font-semibold tracking-[0.08em] transition-colors',
+                    'inline-flex h-11 min-w-11 items-center justify-center rounded-xs px-2.5 text-xs font-semibold tracking-[0.08em] transition-colors',
                     tone === 'dark'
                       ? 'text-ink-soft hover:bg-bone hover:text-ink'
                       : 'text-paper/80 hover:bg-paper/15 hover:text-paper',

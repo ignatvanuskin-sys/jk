@@ -135,7 +135,7 @@ export function InfraMap({
             aria-pressed={category === 'all'}
             onClick={() => setCategory('all')}
             className={cn(
-              'flex-none rounded-xs border px-3 py-2 text-xs transition-colors',
+              'inline-flex min-h-11 flex-none items-center rounded-xs border px-3.5 text-xs transition-colors',
               category === 'all'
                 ? 'border-ink bg-ink text-paper'
                 : 'border-line bg-white text-ink-soft hover:border-ink/40',
@@ -150,7 +150,7 @@ export function InfraMap({
               aria-pressed={category === key}
               onClick={() => setCategory(key)}
               className={cn(
-                'flex-none rounded-xs border px-3 py-2 text-xs transition-colors',
+                'inline-flex min-h-11 flex-none items-center rounded-xs border px-3.5 text-xs transition-colors',
                 category === key
                   ? 'border-ink bg-ink text-paper'
                   : 'border-line bg-white text-ink-soft hover:border-ink/40',

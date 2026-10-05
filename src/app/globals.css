@@ -552,3 +552,43 @@ input[type="range"]::-moz-range-thumb {
 }
 
 }
+
+/* ---------------------------------------------------------------------------
+   MOBILE TYPE SCALE
+
+   Below 640px every step of the type scale moves up one notch. Holstered in
+   the utilities layer with the same specificity Tailwind emits, placed last,
+   so it wins without a single !important. The 11-15px steps the site used on
+   a phone are below what reads comfortably at arm’s length; nothing here
+   affects tablet or desktop.
+   --------------------------------------------------------------------------- */
+@layer utilities {
+  @media (max-width: 639px) {
+    .text-\[0\.5625rem\],
+    .text-\[0\.625rem\],
+    .text-\[0\.6875rem\] {
+      font-size: 0.75rem;
+      line-height: 1.5;
+    }
+
+    .text-xs {
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+
+    .text-\[0\.8125rem\] {
+      font-size: 0.875rem;
+      line-height: 1.55;
+    }
+
+    .text-sm {
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    .text-\[0\.9375rem\] {
+      font-size: 1rem;
+      line-height: 1.65;
+    }
+  }
+}

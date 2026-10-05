@@ -117,7 +117,7 @@ export function ConstructionTimeline({
             aria-pressed={blockId === value}
             onClick={() => setBlockId(value)}
             className={cn(
-              'flex-none rounded-xs border px-4 py-2 text-sm transition-colors',
+              'inline-flex min-h-11 flex-none items-center rounded-xs border px-4 text-sm transition-colors',
               blockId === value
                 ? 'border-ink bg-ink text-paper'
                 : 'border-line bg-white text-ink-soft hover:border-ink/40',
