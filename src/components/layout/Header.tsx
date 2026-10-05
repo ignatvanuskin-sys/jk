@@ -276,7 +276,7 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
                       <Link
                         href={`/${locale}`}
                         onClick={() => setMenuOpen(false)}
-                        className="flex min-h-12 items-center rounded-xs px-3 text-[1.0625rem] text-ink transition-colors duration-200 hover:bg-bone"
+                        className="flex min-h-11 items-center rounded-xs px-3 text-[1.0625rem] text-ink transition-colors duration-200 hover:bg-bone"
                       >
                         {labels.homeLabel}
                       </Link>
@@ -286,7 +286,7 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
                         <Link
                           href={`/${locale}${item.href}`}
                           onClick={() => setMenuOpen(false)}
-                          className="flex min-h-12 items-center rounded-xs px-3 text-[1.0625rem] text-ink-soft transition-colors duration-200 hover:bg-bone hover:text-ink"
+                          className="flex min-h-11 items-center rounded-xs px-3 text-[1.0625rem] text-ink-soft transition-colors duration-200 hover:bg-bone hover:text-ink"
                         >
                           {item.label}
                         </Link>

@@ -95,7 +95,7 @@ export function ApartmentCard({
             {unit.rooms}-{labels.roomSuffix}
           </h3>
           {variant === 'catalogue' && (
-            <p className="text-xs text-muted">
+            <p className="text-sm text-muted">
               {blockName} · {unit.floor} {labels.floorShort}
             </p>
           )}
@@ -104,11 +104,11 @@ export function ApartmentCard({
         <p className="num mt-4 font-display text-[1.75rem] leading-none text-ink">
           {formatPrice(unit.price, locale)}
         </p>
-        <p className="num mt-1.5 text-xs text-muted">
+        <p className="num mt-1.5 text-sm text-muted">
           {formatNumber(unit.pricePerSqm, locale)} ₸ {labels.pricePerSqm}
         </p>
 
-        <dl className="mt-4 grid grid-cols-3 gap-3 border-t border-line-soft pt-4 text-xs">
+        <dl className="mt-4 grid grid-cols-3 gap-3 border-t border-line-soft pt-4 text-sm">
           <div>
             <dt className="text-muted">{labels.area}</dt>
             <dd className="num mt-1 font-medium text-ink">{formatArea(unit.area, locale)}</dd>

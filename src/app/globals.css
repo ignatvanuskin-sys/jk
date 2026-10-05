@@ -590,5 +590,12 @@ input[type="range"]::-moz-range-thumb {
       font-size: 1rem;
       line-height: 1.65;
     }
+
+    /* `eyebrow` is a custom @utility rather than a Tailwind size step, so the
+       rules above never reach it. */
+    .eyebrow,
+    .eyebrow-plain {
+      font-size: 0.75rem;
+    }
   }
 }
