@@ -8,7 +8,6 @@ import {
   type InfraCategory,
 } from '@/data/infrastructure';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { DemoNotice } from '@/components/ui/DemoNotice';
 import { InfraMap, type MapObject } from '@/components/infrastructure/InfraMap';
 
 /**
@@ -67,9 +66,6 @@ export function InfrastructurePreview({
           />
         </div>
 
-        <DemoNotice label={dict.common.demoData} className="mt-8">
-          {dict.infrastructure.placeholderNotice}
-        </DemoNotice>
       </div>
     </section>
   );

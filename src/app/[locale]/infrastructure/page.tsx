@@ -15,7 +15,6 @@ import { breadcrumbSchema, buildMetadata, fillSeoTokens } from '@/lib/seo';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { PageHero } from '@/components/ui/PageHero';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { DemoNotice } from '@/components/ui/DemoNotice';
 import { InfraMap, type MapObject } from '@/components/infrastructure/InfraMap';
 import { LeadButton } from '@/components/forms/LeadButton';
 
@@ -92,9 +91,6 @@ export default async function InfrastructurePage({ params }: PageProps) {
             emptyLabel={dict.apartments.emptyText}
             objectsCountLabel={dict.infrastructure.objectsCount}
           />
-          <DemoNotice label={dict.common.demoData} className="mt-10" tone="clay">
-            {dict.infrastructure.placeholderNotice}
-          </DemoNotice>
         </div>
       </section>
 

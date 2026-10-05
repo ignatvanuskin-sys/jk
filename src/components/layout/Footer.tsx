@@ -2,8 +2,9 @@ import Link from 'next/link';
 
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries/ru';
-import { CONTACTS, DEMO, PROJECT } from '@/data/project';
+import { CONTACTS, PROJECT } from '@/data/project';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { Logo } from './Logo';
 
 interface FooterProps {
   locale: Locale;
@@ -54,7 +55,7 @@ export function Footer({ locale, dict, whatsappHref, navItems }: FooterProps) {
                   <path d="M36 36l16 16" stroke="#c07a4e" strokeWidth="6" strokeLinecap="square" />
                 </svg>
               </span>
-              <span className="font-display text-2xl tracking-[0.02em]">{PROJECT.name}</span>
+              <Logo brand={PROJECT.name} shortName={PROJECT.shortName} tone="paper" />
             </Link>
 
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-paper/70">{dict.footer.about}</p>
@@ -146,22 +147,13 @@ export function Footer({ locale, dict, whatsappHref, navItems }: FooterProps) {
           </div>
         </div>
 
-        <div className="mt-12 grid gap-6 border-t border-paper/15 pt-8 lg:grid-cols-2">
-          <div>
-            <h2 className="text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-paper/55">
-              {dict.footer.disclaimerTitle}
-            </h2>
-            <p className="mt-3 text-xs leading-relaxed text-paper/60">{dict.footer.disclaimer}</p>
-          </div>
-          <div className="rounded-sm border border-clay/50 bg-clay/10 p-4">
-            <h2 className="flex items-center gap-2 text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-paper">
-              <span className="rounded-[2px] bg-clay px-1.5 py-px text-[0.5625rem] tracking-[0.1em] text-white">
-                {DEMO.label}
-              </span>
-              {dict.footer.demoNoticeTitle}
-            </h2>
-            <p className="mt-3 text-xs leading-relaxed text-paper/75">{dict.footer.demoNotice}</p>
-          </div>
+        <div className="mt-12 border-t border-paper/15 pt-8">
+          <h2 className="text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-paper/55">
+            {dict.footer.disclaimerTitle}
+          </h2>
+          <p className="mt-3 max-w-[80ch] text-xs leading-relaxed text-paper/60">
+            {dict.footer.disclaimer}
+          </p>
         </div>
       </div>
 
@@ -172,10 +164,7 @@ export function Footer({ locale, dict, whatsappHref, navItems }: FooterProps) {
             © {year} {PROJECT.developerLegalName}. {dict.footer.rights}
           </p>
           <p className="flex flex-wrap items-center gap-x-4 gap-y-2">
-            <span className="num">
-              БИН {PROJECT.developerBin}
-              <span className="ml-1 text-paper/35">({dict.common.demoData})</span>
-            </span>
+            <span className="num">БИН {PROJECT.developerBin}</span>
             <Link
               href={`/${locale}/privacy`}
               className="underline-offset-4 transition-colors hover:text-paper hover:underline"

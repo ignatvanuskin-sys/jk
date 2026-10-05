@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries/ru';
-import { APARTMENTS, INVENTORY_STATS } from '@/data/apartments';
+import { FEATURED_UNITS, INVENTORY_STATS } from '@/data/apartments';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { ApartmentCard } from '@/components/apartments/ApartmentCard';
 import { buildApartmentCardLabels } from '@/components/apartments/labels';
@@ -10,9 +10,11 @@ import { buildApartmentCardLabels } from '@/components/apartments/labels';
 /**
  * Catalogue preview on the home page.
  *
- * Shows the three cheapest *available* units rather than a curated "hero
- * apartment" — the first screen of the catalogue should never show a sold unit,
- * and the lowest price is what pulls a hesitant buyer into the catalogue.
+ * Shows a curated spread rather than "the three cheapest available units":
+ * sorting by price alone surfaced three identical one-room flats, which told a
+ * visitor nothing about the range on offer. The first card is always the
+ * cheapest one-room flat (the price anchor that pulls a hesitant buyer in), and
+ * the second and third introduce the larger formats.
  */
 export function ApartmentsPreview({
   locale,
@@ -23,9 +25,12 @@ export function ApartmentsPreview({
 }) {
   const labels = buildApartmentCardLabels(locale, dict);
 
-  const cheapest = APARTMENTS.filter((unit) => unit.status === 'available')
-    .sort((a, b) => a.price - b.price)
-    .slice(0, 3);
+  const seen = new Set<number>();
+  const showcase = FEATURED_UNITS.filter((unit) => {
+    if (seen.has(unit.rooms)) return false;
+    seen.add(unit.rooms);
+    return true;
+  }).slice(0, 3);
 
   return (
     <section className="section bg-paper" id="apartments">
@@ -57,7 +62,7 @@ export function ApartmentsPreview({
         />
 
         <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {cheapest.map((unit) => (
+          {showcase.map((unit) => (
             <li key={unit.id}>
               <ApartmentCard
                 unit={unit}

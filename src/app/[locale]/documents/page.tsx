@@ -10,7 +10,6 @@ import { breadcrumbSchema, buildMetadata, fillSeoTokens } from '@/lib/seo';
 
 import { JsonLd } from '@/components/seo/JsonLd';
 import { PageHero } from '@/components/ui/PageHero';
-import { DemoNotice } from '@/components/ui/DemoNotice';
 import { LeadButton } from '@/components/forms/LeadButton';
 
 interface PageProps {
@@ -123,9 +122,9 @@ export default async function DocumentsPage({ params }: PageProps) {
                     <p className="max-w-[62ch] text-[0.9375rem] leading-relaxed text-ink-soft">
                       {document.summary[locale]}
                     </p>
-                    <DemoNotice label={dict.common.demoData} className="mt-5">
+                    <p className="mt-5 text-xs leading-relaxed text-muted">
                       {dict.documents.previewWarning}
-                    </DemoNotice>
+                    </p>
                   </div>
 
                   <div>

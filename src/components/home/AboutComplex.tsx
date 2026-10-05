@@ -96,13 +96,8 @@ export function AboutComplex({
                   className="object-cover"
                 />
               </div>
-              <figcaption className="mt-3 flex flex-wrap items-center justify-between gap-3 text-xs text-muted">
-                <span>
-                  {BLOCKS.map((block) => block.names[locale]).join(' · ')}
-                </span>
-                <span className="rounded-xs bg-bone px-2 py-1">
-                  {dict.common.demoData}
-                </span>
+              <figcaption className="mt-3 text-xs text-muted">
+                {BLOCKS.map((block) => block.names[locale]).join(' · ')}
               </figcaption>
             </figure>
           </Reveal>

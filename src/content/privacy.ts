@@ -132,16 +132,16 @@ export const PRIVACY_SECTIONS: PrivacySection[] = [
     },
     body: {
       ru: [
-        'Оператор персональных данных — застройщик проекта. Реквизиты, БИН и контакт ответственного лица за обработку персональных данных указываются перед публикацией сайта.',
-        'Настоящий текст является шаблоном для демонстрационной версии сайта и подлежит юридической проверке перед запуском.',
+        'Оператор персональных данных — застройщик проекта. Реквизиты, БИН и контакт ответственного лица за обработку персональных данных предоставляются по запросу.',
+        'Настоящая политика применяется к обработке данных на этом сайте и подлежит юридической проверке.',
       ],
       kz: [
-        'Дербес деректер операторы — жобаның құрылыс салушысы. Деректемелер, БСН және дербес деректерді өңдеуге жауапты тұлғаның байланысы сайт жарияланбас бұрын көрсетіледі.',
-        'Бұл мәтін сайттың демонстрациялық нұсқасына арналған үлгі және іске қосар алдында заңдық тексеруден өтуі тиіс.',
+        'Дербес деректер операторы — жобаның құрылыс салушысы. Деректемелер, БСН және дербес деректерді өңдеуге жауапты тұлғаның байланысы сұраныс бойынша беріледі.',
+        'Бұл саясат осы сайттағы деректерді өңдеуге қолданылады және заңдық тексеруден өтуі тиіс.',
       ],
       en: [
-        'The personal data controller is the developer of the project. The company details, BIN and the contact for the person responsible for data processing are filled in before the site goes live.',
-        'This text is a template for the demonstration build and must be reviewed legally before launch.',
+        'The personal data controller is the developer of the project. The company details, BIN and the contact for the person responsible for data processing are provided on request.',
+        'This policy applies to data processing on this site and is subject to legal review.',
       ],
     },
   },

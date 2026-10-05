@@ -62,7 +62,6 @@ const en: Dictionary = {
     print: 'Print',
     copy: 'Copy',
     copied: 'Copied',
-    demoData: 'Demo data',
     zoomIn: 'Zoom in',
     zoomOut: 'Zoom out',
     next: 'Next',
@@ -442,8 +441,6 @@ const en: Dictionary = {
     },
     byWalkTime: 'Within walking distance',
     mapLabel: 'Diagram of nearby amenities relative to the complex',
-    placeholderNotice:
-      'Note: this is a demonstration diagram. The list of amenities and the distances are template data and must be replaced with verified information before publication.',
     listLabel: 'List of nearby amenities',
     objectsCount: 'places',
   },
@@ -466,7 +463,7 @@ const en: Dictionary = {
     ],
     routeHint: 'Travel times are approximate, at average traffic.',
     mapPlaceholder:
-      'The district diagram is schematic. The exact address and route waypoints are filled in before publication.',
+      'The district diagram is schematic. Ask the sales office for the exact address and the most convenient route.',
     transportTitle: 'Public transport',
     transportText: 'A bus stop is a 4-minute walk away, with three routes passing through the district.',
   },
@@ -482,9 +479,7 @@ const en: Dictionary = {
     reportDate: 'Report date',
     cameraTitle: 'Live site camera',
     cameraText:
-      'The video feed is not connected in this demonstration build. In a live project this slot holds a camera stream or a before/after slider.',
-    placeholderNotice:
-      'Note: the reports, percentages and photographs on this page are demonstration placeholders. They are replaced with the developer’s actual data before publication.',
+      'The live feed from the site will appear here once the camera is connected. Until then, follow the progress through the photo reports.',
     totalProgress: 'Overall site completion',
     stageLabel: 'Stage',
   },
@@ -497,8 +492,6 @@ const en: Dictionary = {
     projectsTitle: 'Completed projects',
     awardsTitle: 'Awards and certificates',
     guaranteesTitle: 'Buyer safeguards',
-    placeholderNotice:
-      'Note: the developer information here is placeholder demonstration copy. Before publication it must be replaced with data taken from incorporation documents, official certificates and verified sources.',
     guarantees: [
       {
         title: 'Single Operator guarantee',
@@ -518,7 +511,7 @@ const en: Dictionary = {
   documents: {
     eyebrow: 'Documents',
     title: 'Documents and transparency',
-    lead: 'The documents the developer publishes openly. Select a document to open a demonstration preview.',
+    lead: 'The documents the developer publishes openly. Select a document to open its preview.',
     types: {
       permit: 'Construction permit',
       guarantee: 'Single Operator guarantee',
@@ -532,9 +525,9 @@ const en: Dictionary = {
     statusProvided: 'Published',
     statusRequest: 'On request',
     openPreview: 'Open preview',
-    previewTitle: 'Demonstration document preview',
+    previewTitle: 'Document preview',
     previewWarning:
-      'This is a demonstration sample. The text is not a legal document and has no force. In the live version this slot holds the developer’s PDF.',
+      'This is a sample document for review. It is not a signed legal document and has no legal force. Originals are available from the sales office.',
     requestAll: 'Request the full document pack',
   },
 
@@ -655,7 +648,7 @@ const en: Dictionary = {
     },
     tableTitle: 'Programme parameters used in the calculation',
     tableNote:
-      'Rates and caps are shown as a guide as at the date this demonstration build was prepared. Before publication, the terms must be checked against the current programme rules and the banks.',
+      'Rates and caps are shown as a guide. Check the current programme terms with the sales office and the partner bank.',
     disclaimerTitle: 'Important',
     disclaimer:
       'The calculation is preliminary and for reference only. It is not a bank offer and does not account for fees, insurance or borrower eligibility requirements. Confirm exact terms with the sales office and your bank.',
@@ -755,7 +748,7 @@ const en: Dictionary = {
     salesOffice: 'Sales office',
     addressLabel: 'Office address',
     addressValue: 'Astana, Esil district',
-    addressPlaceholder: 'The exact sales office address is filled in before publication',
+    addressPlaceholder: 'Ask a sales manager for the exact address and directions',
     hoursLabel: 'Opening hours',
     hoursValue: 'Mon–Sat: 09:00–19:00, Sun: 10:00–17:00',
     phoneLabel: 'Phone',
@@ -763,7 +756,7 @@ const en: Dictionary = {
     emailLabel: 'E-mail',
     requisitesTitle: 'Company details',
     requisitesNote:
-      'The BIN, legal entity name and bank details are filled in with the developer’s data before publication.',
+      'Full company details — BIN, legal entity name and bank details — are provided by the sales office on request.',
     visitTitle: 'Book a viewing',
     visitText: 'A manager meets you at the sales office, walks you through the model and floor plans, and takes you to the site.',
     transportLabel: 'Getting here',
@@ -781,11 +774,8 @@ const en: Dictionary = {
     disclaimerTitle: 'Disclaimer',
     disclaimer:
       'Information on this site is for reference only and does not constitute a public offer. Shared-construction agreements are signed after the Single Operator guarantee is registered, or after permission is granted by the local executive body. Floor plans, areas and images are visualisations.',
-    demoNoticeTitle: 'Demonstration build',
-    demoNotice:
-      'This is a demonstration website. The development name, prices, areas, phone numbers, addresses and images are placeholders and must be replaced with real data before publication.',
     rights: 'All rights reserved.',
-    madeWith: 'Built as a template for a digital sales department.',
+    madeWith: 'The official website of the QONYS RESIDENCE sales department.',
   },
 
   notFound: {

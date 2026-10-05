@@ -4,7 +4,6 @@ import { getMapHref } from '@/lib/contacts';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { MediaImage } from '@/components/ui/MediaImage';
 import { RouteAction } from '@/components/ui/RouteAction';
-import { DemoNotice } from '@/components/ui/DemoNotice';
 
 /**
  * Location.
@@ -88,9 +87,6 @@ export function LocationSection({
               ))}
             </dl>
             <p className="mt-4 text-xs text-muted">{dict.location.routeHint}</p>
-            <DemoNotice label={dict.common.demoData} className="mt-6">
-              {dict.location.mapPlaceholder}
-            </DemoNotice>
           </div>
         </div>
       </div>

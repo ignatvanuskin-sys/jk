@@ -17,7 +17,6 @@ import { ApartmentCard } from '@/components/apartments/ApartmentCard';
 import { StatusBadge } from '@/components/apartments/StatusBadge';
 import { LeadButton } from '@/components/forms/LeadButton';
 import { MediaImage } from '@/components/ui/MediaImage';
-import { DemoNotice } from '@/components/ui/DemoNotice';
 import { buildApartmentCardLabels } from '@/components/apartments/labels';
 
 interface PageProps {
@@ -289,9 +288,6 @@ export default async function ApartmentPage({ params }: PageProps) {
               </ul>
             </div>
 
-            <DemoNotice label={dict.common.demoData} className="mt-6">
-              {dict.developer.placeholderNotice}
-            </DemoNotice>
           </aside>
         </div>
 

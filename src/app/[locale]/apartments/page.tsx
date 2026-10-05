@@ -15,7 +15,6 @@ import { Accordion } from '@/components/ui/Accordion';
 import { ApartmentsExplorer } from '@/components/apartments/ApartmentsExplorer';
 import { buildExplorerLabels, buildUnitGridLabels } from '@/components/apartments/labels';
 import { UnitGrid } from '@/components/apartments/UnitGrid';
-import { DemoNotice } from '@/components/ui/DemoNotice';
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -107,9 +106,6 @@ export default async function ApartmentsPage({ params }: PageProps) {
               labels={buildUnitGridLabels(locale, dict)}
             />
           </div>
-          <DemoNotice label={dict.common.demoData} className="mt-8">
-            {dict.developer.placeholderNotice}
-          </DemoNotice>
           <p className="sr-only">
             {APARTMENTS.length} {dict.apartments.resultsUnit}
           </p>

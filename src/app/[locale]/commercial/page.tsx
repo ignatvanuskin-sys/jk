@@ -10,7 +10,6 @@ import { breadcrumbSchema, buildMetadata, fillSeoTokens } from '@/lib/seo';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { PageHero } from '@/components/ui/PageHero';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { DemoNotice } from '@/components/ui/DemoNotice';
 import { MediaImage } from '@/components/ui/MediaImage';
 import { LeadButton } from '@/components/forms/LeadButton';
 import { Reveal } from '@/components/ui/Reveal';
@@ -103,9 +102,6 @@ export default async function CommercialPage({ params }: PageProps) {
               <LeadButton source="commercial" variant="primary" className="mt-6 w-full">
                 {dict.cta.getConditions}
               </LeadButton>
-              <DemoNotice label={dict.common.demoData} className="mt-6">
-                {dict.developer.placeholderNotice}
-              </DemoNotice>
             </aside>
           </div>
         </div>

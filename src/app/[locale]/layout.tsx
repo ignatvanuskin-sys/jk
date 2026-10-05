@@ -6,7 +6,7 @@ import '../globals.css';
 
 import { locales, isLocale, htmlLang, defaultLocale, type Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/get-dictionary';
-import { CONTACTS, PROJECT, DEMO } from '@/data/project';
+import { CONTACTS, PROJECT } from '@/data/project';
 import { buildWhatsAppHref } from '@/lib/contacts';
 import {
   absoluteUrl,
@@ -56,6 +56,9 @@ export const viewport: Viewport = {
   initialScale: 1,
   themeColor: '#fbfaf7',
   colorScheme: 'light',
+  // Let the layout extend under the notch / home indicator so the mobile
+  // action bar can sit flush against the bottom with its own safe-area padding.
+  viewportFit: 'cover',
 };
 
 export const metadata: Metadata = {
@@ -124,8 +127,6 @@ export default async function LocaleLayout({
             labels={{
               brand: PROJECT.name,
               brandShort: PROJECT.shortName,
-              demoLabel: DEMO.label,
-              demoTitle: dict.footer.demoNoticeTitle,
               navItems,
               moreItems,
               moreLabel: dict.nav.complex,

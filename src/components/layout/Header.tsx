@@ -3,11 +3,20 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { Menu, X } from 'lucide-react';
 
 import type { Locale } from '@/i18n/config';
 import { cn } from '@/lib/cn';
 import { LeadButton } from '@/components/forms/LeadButton';
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/shadcn/sheet';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { Logo } from './Logo';
 
 interface NavItem {
   href: string;
@@ -17,8 +26,6 @@ interface NavItem {
 export interface HeaderLabels {
   brand: string;
   brandShort: string;
-  demoLabel: string;
-  demoTitle: string;
   navItems: NavItem[];
   moreItems: NavItem[];
   moreLabel: string;
@@ -45,6 +52,10 @@ export interface HeaderLabels {
  *
  * `position: fixed` everywhere, so the hero can run edge to edge; inner pages
  * account for it with the padding inside <PageHero>.
+ *
+ * The mobile menu is a shadcn/ui `Sheet` (Radix Dialog under the hood), which
+ * brings the focus trap, Escape handling, scroll lock and `aria-modal`
+ * semantics that a hand-rolled overlay has to reimplement.
  */
 export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabels }) {
   const pathname = usePathname() ?? `/${locale}`;
@@ -62,7 +73,8 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Close the mobile menu whenever the route changes.
+  // Close the main menu whenever the route changes. (Scroll locking is handled
+  // by the Sheet primitive itself.)
   useEffect(() => {
     setMenuOpen(false);
     setMoreOpen(false);
@@ -85,15 +97,6 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
     };
   }, [moreOpen]);
 
-  // Lock body scroll while the full-screen menu is open.
-  useEffect(() => {
-    const previous = document.body.style.overflow;
-    if (menuOpen) document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = previous;
-    };
-  }, [menuOpen]);
-
   const overlay = isHome && !scrolled;
   const solid = !overlay;
   const allItems = [...labels.navItems, ...labels.moreItems];
@@ -113,48 +116,15 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
         <div className="shell flex h-16 items-center justify-between gap-3 md:h-20">
           <Link
             href={`/${locale}`}
-            className="group flex items-center gap-2.5"
+            className="flex items-center"
             aria-label={`${labels.brand} — ${labels.allSections}`}
           >
-            <span
-              className={cn(
-                'flex size-9 flex-none items-center justify-center rounded-xs transition-colors',
-                solid ? 'bg-pine text-paper' : 'bg-paper/95 text-pine',
-              )}
-              aria-hidden="true"
-            >
-              <svg viewBox="0 0 64 64" width="20" height="20" focusable="false">
-                <g fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="square">
-                  <rect x="12" y="12" width="26" height="26" />
-                  <path d="M26 26h26v26H26z" />
-                </g>
-                <path d="M36 36l16 16" stroke="#c07a4e" strokeWidth="6" strokeLinecap="square" />
-              </svg>
-            </span>
-            <span className="flex flex-col leading-none">
-              <span
-                className={cn(
-                  'font-display text-lg tracking-[0.02em] transition-colors sm:text-xl',
-                  solid ? 'text-ink' : 'text-paper',
-                )}
-              >
-                {labels.brandShort}
-              </span>
-              <span
-                className={cn(
-                  'mt-0.5 text-[0.5625rem] font-medium uppercase tracking-[0.22em] transition-colors',
-                  solid ? 'text-muted' : 'text-paper/75',
-                )}
-              >
-                residence
-                <span
-                  className="ml-1.5 rounded-[2px] bg-clay px-1 py-px text-[0.5rem] tracking-[0.12em] text-white"
-                  title={labels.demoTitle}
-                >
-                  {labels.demoLabel}
-                </span>
-              </span>
-            </span>
+            <Logo
+              brand={labels.brand}
+              shortName={labels.brandShort}
+              tone={solid ? 'ink' : 'paper'}
+              className={cn(solid ? 'text-ink' : 'text-paper')}
+            />
           </Link>
 
           <nav aria-label={labels.menu} className="hidden lg:block">
@@ -164,7 +134,7 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
                   <Link
                     href={`/${locale}${item.href}`}
                     className={cn(
-                      'inline-flex h-9 items-center rounded-xs px-3 text-[0.8125rem] font-medium transition-colors',
+                      'inline-flex h-9 items-center rounded-xs px-3 text-[0.8125rem] font-medium transition-colors duration-200',
                       solid
                         ? 'text-ink-soft hover:bg-bone hover:text-ink'
                         : 'text-paper/90 hover:bg-paper/15 hover:text-paper',
@@ -181,7 +151,7 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
                   aria-haspopup="true"
                   onClick={() => setMoreOpen((v) => !v)}
                   className={cn(
-                    'inline-flex h-9 items-center gap-1.5 rounded-xs px-3 text-[0.8125rem] font-medium transition-colors',
+                    'inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-xs px-3 text-[0.8125rem] font-medium transition-colors duration-200',
                     solid
                       ? 'text-ink-soft hover:bg-bone hover:text-ink'
                       : 'text-paper/90 hover:bg-paper/15 hover:text-paper',
@@ -194,7 +164,7 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
                     height="7"
                     aria-hidden="true"
                     focusable="false"
-                    className={cn('transition-transform', moreOpen && 'rotate-180')}
+                    className={cn('transition-transform duration-200', moreOpen && 'rotate-180')}
                   >
                     <path d="M1 1.5L6 6.5l5-5" fill="none" stroke="currentColor" strokeWidth="1.5" />
                   </svg>
@@ -205,7 +175,7 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
                       <li key={item.href}>
                         <Link
                           href={`/${locale}${item.href}`}
-                          className="block px-4 py-2.5 text-sm text-ink-soft transition-colors hover:bg-bone hover:text-ink"
+                          className="block px-4 py-2.5 text-sm text-ink-soft transition-colors duration-200 hover:bg-bone hover:text-ink"
                         >
                           {item.label}
                         </Link>
@@ -227,7 +197,7 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
             <a
               href={labels.phoneHref}
               className={cn(
-                'num hidden h-9 items-center rounded-xs px-3 text-[0.8125rem] font-medium transition-colors xl:inline-flex',
+                'num hidden h-9 items-center rounded-xs px-3 text-[0.8125rem] font-medium transition-colors duration-200 xl:inline-flex',
                 solid ? 'text-ink hover:bg-bone' : 'text-paper hover:bg-paper/15',
               )}
             >
@@ -246,112 +216,97 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
               rel="noopener noreferrer"
               aria-label={labels.whatsappLabel}
               className={cn(
-                'inline-flex size-9 items-center justify-center rounded-xs transition-colors md:hidden',
+                'inline-flex size-11 touch-manipulation items-center justify-center rounded-xs transition-colors duration-200 md:hidden',
                 solid ? 'bg-bone text-pine' : 'bg-paper/90 text-pine',
               )}
             >
               <WhatsAppGlyph />
             </a>
-            <button
-              type="button"
-              onClick={() => setMenuOpen(true)}
-              aria-label={labels.openMenu}
-              aria-expanded={menuOpen}
-              className={cn(
-                'inline-flex size-9 items-center justify-center rounded-xs transition-colors lg:hidden',
-                solid ? 'bg-bone text-ink' : 'bg-paper/90 text-ink',
-              )}
-            >
-              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
-                <path
-                  d="M3 6h18M3 12h18M3 18h18"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </button>
+            <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
+              <SheetTrigger
+                aria-label={labels.openMenu}
+                className={cn(
+                  'inline-flex size-11 cursor-pointer touch-manipulation items-center justify-center rounded-xs transition-colors duration-200 lg:hidden',
+                  solid ? 'bg-bone text-ink hover:bg-sand' : 'bg-paper/90 text-ink hover:bg-paper',
+                )}
+              >
+                <Menu className="size-5" aria-hidden="true" />
+              </SheetTrigger>
+
+              <SheetContent
+                side="right"
+                showCloseButton={false}
+                className="w-[min(22rem,88vw)] gap-0 border-l border-line bg-paper p-0 sm:max-w-sm"
+              >
+                <SheetTitle className="sr-only">{labels.menu}</SheetTitle>
+
+                <div className="flex h-16 flex-none items-center justify-between border-b border-line px-5">
+                  <Logo brand={labels.brand} shortName={labels.brandShort} tone="ink" />
+                  <SheetClose
+                    aria-label={labels.closeMenu}
+                    className="inline-flex size-11 cursor-pointer touch-manipulation items-center justify-center rounded-xs bg-bone text-ink transition-colors duration-200 hover:bg-sand"
+                  >
+                    <X className="size-5" aria-hidden="true" />
+                  </SheetClose>
+                </div>
+
+                <nav
+                  aria-label={labels.menu}
+                  className="flex-1 overflow-y-auto overscroll-contain px-5 pb-8 pt-2"
+                >
+                  <ul className="divide-y divide-line-soft border-b border-line-soft">
+                    <li>
+                      <Link
+                        href={`/${locale}`}
+                        onClick={() => setMenuOpen(false)}
+                        className="flex min-h-14 items-center font-display text-2xl leading-tight text-ink transition-colors duration-200"
+                      >
+                        {labels.homeLabel}
+                      </Link>
+                    </li>
+                    {allItems.map((item) => (
+                      <li key={item.href}>
+                        <Link
+                          href={`/${locale}${item.href}`}
+                          onClick={() => setMenuOpen(false)}
+                          className="flex min-h-14 items-center text-lg text-ink-soft transition-colors duration-200 hover:text-ink"
+                        >
+                          {item.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="mt-6 flex flex-col gap-3">
+                    <LeadButton source="mobile-menu" variant="primary" fullWidth>
+                      {labels.consult}
+                    </LeadButton>
+                    <a
+                      href={labels.whatsappHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-outline min-h-12 w-full touch-manipulation"
+                    >
+                      <WhatsAppGlyph />
+                      {labels.whatsappLabel}
+                    </a>
+                    <a
+                      href={labels.phoneHref}
+                      className="btn btn-outline num min-h-12 w-full touch-manipulation"
+                    >
+                      {labels.phoneDisplay}
+                    </a>
+                  </div>
+
+                  <div className="mt-6">
+                    <LanguageSwitcher locale={locale} label={labels.switchLanguage} tone="dark" />
+                  </div>
+                </nav>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </header>
-
-      {/* Full-screen mobile menu */}
-      {menuOpen && (
-        <div
-          className="fixed inset-0 z-[70] flex flex-col bg-paper lg:hidden"
-          role="dialog"
-          aria-modal="true"
-          aria-label={labels.menu}
-        >
-          <div className="shell flex h-16 flex-none items-center justify-between">
-            <span className="font-display text-lg">{labels.brandShort}</span>
-            <button
-              type="button"
-              onClick={() => setMenuOpen(false)}
-              aria-label={labels.closeMenu}
-              className="inline-flex size-10 items-center justify-center rounded-xs bg-bone"
-            >
-              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
-                <path
-                  d="M6 6l12 12M18 6L6 18"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </button>
-          </div>
-
-          <nav aria-label={labels.menu} className="shell flex-1 overflow-y-auto pb-6">
-            <ul className="divide-y divide-line-soft border-y border-line-soft">
-              <li>
-                <Link
-                  href={`/${locale}`}
-                  className="block py-4 font-display text-2xl text-ink"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {labels.homeLabel}
-                </Link>
-              </li>
-              {allItems.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={`/${locale}${item.href}`}
-                    className="block py-4 text-lg text-ink"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-
-            <div className="mt-6 flex flex-col gap-3">
-              <LeadButton source="mobile-menu" variant="primary" fullWidth>
-                {labels.consult}
-              </LeadButton>
-              <a
-                href={labels.whatsappHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-outline w-full"
-              >
-                <WhatsAppGlyph />
-                {labels.whatsappLabel}
-              </a>
-              <a href={labels.phoneHref} className="btn btn-outline num w-full">
-                {labels.phoneDisplay}
-              </a>
-            </div>
-
-            <div className="mt-6">
-              <LanguageSwitcher locale={locale} label={labels.switchLanguage} tone="dark" />
-            </div>
-          </nav>
-        </div>
-      )}
     </>
   );
 }

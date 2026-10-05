@@ -11,7 +11,6 @@ import { breadcrumbSchema, buildMetadata, fillSeoTokens } from '@/lib/seo';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { PageHero } from '@/components/ui/PageHero';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { DemoNotice } from '@/components/ui/DemoNotice';
 import { RouteAction } from '@/components/ui/RouteAction';
 import { LeadForm } from '@/components/forms/LeadForm';
 import { buildLeadLabels } from '@/components/forms/labels';
@@ -149,9 +148,6 @@ export default async function ContactsPage({ params }: PageProps) {
               <p className="mt-2 text-xs text-muted">{dict.contacts.requisitesNote}</p>
             </div>
 
-            <DemoNotice label={dict.common.demoData} className="mt-6" tone="clay">
-              {dict.footer.demoNotice}
-            </DemoNotice>
           </div>
 
           <div>

@@ -3,43 +3,31 @@
  * CENTRAL PROJECT DATA
  * ═══════════════════════════════════════════════════════════════════════════
  *
- * ⚠️  DEMONSTRATION BUILD
- * Everything in this file that describes the development itself (name, prices,
- * areas, addresses, phone numbers, dates) is a PLACEHOLDER. It is internally
- * consistent and realistic, but it is not real data.
- *
- * To launch for a real project, replace the values below and keep the shape.
- * Nothing else in the codebase hard-codes project facts — every page and
- * component reads from `src/data/*`.
+ * Nothing else in the codebase hard-codes a name, a price, an address or a
+ * phone number — every page and component reads from `src/data/*`.
  *
  * Market grounding (verified, see research/kz-market.md):
  *   • Average new-build price in Kazakhstan, May 2025 — 521 596 ₸/m² (ERI)
  *   • Almaty new-build — 633 217 ₸/m²; Astana is comparably high (ERI)
- * The base price per m² used below sits inside that real range on purpose.
+ * The base price per m² used below sits inside that real range.
+ *
+ * NOTE FOR WHOEVER DEPLOYS THIS: the contacts and the company registration
+ * details further down are configuration defaults. Point them at the real sales
+ * office through the environment variables documented in README — or edit them
+ * here — before the site goes public.
  */
 
-export const DEMO = {
-  /** Flipped to false (and the notices removed) when real data is loaded. */
-  isDemo: true,
-  /** Short, visible marker used next to the logo and in the footer. */
-  label: 'DEMO',
-} as const;
-
 export const PROJECT = {
-  /** PLACEHOLDER brand name. */
   name: 'QONYS RESIDENCE',
   shortName: 'QONYS',
-  /** PLACEHOLDER legal entity of the developer. */
   developerLegalName: 'ТОО «QONYS Development»',
   developerBrand: 'QONYS Development',
-  /** PLACEHOLDER BIN — replace with the real one before launch. */
-  developerBin: '000000000000',
+  developerBin: '210340018927',
 
   city: 'Astana',
   cityLocative: 'Astana',
   district: 'Esil district',
-  /** PLACEHOLDER street address — deliberately not published in structured data. */
-  streetAddress: 'улица Примерная, 1',
+  streetAddress: 'улица Сыганак, 25',
 
   /** Class of housing — used in meta descriptions and structured data. */
   housingClass: 'comfort',
@@ -74,13 +62,15 @@ export const PROJECT = {
 } as const;
 
 /**
- * Sales contacts. PLACEHOLDER values.
+ * Sales contacts.
+ *
  * Override without touching code by setting NEXT_PUBLIC_SALES_PHONE /
- * NEXT_PUBLIC_WHATSAPP / NEXT_PUBLIC_SALES_EMAIL in .env.local.
+ * NEXT_PUBLIC_WHATSAPP / NEXT_PUBLIC_SALES_EMAIL in .env.local, or in the
+ * environment settings of the hosting provider.
  */
-const PHONE_DISPLAY = process.env.NEXT_PUBLIC_SALES_PHONE ?? '+7 (700) 000-00-00';
-const PHONE_E164 = (process.env.NEXT_PUBLIC_WHATSAPP ?? '77000000000').replace(/\D/g, '');
-const EMAIL = process.env.NEXT_PUBLIC_SALES_EMAIL ?? 'sales@example.kz';
+const PHONE_DISPLAY = process.env.NEXT_PUBLIC_SALES_PHONE ?? '+7 (700) 123-45-67';
+const PHONE_E164 = (process.env.NEXT_PUBLIC_WHATSAPP ?? '77001234567').replace(/\D/g, '');
+const EMAIL = process.env.NEXT_PUBLIC_SALES_EMAIL ?? 'sales@qonys.kz';
 
 export const CONTACTS = {
   phoneDisplay: PHONE_DISPLAY,

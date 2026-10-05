@@ -10,7 +10,6 @@ import { breadcrumbSchema, buildMetadata, fillSeoTokens } from '@/lib/seo';
 
 import { JsonLd } from '@/components/seo/JsonLd';
 import { PageHero } from '@/components/ui/PageHero';
-import { DemoNotice } from '@/components/ui/DemoNotice';
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -56,9 +55,9 @@ export default async function PrivacyPage({ params }: PageProps) {
 
       <section className="section bg-paper">
         <div className="shell-narrow">
-          <DemoNotice label={dict.common.demoData} tone="clay">
+          <p className="text-[0.9375rem] leading-relaxed text-ink-soft">
             {PRIVACY_SECTIONS[PRIVACY_SECTIONS.length - 1].body[locale][1]}
-          </DemoNotice>
+          </p>
 
           <div className="mt-12 space-y-10">
             {PRIVACY_SECTIONS.map((section, index) => (

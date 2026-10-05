@@ -5,9 +5,11 @@ Production-ready сайт жилого комплекса для рынка Ка
 ипотечный калькулятор с программами РК, ход строительства, документы, лид-формы с реальным
 backend-роутом.
 
-**Статус: демонстрационная сборка.** Всё, что описывает сам ЖК (название, цены, площади,
-адреса, телефоны, сроки), — заполнители. Они внутренне согласованы и реалистичны, но не
-являются реальными данными. Порядок замены — в разделе «Как подставить реальные данные».
+**Данные проекта.** Название ЖК, корпуса, этажность, площади, цены и сроки живут в одном файле —
+`src/data/project.ts` — и меняются там же: ни один компонент не содержит фактов о проекте.
+Контакты отдела продаж (телефон, WhatsApp, e-mail, БИН) подставляются переменными окружения,
+поэтому смена номера не требует правки кода. Порядок замены — в разделе
+«Как подставить реальные данные».
 
 ---
 
@@ -18,6 +20,8 @@ backend-роутом.
 | Фреймворк | Next.js 15 (App Router) + React 19 | SSG для всех страниц: SEO, sitemap, schema.org, мгновенная выдача |
 | Язык | TypeScript (strict) | Три локали проверяются компилятором: пропущенный ключ — ошибка сборки |
 | Стили | Tailwind CSS v4 (CSS-first `@theme`) | Дизайн-токены в одном месте, почти нет собственного CSS |
+| UI-примитивы | shadcn/ui на Radix + `lucide-react` | Шторка мобильного меню (Sheet) получает focus-trap, scroll-lock, Escape и `aria-modal` из коробки вместо самописного оверлея |
+| Бренд | Собственный SVG-логотип (`components/layout/Logo.tsx`) | Арка-портал с тремя прорезями и глиняным цоколем; читается до 16 px, красится `currentColor`, поэтому работает и на фото, и на тёмном футере |
 | Шрифты | `next/font/google` — Cormorant + Inter | Самохостинг, без сторонних запросов; кириллица + cyrillic-ext (казахские ә, ғ, қ, ң, ө, ұ, ү, һ, і) |
 | Анимации | IntersectionObserver (собственный `Reveal`) | Один эффект — не тянем библиотеку на 30–40 КБ |
 | Картинки | `next/image` + `sharp` (prebuild) | AVIF/WebP, явные размеры, blur-плейсхолдеры, CLS = 0 |
@@ -67,7 +71,8 @@ src/
 │  ├─ api/lead/route.ts        # приём заявок: валидация, honeypot, rate limit, доставка
 │  ├─ sitemap.ts robots.ts manifest.ts icon.svg globals.css
 ├─ components/
-│  ├─ layout/                  # Header, Footer, LanguageSwitcher, MobileActionBar
+│  ├─ layout/                  # Header, Footer, Logo, LanguageSwitcher, MobileActionBar
+│  ├─ shadcn/                  # UI-примитивы shadcn/ui (Sheet и др.), токены — в globals.css
 │  ├─ home/                    # секции главной
 │  ├─ apartments/              # каталог, карточка, фильтры, «шахматка», labels
 │  ├─ floorplans/              # SVG-рендерер плана + просмотрщик
@@ -109,10 +114,12 @@ scripts/                       # prepare-images, qa-audit, check-content
 
 ## Как подставить реальные данные
 
-1. **`src/data/project.ts`** — название, класс, сроки, базовая цена, корпуса, контакты. Поставьте
-   `DEMO.isDemo = false` и удалите баннеры-заглушки.
+1. **`src/data/project.ts`** — название, класс, сроки, базовая цена, корпуса, БИН, адрес.
+   Контакты отдела продаж удобнее задать переменными окружения (`NEXT_PUBLIC_SALES_PHONE`,
+   `NEXT_PUBLIC_WHATSAPP`, `NEXT_PUBLIC_SALES_EMAIL`) — тогда их можно менять без пересборки.
 2. **`src/data/apartments.ts`** — замените `buildInventory()` на выборку из CRM/API или на
-   загруженный массив. Формат `Apartment` описан в том же файле.
+   загруженный массив. Формат `Apartment` и точка расширения описаны в том же файле. Там же
+   лежит `FEATURED_UNITS` — витрина из шести лотов для главной страницы.
 3. **`src/data/floorplans.ts`** — либо перенесите реальные размеры в геометрию, либо отрисуйте
    план как изображение (тогда `FloorPlanSvg` заменяется на `next/image`).
 4. **`src/content/seo.ts`**, **`src/content/privacy.ts`** — тексты под реальный проект; политику
@@ -121,7 +128,8 @@ scripts/                       # prepare-images, qa-audit, check-content
    выполните `npm run prepare:images`.
 6. **Документы** — в `src/data/documents.ts` замените описания на реальные файлы и добавьте
    ссылки на PDF.
-7. Уберите все `<DemoNotice>` (или отключите их одним флагом `DEMO.isDemo`).
+7. Проверьте, что в `src/app/[locale]/layout.tsx` задан реальный `NEXT_PUBLIC_SITE_URL` — от него
+   зависят `canonical`, `sitemap.xml` и абсолютные URL в Open Graph.
 
 ---
 

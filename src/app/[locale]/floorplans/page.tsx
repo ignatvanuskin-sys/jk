@@ -14,7 +14,6 @@ import { SectionHeading } from '@/components/ui/SectionHeading';
 import { FloorPlansExplorer } from '@/components/floorplans/FloorPlansExplorer';
 import { buildFloorPlansLabels } from '@/components/apartments/labels';
 import { LeadButton } from '@/components/forms/LeadButton';
-import { DemoNotice } from '@/components/ui/DemoNotice';
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -73,9 +72,6 @@ export default async function FloorPlansPage({ params }: PageProps) {
             locale={locale}
             labels={buildFloorPlansLabels(locale, dict)}
           />
-          <DemoNotice label={dict.common.demoData} className="mt-10">
-            {dict.developer.placeholderNotice}
-          </DemoNotice>
         </div>
       </section>
 

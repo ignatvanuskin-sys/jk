@@ -185,9 +185,8 @@ export interface MortgageLabels {
   capLabel: string;
   providerLabel: string;
   periodLabel: string;
-  sourcesTitle: string;
-  caveatLabel: string;
-  showAll: string;
+   sourcesTitle: string;
+   showAll: string;
   hideAll: string;
 }
 
@@ -210,7 +209,6 @@ export function buildMortgageLabels(dict: Dictionary): MortgageLabels {
     providerLabel: dict.contacts.salesOffice,
     periodLabel: dict.common.minutes,
     sourcesTitle: dict.documents.eyebrow,
-    caveatLabel: dict.common.demoData,
     showAll: dict.common.more,
     hideAll: dict.common.less,
   };

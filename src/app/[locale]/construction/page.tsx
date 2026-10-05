@@ -16,7 +16,6 @@ import { breadcrumbSchema, buildMetadata, fillSeoTokens } from '@/lib/seo';
 
 import { JsonLd } from '@/components/seo/JsonLd';
 import { PageHero } from '@/components/ui/PageHero';
-import { DemoNotice } from '@/components/ui/DemoNotice';
 import {
   ConstructionTimeline,
   type TimelineReport,
@@ -110,9 +109,6 @@ export default async function ConstructionPage({ params }: PageProps) {
             </p>
           </div>
 
-          <DemoNotice label={dict.common.demoData} className="mt-6" tone="clay">
-            {dict.construction.placeholderNotice}
-          </DemoNotice>
         </div>
       </section>
     </>

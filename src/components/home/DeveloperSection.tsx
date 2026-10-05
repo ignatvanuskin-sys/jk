@@ -5,7 +5,6 @@ import type { Dictionary } from '@/i18n/dictionaries/ru';
 import { PROJECT } from '@/data/project';
 import { AWARDS_PLACEHOLDER, COMPLETED_PROJECTS, DEVELOPER_FACTS } from '@/data/developer';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { DemoNotice } from '@/components/ui/DemoNotice';
 import { Reveal } from '@/components/ui/Reveal';
 
 /**
@@ -109,9 +108,6 @@ export function DeveloperSection({
           </div>
         </div>
 
-        <DemoNotice label={dict.common.demoData} className="mt-10" tone="clay">
-          {dict.developer.placeholderNotice}
-        </DemoNotice>
         <p className="mt-4 text-xs text-muted">
           {PROJECT.developerLegalName} · БИН {PROJECT.developerBin}
         </p>

@@ -13,7 +13,6 @@ import { PageHero } from '@/components/ui/PageHero';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { LocationSection } from '@/components/home/LocationSection';
 import { LeadButton } from '@/components/forms/LeadButton';
-import { DemoNotice } from '@/components/ui/DemoNotice';
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -100,9 +99,6 @@ export default async function LocationPage({ params }: PageProps) {
                 </li>
               ))}
           </ul>
-        </div>
-        <div className="shell mt-10">
-          <DemoNotice label={dict.common.demoData}>{dict.location.mapPlaceholder}</DemoNotice>
         </div>
       </section>
     </>

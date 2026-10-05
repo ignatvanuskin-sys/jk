@@ -5,7 +5,6 @@ import type { Dictionary } from '@/i18n/dictionaries/ru';
 import { BLOCKS } from '@/data/project';
 import { getLatestReport, OVERALL_PROGRESS } from '@/data/construction';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { DemoNotice } from '@/components/ui/DemoNotice';
 
 /**
  * Construction progress teaser.
@@ -80,9 +79,6 @@ export function ConstructionPreview({
           </ul>
         </div>
 
-        <DemoNotice label={dict.common.demoData} className="mt-8">
-          {dict.construction.placeholderNotice}
-        </DemoNotice>
       </div>
     </section>
   );

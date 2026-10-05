@@ -10,7 +10,6 @@ import { breadcrumbSchema, buildMetadata, fillSeoTokens } from '@/lib/seo';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { PageHero } from '@/components/ui/PageHero';
 import { SectionHeading } from '@/components/ui/SectionHeading';
-import { DemoNotice } from '@/components/ui/DemoNotice';
 import { Reveal } from '@/components/ui/Reveal';
 import { MortgageCalculator } from '@/components/mortgage/MortgageCalculator';
 import { buildCalcPrograms, CALCULATOR_DEFAULTS } from '@/components/mortgage/programs';
@@ -168,9 +167,9 @@ export default async function MortgagePage({ params }: PageProps) {
             ))}
           </ul>
 
-          <DemoNotice label={dict.common.demoData} className="mt-10" tone="clay">
+          <p className="mt-10 text-xs leading-relaxed text-muted">
             {dict.mortgage.tableNote} {dict.mortgage.disclaimer}
-          </DemoNotice>
+          </p>
         </div>
       </section>
 

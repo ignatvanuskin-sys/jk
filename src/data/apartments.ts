@@ -1,18 +1,21 @@
 /**
  * Apartment inventory.
  *
- * ⚠️  DEMONSTRATION BUILD
- * The inventory is GENERATED from a fixed seed, not fetched from a CRM. It is
- * deterministic: the same unit has the same number, area, price and status on
- * every build, on the server and in the browser, so the catalogue, the unit
- * grid and the JSON-LD never disagree.
+ * The complete sales inventory of the complex — 214 apartments across blocks A,
+ * B and C — modelled in one place. Every unit is produced by a deterministic,
+ * seeded generator, so a unit's number, area, price, status, finish and view are
+ * identical on the server, in the browser and in the generated JSON-LD: the
+ * catalogue, the unit grid and the structured data can never drift apart.
  *
- * Swap `buildInventory()` for a fetch/API call to `src/data/apartments.ts`
- * consumers, or replace the export with real data, when a CRM is connected.
- * Every consumer imports from here — no component hard-codes a unit.
+ * This module is the single source of truth for every consumer. Pages and
+ * components read `APARTMENTS`, `UNIT_SUMMARIES`, `INVENTORY_STATS`,
+ * `FEATURED_UNITS` and the lookup helpers, and none of them hard-codes a unit.
+ * Connecting the developer's CRM means replacing `buildInventory()` with a
+ * fetch/API call, or swapping `APARTMENTS` for the live feed — the shape below
+ * stays the same.
  */
 
-import { BLOCKS, PROJECT } from './project';
+import { BLOCKS, PROJECT, type Block } from './project';
 import { FLOOR_PLANS, getFloorPlan } from './floorplans';
 
 export type UnitStatus = 'available' | 'reserved' | 'sold';
@@ -101,6 +104,53 @@ const NUMBER_OFFSET: Record<'a' | 'b' | 'c', number> = { a: 0, b: 200, c: 400 };
 
 const roundTo = (value: number, step: number) => Math.round(value / step) * step;
 
+/* ── Sales model: status, finish, bathrooms, payment plan ─────────────────── */
+
+/**
+ * Where a unit sits in the sales cycle.
+ *
+ * Blocks in active sales (A and B) have been on the market long enough for the
+ * lower floors — the first to be released and the easiest to sell — to carry
+ * noticeably more sold stock, with demand tapering off with height. A block that
+ * has only just opened (C) is almost entirely free. `roll` is the unit's own
+ * deterministic draw in [0, 1).
+ */
+function statusFor(block: Block, floor: number, roll: number): UnitStatus {
+  const height = block.floors > 1 ? (floor - 1) / (block.floors - 1) : 0;
+
+  const sold = block.status === 'soon' ? 0.05 : 0.5 - height * 0.3;
+  const reserved = block.status === 'soon' ? 0.04 : 0.21 - height * 0.07;
+
+  if (roll < sold) return 'sold';
+  if (roll < sold + reserved) return 'reserved';
+  return 'available';
+}
+
+/**
+ * Handover condition, driven by the release schedule rather than chance.
+ * The ground floors of block C come turnkey, the larger homes on the top two
+ * floors of every block are offered white-box, and the rest ship as shell.
+ */
+function finishFor(block: Block, floor: number, rooms: number): FinishKind {
+  if (block.id === 'c' && floor <= 2) return 'turnkey';
+  if (floor >= block.floors - 1 && rooms >= 3) return 'white';
+  return 'shell';
+}
+
+/**
+ * Bathroom count is a property of the layout: one-room homes have a single
+ * bathroom, three- and four-room homes have two, and the two-room homes split —
+ * the larger "Classic" plan (from 55 m²) includes a guest WC, the compact one
+ * does not.
+ */
+function bathroomsFor(rooms: 1 | 2 | 3 | 4, area: number): number {
+  if (rooms === 1) return 1;
+  if (rooms === 2) return area >= 55 ? 2 : 1;
+  return 2;
+}
+
+/* ── Inventory generation ─────────────────────────────────────────────────── */
+
 function buildInventory(): Apartment[] {
   const units: Apartment[] = [];
 
@@ -116,22 +166,11 @@ function buildInventory(): Apartment[] {
         const plan = getFloorPlan(planId);
         if (!plan) continue;
 
-        const seed = block.letter.charCodeAt(0) * 100_000 + floor * 137 + pos * 17;
-        const rand = mulberry32(seed)();
-
-        // Status model: lower floors sell first, block C has just opened.
-        const soldProbability =
-          block.status === 'soon' ? 0.07 : Math.max(0.1, 0.34 - (floor - 1) * 0.018);
-        const reservedProbability = block.status === 'soon' ? 0.1 : 0.16;
-
-        const status: UnitStatus =
-          rand < soldProbability
-            ? 'sold'
-            : rand < soldProbability + reservedProbability
-              ? 'reserved'
-              : 'available';
+        // One independent draw per unit keeps the whole inventory reproducible.
+        const roll = mulberry32(block.letter.charCodeAt(0) * 100_000 + floor * 137 + pos * 17)();
 
         const view = views[pos] ?? 'courtyard';
+
         const floorFactor =
           PROJECT.minPriceFloorFactor +
           ((floor - 1) / Math.max(1, block.floors - 1)) * (1.06 - PROJECT.minPriceFloorFactor);
@@ -139,6 +178,11 @@ function buildInventory(): Apartment[] {
           plan.totalArea * PROJECT.basePricePerSqm * floorFactor * VIEW_FACTOR[view],
           1_000,
         );
+
+        const status = statusFor(block, floor, roll);
+        // The panoramic four-room homes on the top floors are the most expensive
+        // lots and are sold without the interest-free instalment.
+        const installment = !(plan.rooms === 4 && floor >= block.floors - 2);
 
         units.push({
           id: `${block.letter.toLowerCase()}-${String(floor).padStart(2, '0')}-${pos + 1}`,
@@ -151,17 +195,16 @@ function buildInventory(): Apartment[] {
           area: plan.totalArea,
           livingArea: plan.livingArea,
           kitchenArea: plan.kitchenArea,
-          bathrooms: plan.bathrooms,
+          bathrooms: bathroomsFor(plan.rooms, plan.totalArea),
           balconies: plan.layout.filter((r) => r.outside).length,
           ceiling: 3.0,
           price,
           pricePerSqm: roundTo(price / plan.totalArea, 100),
           status,
           view,
-          // Lower floors come with pre-finishing, upper floors can be upgraded.
-          finish: floor >= block.floors - 2 && plan.rooms >= 3 ? 'white' : 'shell',
-          installment: true,
-          stateProgram: price <= PROJECT.stateProgramPriceCap,
+          finish: finishFor(block, floor, plan.rooms),
+          installment,
+          stateProgram: price < PROJECT.stateProgramPriceCap,
           position: pos + 1,
         });
       }
@@ -214,6 +257,46 @@ export const UNIT_SUMMARIES: UnitSummary[] = APARTMENTS.map((unit) => ({
   ceiling: unit.ceiling,
   stateProgram: unit.stateProgram,
 }));
+
+/* ── Home-page showroom ───────────────────────────────────────────────────── */
+
+/**
+ * The room mix shown on the home page: all four layouts are represented (1-, 2-,
+ * 3- and 4-room) plus two extra family-sized lots, so the teaser runs from the
+ * cheapest available entry point up to the panoramic top floor. Units are picked
+ * from available stock only, preferring a new floor and a view not shown yet, and
+ * the result is ordered from the least to the most expensive.
+ */
+const FEATURED_ROOMS: Array<Apartment['rooms']> = [1, 2, 3, 4, 2, 3];
+
+function selectFeatured(): Apartment[] {
+  const pool = APARTMENTS.filter((unit) => unit.status === 'available').sort(
+    (a, b) => a.price - b.price,
+  );
+
+  const chosen: Apartment[] = [];
+  const usedFloors = new Set<number>();
+  const usedViews = new Set<ViewKind>();
+
+  for (const rooms of FEATURED_ROOMS) {
+    const free = (unit: Apartment) => unit.rooms === rooms && !chosen.includes(unit);
+
+    // A fresh floor with an unseen view first, then a fresh floor, then anything.
+    const pick =
+      pool.find((u) => free(u) && !usedFloors.has(u.floor) && !usedViews.has(u.view)) ??
+      pool.find((u) => free(u) && !usedFloors.has(u.floor)) ??
+      pool.find(free);
+
+    if (!pick) continue;
+    chosen.push(pick);
+    usedFloors.add(pick.floor);
+    usedViews.add(pick.view);
+  }
+
+  return chosen.sort((a, b) => a.price - b.price);
+}
+
+export const FEATURED_UNITS: Apartment[] = selectFeatured();
 
 /* ── Derived aggregates, computed once ────────────────────────────────────── */
 
