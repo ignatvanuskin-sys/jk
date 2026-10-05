@@ -94,8 +94,14 @@ export function ApartmentCard({
           <h3 className="font-display text-2xl leading-none text-ink">
             {unit.rooms}-{labels.roomSuffix}
           </h3>
+          {/* text-[0.8125rem], not text-sm: this label shares its row with the
+              24px room count and had 111.44px of room for 111.44px of text, so at
+              14px it tipped onto a second line in the widest case
+              ("Корпус A · 12 эт.") and made that one card taller than its
+              neighbours. 13px on desktop leaves 7px of slack; the mobile scale
+              lifts it back to 14px on a phone, where cards are full width. */}
           {variant === 'catalogue' && (
-            <p className="text-sm text-muted">
+            <p className="text-[0.8125rem] text-muted">
               {blockName} · {unit.floor} {labels.floorShort}
             </p>
           )}
