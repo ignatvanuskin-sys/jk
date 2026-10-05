@@ -1,7 +1,7 @@
 /**
  * Construction progress reports.
  *
- * ⚠️  DEMONSTRATION BUILD
+ * DATA SOURCE
  * Percentages, dates and photographs are placeholders. The on-page section
  * carries a visible notice. Replace `MONTHLY_REPORTS` with real monthly reports
  * (photo + % + works) before launch.

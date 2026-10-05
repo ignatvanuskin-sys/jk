@@ -1,7 +1,7 @@
 /**
  * Neighbourhood infrastructure.
  *
- * ⚠️  DEMONSTRATION BUILD
+ * DATA SOURCE
  * Objects are described by GENERIC TYPE, never by an invented proper name — no
  * fake school numbers, no invented shopping-centre brands, no fabricated
  * distances presented as fact. Times and distances below are placeholders and

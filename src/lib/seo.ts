@@ -15,16 +15,27 @@ export function fillSeoTokens(text: string, locale: Locale): string {
 }
 
 /**
- * Canonical origin. Set NEXT_PUBLIC_SITE_URL for the real launch.
+ * Canonical origin, resolved in three steps.
  *
- * The fallback is `example.com`, which IANA reserves permanently for
- * documentation and examples. It is deliberately NOT a real .kz domain: a
- * template that ships someone else's live domain in its canonicals, sitemap and
- * Open Graph tags would be pointing search engines and social previews at a
- * site the developer does not own.
+ * 1. `NEXT_PUBLIC_SITE_URL` — the explicit setting, used whenever it is present.
+ * 2. Vercel's own build-time variables. Vercel injects the deployment's domain,
+ *    so a deployment is self-describing even when nobody remembered to set the
+ *    variable. Without this step a live deployment advertised
+ *    `https://example.com` as the canonical of every page, put that domain in
+ *    `robots.txt` and in all 690 sitemap URLs, and pointed Open Graph previews
+ *    at an image that does not exist — the site was effectively unindexable.
+ * 3. `example.com`, which IANA reserves permanently for documentation. It stays
+ *    the last resort so a bare clone never points search engines at a real
+ *    domain the developer does not own.
  */
 export function getSiteUrl(): string {
-  return (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://example.com').replace(/\/+$/, '');
+  const explicit = process.env.NEXT_PUBLIC_SITE_URL;
+  if (explicit) return explicit.replace(/\/+$/, '');
+
+  const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL;
+  if (vercel) return `https://${vercel.replace(/\/+$/, '')}`;
+
+  return 'https://example.com';
 }
 
 export function localePath(locale: Locale, path = ''): string {
@@ -115,7 +126,7 @@ export function buildMetadata({
  * (the development) + RealEstateListing / Offer (units) + BreadcrumbList + FAQPage.
  *
  * NOTE: no `geo` coordinates and no `streetAddress` are published, because the
- * address in this demonstration build is a placeholder. Publishing invented
+ * address in this template is a placeholder. Publishing invented
  * coordinates in structured data would be a factual claim we cannot support.
  */
 export function organizationSchema(locale: Locale) {

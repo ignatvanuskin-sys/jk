@@ -328,6 +328,7 @@ const en: Dictionary = {
     availableCount: 'Available',
     modal: {
       title: 'Floor plan',
+      close: 'Close',
       dimensions: 'Room dimensions',
       roomsList: 'Rooms',
       hint: 'Scroll, or use the zoom buttons. On a phone you can drag the plan with your finger.',
@@ -726,6 +727,9 @@ const en: Dictionary = {
     successTitle: 'Request sent',
     successText:
       'A sales manager will contact you during working hours. If it is urgent, message us on WhatsApp — replies are faster there.',
+    successUndeliveredTitle: 'Your request did not reach us automatically',
+    successUndeliveredText:
+      'The server could not accept it. Please call or message us on WhatsApp so your request is not lost.',
     successAgain: 'Send another request',
     successCall: 'Call now',
     errors: {

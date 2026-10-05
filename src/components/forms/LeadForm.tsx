@@ -85,6 +85,19 @@ export function LeadForm({
   const [consent, setConsent] = useState(false);
   const successRef = useRef<HTMLHeadingElement>(null);
   const summaryRef = useRef<HTMLDivElement>(null);
+  /**
+   * Blocks a second submit while the first is still in flight. The button does
+   * disable on `status === 'sending'`, but that state lands a render later, so
+   * three fast taps fired three POSTs and produced three identical leads.
+   */
+  const sendingRef = useRef(false);
+  /**
+   * False when the endpoint accepted the request but captured it nowhere: no
+   * Telegram, no webhook, and on a serverless host the local JSON-lines fallback
+   * has no writable disk. The visitor must not be told "we will call you" when
+   * nobody will.
+   */
+  const [delivered, setDelivered] = useState(true);
 
   const fieldId = (field: string) => `${uid}-${field}`;
   const errorId = (field: string) => `${uid}-${field}-error`;
@@ -97,6 +110,7 @@ export function LeadForm({
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (sendingRef.current) return;
     setErrors([]);
 
     const form = event.currentTarget;
@@ -111,6 +125,7 @@ export function LeadForm({
       return;
     }
 
+    sendingRef.current = true;
     setStatus('sending');
     try {
       const response = await fetch('/api/lead', {
@@ -137,7 +152,7 @@ export function LeadForm({
       }
 
       const payload = (await response.json().catch(() => null)) as
-        | { ok?: boolean; fields?: LeadErrorCode[] }
+        | { ok?: boolean; delivered?: boolean; fields?: LeadErrorCode[] }
         | null;
 
       if (!response.ok || !payload?.ok) {
@@ -152,12 +167,15 @@ export function LeadForm({
         return;
       }
 
+      setDelivered(payload.delivered !== false);
       setStatus('success');
       onSuccess?.();
       requestAnimationFrame(() => successRef.current?.focus());
     } catch {
       setStatus('error');
       requestAnimationFrame(() => summaryRef.current?.focus());
+    } finally {
+      sendingRef.current = false;
     }
   }
 
@@ -174,26 +192,48 @@ export function LeadForm({
   if (status === 'success') {
     return (
       <div className={cn('p-6 sm:p-8', className)}>
-        <div className="mb-4 flex size-12 items-center justify-center rounded-full bg-pine/10 text-pine">
-          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">
-            <path
-              d="M4 12.5l5 5L20 6.5"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+        <div
+          className={cn(
+            'mb-4 flex size-12 items-center justify-center rounded-full',
+            delivered ? 'bg-pine/10 text-pine' : 'bg-clay/10 text-clay',
+          )}
+        >
+          {delivered ? (
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">
+              <path
+                d="M4 12.5l5 5L20 6.5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ) : (
+            /* No checkmark: nothing was captured, and a green tick here would be
+               the exact lie this state exists to avoid. */
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">
+              <path
+                d="M12 6.5v7.5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.9"
+                strokeLinecap="round"
+              />
+              <circle cx="12" cy="17.6" r="1.25" fill="currentColor" />
+            </svg>
+          )}
         </div>
         <h3
           ref={successRef}
           tabIndex={-1}
           className="font-display text-3xl leading-tight text-ink outline-none"
         >
-          {labels.successTitle}
+          {delivered ? labels.successTitle : labels.successUndeliveredTitle}
         </h3>
-        <p className="mt-3 max-w-prose text-sm leading-relaxed text-ink-soft">{labels.successText}</p>
+        <p className="mt-3 max-w-prose text-sm leading-relaxed text-ink-soft">
+          {delivered ? labels.successText : labels.successUndeliveredText}
+        </p>
 
         <div className="mt-6 flex flex-wrap gap-3">
           <a href={labels.phoneHref} className="btn btn-primary">

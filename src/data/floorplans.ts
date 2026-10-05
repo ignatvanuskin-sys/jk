@@ -5,7 +5,7 @@
  * the plan's total area are all DERIVED from that geometry, so the catalogue,
  * the plan detail page and the SVG drawing can never drift apart.
  *
- * ⚠️  DEMONSTRATION BUILD — the layouts are plausible but invented. Replace the
+ * DATA SOURCE — the layouts are plausible but invented. Replace the
  * geometry with the developer's real drawings, or swap `layout` for an image
  * source, before launch.
  */

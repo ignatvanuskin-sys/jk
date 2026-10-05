@@ -9,7 +9,7 @@
  * `scripts/prepare-images.mjs` into `image-meta.ts`, so the layout reserves the
  * right space and CLS stays at zero.
  *
- * ⚠️  DEMONSTRATION BUILD — all images are 3D visualisations generated for this
+ * DATA SOURCE — all images are 3D visualisations generated for this
  * template. They are NOT photographs of a built development. The site states
  * this in the footer disclaimer.
  */

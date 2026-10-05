@@ -1,7 +1,7 @@
 /**
  * Public document pack.
  *
- * ⚠️  DEMONSTRATION BUILD
+ * DATA SOURCE
  * No document is fabricated here. Each entry describes what the document IS,
  * what it must contain, and what has to be verified. The preview modal renders
  * a clearly-marked demonstration sample — never a fake legal instrument.

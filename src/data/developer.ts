@@ -1,7 +1,7 @@
 /**
  * Developer profile.
  *
- * ⚠️  DEMONSTRATION BUILD
+ * DATA SOURCE
  * Every figure and project below is a PLACEHOLDER for a fictional developer.
  * The section renders a visible notice saying so.
  *

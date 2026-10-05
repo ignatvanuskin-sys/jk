@@ -101,6 +101,15 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
   const solid = !overlay;
   const allItems = [...labels.navItems, ...labels.moreItems];
 
+  /**
+   * True when the current URL is this nav target, or a page nested under it
+   * (so `/ru/apartments/a-04-1` still marks "Квартиры" as current). Nothing on
+   * the site indicated where you were — the nav looked identical on all 690
+   * pages.
+   */
+  const isActive = (href: string) =>
+    pathname === `/${locale}${href}` || pathname.startsWith(`/${locale}${href}/`);
+
   return (
     <>
       <header
@@ -129,21 +138,26 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
 
           <nav aria-label={labels.menu} className="hidden shrink-0 lg:block">
             <ul className="flex items-center gap-0.5">
-              {labels.navItems.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={`/${locale}${item.href}`}
-                    className={cn(
-                      'inline-flex h-9 shrink-0 items-center whitespace-nowrap rounded-xs px-3 text-[0.8125rem] font-medium transition-colors duration-200',
-                      solid
-                        ? 'text-ink-soft hover:bg-bone hover:text-ink'
-                        : 'text-paper/90 hover:bg-paper/15 hover:text-paper',
-                    )}
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
+              {labels.navItems.map((item) => {
+                const current = isActive(item.href);
+                return (
+                  <li key={item.href}>
+                    <Link
+                      href={`/${locale}${item.href}`}
+                      aria-current={current ? 'page' : undefined}
+                      className={cn(
+                        'inline-flex h-9 shrink-0 items-center whitespace-nowrap rounded-xs px-3 text-[0.8125rem] font-medium transition-colors duration-200',
+                        solid
+                          ? 'text-ink-soft hover:bg-bone hover:text-ink'
+                          : 'text-paper/90 hover:bg-paper/15 hover:text-paper',
+                        current && (solid ? 'bg-bone text-ink' : 'bg-paper/15 text-paper'),
+                      )}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                );
+              })}
               <li ref={moreRef} className="relative">
                 <button
                   type="button"
@@ -175,7 +189,11 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
                       <li key={item.href}>
                         <Link
                           href={`/${locale}${item.href}`}
-                          className="block px-4 py-2.5 text-sm text-ink-soft transition-colors duration-200 hover:bg-bone hover:text-ink"
+                          aria-current={isActive(item.href) ? 'page' : undefined}
+                          className={cn(
+                            'block px-4 py-2.5 text-sm text-ink-soft transition-colors duration-200 hover:bg-bone hover:text-ink',
+                            isActive(item.href) && 'bg-bone text-ink',
+                          )}
                         >
                           {item.label}
                         </Link>
@@ -286,7 +304,11 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
                         <Link
                           href={`/${locale}${item.href}`}
                           onClick={() => setMenuOpen(false)}
-                          className="flex min-h-11 items-center rounded-xs px-3 text-[1.0625rem] text-ink-soft transition-colors duration-200 hover:bg-bone hover:text-ink"
+                          aria-current={isActive(item.href) ? 'page' : undefined}
+                          className={cn(
+                            'flex min-h-11 items-center rounded-xs px-3 text-[1.0625rem] text-ink-soft transition-colors duration-200 hover:bg-bone hover:text-ink',
+                            isActive(item.href) && 'bg-bone text-ink',
+                          )}
                         >
                           {item.label}
                         </Link>

@@ -150,11 +150,14 @@ export function FloorPlansExplorer({
         ))}
       </ul>
 
+      {/* closeLabel is the modal action, not the modal title: a close button
+          whose accessible name is "Планировка" tells a screen-reader user
+          nothing about what it does. */}
       <Modal
         open={active !== null}
         onClose={() => setActiveId(null)}
         labelledBy="plan-modal-title"
-        closeLabel={labels.modal.title}
+        closeLabel={labels.modal.close}
         size="xl"
         panelClassName="bg-paper"
         initialFocusRef={closeRef}
