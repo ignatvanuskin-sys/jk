@@ -124,7 +124,11 @@ export function InfraMap({
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1.35fr_1fr] lg:gap-10">
-      <div>
+      {/* min-w-0: without it the grid item's automatic minimum width becomes the
+          chip rail's full content width, so the rail grew to ~730px inside a
+          ~340px column instead of scrolling inside it — and on a phone the chips
+          past the viewport became unreachable. */}
+      <div className="min-w-0">
         <div className="scroll-x -mx-1 flex gap-1.5 px-1 pb-3">
           <button
             type="button"

@@ -227,6 +227,10 @@
   overflow-y: hidden;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
+  /* When the rail is itself a grid or flex item, its automatic minimum width
+     would otherwise be the full width of its content, so it would push the
+     layout wide instead of scrolling within its column. */
+  min-width: 0;
   /* Keep a sideways flick on the chip rail from chaining to the page: without
      this, an edge swipe fires the browser's back gesture or pull-to-refresh
      instead of scrolling the rail. */
@@ -240,6 +244,13 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    TOUCH & MOBILE
    ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Everything from here to the end of the file is one cascade layer.
+   It used to sit unlayered, and unlayered CSS outranks EVERY layer — so a
+   plain .btn { display: inline-flex } beat the hidden utility, which is how
+   the mobile header ended up overflowing and clipping the menu button.
+   Wrapping the component layer once makes Tailwind utilities win again. */
+@layer components {
 
 /* Interactive elements opt out of double-tap-to-zoom, which removes the ~300 ms
    delay the browser otherwise adds before dispatching a click. */
@@ -538,4 +549,6 @@ input[type="range"]::-moz-range-thumb {
   [data-print-hide] {
     display: none !important;
   }
+}
+
 }

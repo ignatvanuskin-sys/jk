@@ -216,7 +216,7 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
               rel="noopener noreferrer"
               aria-label={labels.whatsappLabel}
               className={cn(
-                'inline-flex size-11 touch-manipulation items-center justify-center rounded-xs transition-colors duration-200 md:hidden',
+                'inline-flex size-11 shrink-0 touch-manipulation items-center justify-center rounded-xs transition-colors duration-200 md:hidden',
                 solid ? 'bg-bone text-pine' : 'bg-paper/90 text-pine',
               )}
             >
@@ -226,7 +226,7 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
               <SheetTrigger
                 aria-label={labels.openMenu}
                 className={cn(
-                  'inline-flex size-11 cursor-pointer touch-manipulation items-center justify-center rounded-xs transition-colors duration-200 lg:hidden',
+                  'inline-flex size-11 shrink-0 cursor-pointer touch-manipulation items-center justify-center rounded-xs transition-colors duration-200 lg:hidden',
                   solid ? 'bg-bone text-ink hover:bg-sand' : 'bg-paper/90 text-ink hover:bg-paper',
                 )}
               >
