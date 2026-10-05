@@ -127,14 +127,14 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
             />
           </Link>
 
-          <nav aria-label={labels.menu} className="hidden lg:block">
+          <nav aria-label={labels.menu} className="hidden shrink-0 lg:block">
             <ul className="flex items-center gap-0.5">
               {labels.navItems.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={`/${locale}${item.href}`}
                     className={cn(
-                      'inline-flex h-9 items-center rounded-xs px-3 text-[0.8125rem] font-medium transition-colors duration-200',
+                      'inline-flex h-9 shrink-0 items-center whitespace-nowrap rounded-xs px-3 text-[0.8125rem] font-medium transition-colors duration-200',
                       solid
                         ? 'text-ink-soft hover:bg-bone hover:text-ink'
                         : 'text-paper/90 hover:bg-paper/15 hover:text-paper',
@@ -151,7 +151,7 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
                   aria-haspopup="true"
                   onClick={() => setMoreOpen((v) => !v)}
                   className={cn(
-                    'inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-xs px-3 text-[0.8125rem] font-medium transition-colors duration-200',
+                    'inline-flex h-9 shrink-0 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-xs px-3 text-[0.8125rem] font-medium transition-colors duration-200',
                     solid
                       ? 'text-ink-soft hover:bg-bone hover:text-ink'
                       : 'text-paper/90 hover:bg-paper/15 hover:text-paper',
@@ -187,17 +187,19 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
             </ul>
           </nav>
 
-          <div className="flex items-center gap-1.5">
+          <div className="flex shrink-0 items-center gap-1.5">
             <LanguageSwitcher
               locale={locale}
               label={labels.switchLanguage}
               tone={solid ? 'dark' : 'light'}
               className="hidden sm:flex"
             />
+            {/* shrink-0 + nowrap: without them the flex row squeezes the number
+                until it wraps onto four lines and spills out of the header. */}
             <a
               href={labels.phoneHref}
               className={cn(
-                'num hidden h-9 items-center rounded-xs px-3 text-[0.8125rem] font-medium transition-colors duration-200 xl:inline-flex',
+                'num hidden h-9 shrink-0 items-center whitespace-nowrap rounded-xs px-3 text-[0.8125rem] font-medium transition-colors duration-200 xl:inline-flex',
                 solid ? 'text-ink hover:bg-bone' : 'text-paper hover:bg-paper/15',
               )}
             >
@@ -206,7 +208,7 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
             <LeadButton
               source="header"
               variant={solid ? 'primary' : 'light'}
-              className="hidden h-9 px-4 text-[0.8125rem] md:inline-flex"
+              className="hidden h-9 shrink-0 px-4 text-[0.8125rem] md:inline-flex"
             >
               {labels.consult}
             </LeadButton>
