@@ -96,7 +96,9 @@ export const CONTACTS = {
   /** Pre-filled WhatsApp message — the pattern that converts best in KZ. */
   whatsappMessage: {
     ru: `Здравствуйте! Интересует квартира в ЖК ${PROJECT.nameByLocale.ru}. Хотел(а) бы узнать стоимость и доступные планировки.`,
-    kz: `Сәлеметсіз бе! ${PROJECT.nameByLocale.kz} ТҮК-дегі пәтер қызықтырады. Құны мен қолжетімді жоспарларды білгім келеді.`,
+    // The brand is a proper noun written in Latin wherever the interface is not
+    // Russian, so the Kazakh message must not carry a Cyrillic "Асылым Парк 1".
+    kz: `Сәлеметсіз бе! Asylym Park 1 ТҮК-дегі пәтер қызықтырады. Құны мен қолжетімді жоспарларды білгім келеді.`,
     en: `Hello! I am interested in an apartment at ${PROJECT.nameByLocale.en}. I would like to know the price and the available floor plans.`,
   },
   office: {

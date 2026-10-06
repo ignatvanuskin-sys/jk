@@ -36,7 +36,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const dict = getDictionary(raw);
   const block = getBlock(unit.blockId);
 
-  const title = `${dict.apartments.detail.title} №${unit.number} — ${unit.rooms}-${dict.floorplans.room}, ${formatArea(unit.area, raw)} | ${PROJECT.name}`;
+  // The complex name is localised: the English card must not carry the Cyrillic
+  // brand ("Асылым Парк 1"), it must read "Asylym Park 1".
+  const title = `${dict.apartments.detail.title} №${unit.number} — ${unit.rooms}-${dict.floorplans.room}, ${formatArea(unit.area, raw)} | ${PROJECT.nameByLocale[raw]}`;
   const description =
     raw === 'kz'
       ? `${block?.names.kz}: ${unit.floor}-қабат, ${formatArea(unit.area, 'kz')}, бағасы ${formatPrice(unit.price, 'kz')}. ${dict.apartments.statuses[unit.status]}.`
@@ -113,9 +115,9 @@ export default async function ApartmentPage({ params }: PageProps) {
 
   return (
     <>
-      <JsonLd id="ld-breadcrumb" data={breadcrumbSchema(locale, trail)} />
+      <JsonLd id={`ld-breadcrumb-${locale}`} data={breadcrumbSchema(locale, trail)} />
       <JsonLd
-        id="ld-offer"
+        id={`ld-offer-${locale}`}
         data={offerSchema(locale, {
           id: unit.id,
           number: unit.number,
@@ -236,9 +238,6 @@ export default async function ApartmentPage({ params }: PageProps) {
                 <li className="flex items-center justify-between gap-4 text-sm">
                   <span className="text-muted">{dict.apartments.filters.installment}</span>
                   <span className="text-ok">{dict.common.yes}</span>
-                </li>
-                <li className="flex items-center justify-between gap-4 text-sm">
-                  <span className="text-muted">{dict.apartments.card.bookNote}</span>
                 </li>
               </ul>
 

@@ -24,7 +24,18 @@ import { fileURLToPath } from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, '..');
-const BASE = (process.argv[2] ?? 'http://localhost:3000').replace(/\/+$/, '');
+
+/**
+ * Origin under test. Precedence:
+ *   1. an explicit `QA_BASE_URL` environment variable,
+ *   2. the first CLI argument (`npm run qa -- http://localhost:3100`),
+ *   3. the development default `http://localhost:3000`.
+ * Printing it makes it obvious which server a run actually hit.
+ */
+const BASE = (process.env.QA_BASE_URL ?? process.argv[2] ?? 'http://localhost:3000').replace(
+  /\/+$/,
+  '',
+);
 
 const CONCURRENCY = 6;
 
@@ -204,9 +215,30 @@ function internalLinks(html) {
 }
 
 async function main() {
-  console.log(`QA audit against ${BASE}\n`);
+  console.log('QA audit');
+  console.log(`  Origin tested: ${BASE}`);
+  console.log(
+    `  (override with QA_BASE_URL or: npm run qa -- <origin>)\n`,
+  );
 
-  const sitemapResponse = await fetch(`${BASE}/sitemap.xml`);
+  let sitemapResponse;
+  try {
+    sitemapResponse = await fetch(`${BASE}/sitemap.xml`);
+  } catch (error) {
+    // A refusal here is an environment problem, not a site failure — say so
+    // instead of letting a bare ECONNREFUSED look like a broken page.
+    const code = error?.cause?.code ?? error?.code ?? '';
+    console.error(
+      `✗ Cannot reach a server at ${BASE}${code ? ` (${code})` : ''}.`,
+    );
+    console.error(
+      '  Start the site first, e.g. `npm run build && npm start`, then point the',
+    );
+    console.error(
+      '  audit at it: `npm run qa -- http://localhost:3000` or set QA_BASE_URL.',
+    );
+    process.exit(1);
+  }
   if (!sitemapResponse.ok) {
     console.error(`✗ /sitemap.xml returned ${sitemapResponse.status}`);
     process.exit(1);

@@ -279,6 +279,8 @@ const kz: Dictionary = {
       planLabel: 'Жоспары',
       bookNote: 'Бронь — 1 000 000 ₸',
       lastChance: 'Осы жоспардағы соңғысы',
+      monthlyFrom: '{amount}/айдан',
+      monthlyNote: 'Болжамды — «{program}» бағдарламасы бойынша',
     },
     detail: {
       title: 'Пәтер',
@@ -316,6 +318,9 @@ const kz: Dictionary = {
     selectFloorHint: 'Пәтерлерді ашу үшін қабатты басыңыз',
     floorLabel: 'қабат',
     hint: 'Мәртебелерді сату бөлімінің менеджері жаңартады. Өзектілігін телефон арқылы растаңыз.',
+    filterMatch: 'сүзгіге сәйкес келеді',
+    filterNoMatch: 'сүзгіге сәйкес келмейді',
+    filterLegend: 'Ұяшықтарды ағымдағы сүзгіге қарай белгілеу',
   },
 
   floorplans: {

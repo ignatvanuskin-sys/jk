@@ -19,9 +19,10 @@ qa-report.md
 qa-report.json
 qa-screenshots/
 
-# intermediate image-generation output — the committed sources live in
-# public/images/raw/*.jpg, the optimised set in public/images/*.jpg
-public/images/raw/media-output/
+# Image sources and intermediate generation output. This is ~53 MB of original
+# PNG/JPG and is NOT part of the deployed site (which serves the optimised
+# public/images/*.jpg). Untracked but kept on disk as the originals.
+public/images/raw/
 
 # os
 .DS_Store

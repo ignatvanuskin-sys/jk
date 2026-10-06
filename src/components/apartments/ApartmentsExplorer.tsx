@@ -6,6 +6,7 @@ import type { Locale } from '@/i18n/config';
 import type { UnitStatus } from '@/data/apartments';
 import { cn } from '@/lib/cn';
 import { countInventoryResults } from '@/lib/domain/inventory';
+import { setCatalogueFilter } from '@/lib/catalogue-filter';
 
 import { ApartmentCard, type CardUnit } from './ApartmentCard';
 import type { ExplorerLabels } from './labels';
@@ -152,6 +153,23 @@ export function ApartmentsExplorer({
     sort,
   ]);
 
+  /* ── Publish the highlightable filter slice for the unit grid ───────────── */
+  // The шахматка is rendered as a sibling of this explorer, so it cannot see the
+  // explorer's state directly. It subscribes to this store to highlight the
+  // units that match the active rooms / block / price filter.
+  useEffect(() => {
+    const num = (value: string) => {
+      const parsed = Number(value);
+      return Number.isFinite(parsed) && value !== '' ? parsed : null;
+    };
+    setCatalogueFilter({
+      rooms,
+      blocks,
+      priceMin: num(priceMin),
+      priceMax: num(priceMax),
+    });
+  }, [rooms, blocks, priceMin, priceMax]);
+
   /* ── Filtering ─────────────────────────────────────────────────────────── */
   const filtered = useMemo(() => {
     const num = (value: string) => {
@@ -278,7 +296,7 @@ export function ApartmentsExplorer({
                       aria-pressed={active}
                       onClick={() => toggle(rooms, value, setRooms)}
                       className={cn(
-                        'min-w-11 rounded-xs border px-3 py-2 text-sm transition-colors',
+                        'inline-flex min-h-11 min-w-11 items-center justify-center rounded-xs border px-3 text-sm transition-colors',
                         active
                           ? 'border-ink bg-ink text-paper'
                           : 'border-line bg-white text-ink-soft hover:border-ink/40',
@@ -303,7 +321,7 @@ export function ApartmentsExplorer({
                       aria-pressed={active}
                       onClick={() => toggle(blocks, value, setBlocks)}
                       className={cn(
-                        'rounded-xs border px-3 py-2 text-sm uppercase transition-colors',
+                        'inline-flex min-h-11 items-center rounded-xs border px-3 text-sm uppercase transition-colors',
                         active
                           ? 'border-ink bg-ink text-paper'
                           : 'border-line bg-white text-ink-soft hover:border-ink/40',
@@ -328,7 +346,7 @@ export function ApartmentsExplorer({
                       aria-pressed={active}
                       onClick={() => toggle(statuses, value, setStatuses)}
                       className={cn(
-                        'rounded-xs border px-3 py-2 text-sm transition-colors',
+                        'inline-flex min-h-11 items-center rounded-xs border px-3 text-sm transition-colors',
                         active
                           ? 'border-ink bg-ink text-paper'
                           : 'border-line bg-white text-ink-soft hover:border-ink/40',

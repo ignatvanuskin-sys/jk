@@ -78,7 +78,7 @@ export function Footer({ locale, dict, whatsappHref, navItems }: FooterProps) {
                 <li key={item.href}>
                   <Link
                     href={`/${locale}${item.href}`}
-                    className="text-sm text-paper/80 transition-colors hover:text-paper"
+                    className="inline-flex min-h-11 items-center text-sm text-paper/80 transition-colors hover:text-paper"
                   >
                     {item.label}
                   </Link>
@@ -96,7 +96,7 @@ export function Footer({ locale, dict, whatsappHref, navItems }: FooterProps) {
                 <li key={item.href}>
                   <Link
                     href={`/${locale}${item.href}`}
-                    className="text-sm text-paper/80 transition-colors hover:text-paper"
+                    className="inline-flex min-h-11 items-center text-sm text-paper/80 transition-colors hover:text-paper"
                   >
                     {item.label}
                   </Link>
@@ -168,13 +168,13 @@ export function Footer({ locale, dict, whatsappHref, navItems }: FooterProps) {
               href={CONTACTS.site}
               target="_blank"
               rel="noopener noreferrer"
-              className="underline-offset-4 transition-colors hover:text-paper hover:underline"
+              className="inline-flex min-h-11 items-center underline-offset-4 transition-colors hover:text-paper hover:underline"
             >
               nak.kz
             </a>
             <Link
               href={`/${locale}/privacy`}
-              className="underline-offset-4 transition-colors hover:text-paper hover:underline"
+              className="inline-flex min-h-11 items-center underline-offset-4 transition-colors hover:text-paper hover:underline"
             >
               {dict.footer.privacy}
             </Link>

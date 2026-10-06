@@ -163,7 +163,7 @@ export function MortgageCalculator({
               type="range"
               className="mt-3"
               min={5}
-              max={90}
+              max={100}
               step={1}
               value={downPercent}
               aria-valuetext={`${downPercent}%`}

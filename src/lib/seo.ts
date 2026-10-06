@@ -18,16 +18,24 @@ export function fillSeoTokens(text: string, locale: Locale): string {
  * Canonical origin, resolved in three steps.
  *
  * 1. `NEXT_PUBLIC_SITE_URL` — the explicit setting, used whenever it is present.
+ *    Trailing slashes are trimmed so `https://host/` and `https://host` cannot
+ *    produce two different canonical shapes.
  * 2. Vercel's own build-time variables. Vercel injects the deployment's domain,
  *    so a deployment is self-describing even when nobody remembered to set the
- *    variable. Without this step a live deployment advertised
- *    `https://example.com` as the canonical of every page, put that domain in
- *    `robots.txt` and in all 690 sitemap URLs, and pointed Open Graph previews
- *    at an image that does not exist — the site was effectively unindexable.
- * 3. `example.com`, which IANA reserves permanently for documentation. It stays
- *    the last resort so a bare clone never points search engines at a real
- *    domain the developer does not own.
+ *    variable.
+ * 3. `http://localhost:3000`. The fallback is deliberately a local address, not
+ *    a domain: a build that is missing its origin must be *obviously*
+ *    unconfigured, never quietly wrong. An earlier revision fell back to
+ *    `https://example.com` (IANA's documentation domain), which meant a
+ *    production build on any host that is not Vercel silently advertised a
+ *    foreign domain in canonical, hreflang, og:url, og:image, robots.txt and
+ *    every sitemap URL. `getSiteUrl` now emits a `console.warn` naming the
+ *    missing variable the first time it degrades to the fallback, so a
+ *    misconfigured deploy is caught in the build log instead of by a search
+ *    engine.
  */
+let warnedAboutFallback = false;
+
 export function getSiteUrl(): string {
   const explicit = process.env.NEXT_PUBLIC_SITE_URL;
   if (explicit) return explicit.replace(/\/+$/, '');
@@ -35,7 +43,18 @@ export function getSiteUrl(): string {
   const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL;
   if (vercel) return `https://${vercel.replace(/\/+$/, '')}`;
 
-  return 'https://example.com';
+  if (!warnedAboutFallback) {
+    warnedAboutFallback = true;
+    // eslint-disable-next-line no-console
+    console.warn(
+      '[seo] NEXT_PUBLIC_SITE_URL is not set and no Vercel URL is present — ' +
+        'falling back to http://localhost:3000. Canonical, hreflang, og:url, ' +
+        'og:image, robots.txt and sitemap.xml will all be wrong. Set ' +
+        'NEXT_PUBLIC_SITE_URL to the production origin before deploying.',
+    );
+  }
+
+  return 'http://localhost:3000';
 }
 
 export function localePath(locale: Locale, path = ''): string {

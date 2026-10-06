@@ -51,7 +51,7 @@ export default async function ConstructionPage({ params }: PageProps) {
 
   return (
     <>
-      <JsonLd id="ld-breadcrumb" data={breadcrumbSchema(locale, trail)} />
+      <JsonLd id={`ld-breadcrumb-${locale}`} data={breadcrumbSchema(locale, trail)} />
 
       <PageHero
         locale={locale}

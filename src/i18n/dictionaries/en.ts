@@ -276,6 +276,8 @@ const en: Dictionary = {
       planLabel: 'Floor plan',
       bookNote: 'Reservation — ₸1,000,000',
       lastChance: 'Last one in this layout',
+      monthlyFrom: 'from {amount}/mo',
+      monthlyNote: 'Indicative — under the {program} programme',
     },
     detail: {
       title: 'Apartment',
@@ -313,6 +315,9 @@ const en: Dictionary = {
     selectFloorHint: 'Select a floor to reveal its units',
     floorLabel: 'floor',
     hint: 'Statuses are updated by the sales team. Confirm availability by phone before travelling.',
+    filterMatch: 'matches the filter',
+    filterNoMatch: 'does not match the filter',
+    filterLegend: 'Cells highlighted by the current filter',
   },
 
   floorplans: {

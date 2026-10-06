@@ -1,26 +1,37 @@
 import Link from 'next/link';
-import { cookies } from 'next/headers';
+import { headers } from 'next/headers';
 
 import { locales, defaultLocale, isLocale, type Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/get-dictionary';
+import { PROJECT } from '@/data/project';
+import { LOCALE_HEADER } from '@/lib/route-locale';
 
 /**
  * 404 inside the locale segment.
  *
- * The locale comes from the cookie the middleware sets, because Next does not
- * pass route params to a not-found boundary. That keeps the page in the
- * visitor's own language instead of dropping them into Russian.
+ * Next does not pass route params to a not-found boundary, so the locale is
+ * derived from the pathname: the middleware forwards the locale of every
+ * prefixed request as a request header (`x-zhk-locale`), and this page reads it.
+ * That keeps the copy in the visitor's own language — Kazakh on `/kz/...`,
+ * English on `/en/...` — instead of dropping everyone into Russian.
+ *
+ * `<title>` and the description are rendered here (React 19 hoists them into
+ * `<head>`); previously the tab showed an empty title. The HTTP 404 status
+ * still comes from `notFound()` / the catch-all route, not from this component.
  */
 export default async function NotFound() {
-  const store = await cookies();
-  const cookieLocale = store.get('zhk_locale')?.value;
-  const locale: Locale =
-    cookieLocale && isLocale(cookieLocale) ? cookieLocale : defaultLocale;
+  const headerStore = await headers();
+  const raw = headerStore.get(LOCALE_HEADER);
+  const locale: Locale = raw && isLocale(raw) ? raw : defaultLocale;
 
   const dict = getDictionary(locale);
+  const title = `${dict.notFound.code} — ${dict.notFound.title} | ${PROJECT.nameByLocale[locale]}`;
 
   return (
     <section className="flex min-h-[80svh] items-center bg-bone">
+      <title>{title}</title>
+      <meta name="description" content={dict.notFound.text} />
+
       <div className="shell py-24">
         <p className="num font-display text-[5rem] leading-none text-clay sm:text-[7rem]">
           {dict.notFound.code}

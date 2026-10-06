@@ -45,7 +45,7 @@ export default async function FloorPlansPage({ params }: PageProps) {
 
   return (
     <>
-      <JsonLd id="ld-breadcrumb" data={breadcrumbSchema(locale, trail)} />
+      <JsonLd id={`ld-breadcrumb-${locale}`} data={breadcrumbSchema(locale, trail)} />
 
       <PageHero
         locale={locale}

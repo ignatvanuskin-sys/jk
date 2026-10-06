@@ -409,10 +409,24 @@ export function LeadForm({
         </div>
       </div>
 
-      {/* Honeypot: not rendered, not in the accessibility tree, still posted. */}
-      <div hidden aria-hidden="true">
-        <label htmlFor={fieldId('website')}>Website</label>
-        <input id={fieldId('website')} name="website" type="text" tabIndex={-1} autoComplete="off" />
+      {/* Honeypot. Invisible to people — visually hidden, out of the tab order
+          and out of the accessibility tree — but still present in the markup, so
+          a bot that fills every field it finds reveals itself. `display: none`
+          is set inline (not just via the `hidden` attribute) so no stylesheet
+          can resurrect it, and it keeps the field out of the rendered text too,
+          so it can never surface as a stray "Website" label. */}
+      <div aria-hidden="true" style={{ display: 'none' }}>
+        <label htmlFor={fieldId('website')} aria-hidden="true">
+          Website
+        </label>
+        <input
+          id={fieldId('website')}
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+        />
       </div>
 
       <div className="mt-5 flex items-start gap-3">

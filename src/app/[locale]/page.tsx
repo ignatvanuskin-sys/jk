@@ -59,7 +59,7 @@ export default async function HomePage({ params }: PageProps) {
 
   return (
     <>
-      <JsonLd id="ld-faq" data={faqSchema(dict.faq.items)} />
+      <JsonLd id={`ld-faq-${locale}`} data={faqSchema(dict.faq.items)} />
 
       <Hero locale={locale} dict={dict} whatsappHref={whatsappHref} />
       <AboutComplex locale={locale} dict={dict} />

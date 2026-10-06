@@ -3,6 +3,10 @@
 // Baseline security headers. No third-party origins are used at runtime:
 // all fonts are self-hosted by next/font, all images are served from /public.
 const securityHeaders = [
+  // HSTS: two years, subdomains included. `preload` is deliberately omitted —
+  // it is a one-way commitment to the preload list that should only be taken
+  // once the domain and every subdomain are guaranteed HTTPS-only.
+  { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains' },
   { key: 'X-Content-Type-Options', value: 'nosniff' },
   { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },

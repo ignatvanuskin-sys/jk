@@ -146,7 +146,7 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
                       href={`/${locale}${item.href}`}
                       aria-current={current ? 'page' : undefined}
                       className={cn(
-                        'inline-flex h-9 shrink-0 items-center whitespace-nowrap rounded-xs px-3 text-[0.8125rem] font-medium transition-colors duration-200',
+                        'inline-flex h-11 shrink-0 items-center whitespace-nowrap rounded-xs px-3 text-[0.8125rem] font-medium transition-colors duration-200',
                         solid
                           ? 'text-ink-soft hover:bg-bone hover:text-ink'
                           : 'text-paper/90 hover:bg-paper/15 hover:text-paper',
@@ -165,7 +165,7 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
                   aria-haspopup="true"
                   onClick={() => setMoreOpen((v) => !v)}
                   className={cn(
-                    'inline-flex h-9 shrink-0 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-xs px-3 text-[0.8125rem] font-medium transition-colors duration-200',
+                    'inline-flex h-11 shrink-0 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-xs px-3 text-[0.8125rem] font-medium transition-colors duration-200',
                     solid
                       ? 'text-ink-soft hover:bg-bone hover:text-ink'
                       : 'text-paper/90 hover:bg-paper/15 hover:text-paper',
@@ -217,7 +217,7 @@ export function Header({ locale, labels }: { locale: Locale; labels: HeaderLabel
             <a
               href={labels.phoneHref}
               className={cn(
-                'num hidden h-9 shrink-0 items-center whitespace-nowrap rounded-xs px-3 text-[0.8125rem] font-medium transition-colors duration-200 xl:inline-flex',
+                'num hidden h-11 shrink-0 items-center whitespace-nowrap rounded-xs px-3 text-[0.8125rem] font-medium transition-colors duration-200 xl:inline-flex',
                 solid ? 'text-ink hover:bg-bone' : 'text-paper hover:bg-paper/15',
               )}
             >

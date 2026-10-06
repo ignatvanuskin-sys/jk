@@ -184,7 +184,7 @@ export function FloorPlansExplorer({
                   onClick={() => setZoomIndex((index) => Math.max(0, index - 1))}
                   disabled={zoomIndex === 0}
                   aria-label={labels.zoomOut}
-                  className="flex size-9 items-center justify-center rounded-xs border border-line bg-white disabled:opacity-40"
+                  className="flex size-11 items-center justify-center rounded-xs border border-line bg-white disabled:opacity-40"
                 >
                   −
                 </button>
@@ -198,7 +198,7 @@ export function FloorPlansExplorer({
                   }
                   disabled={zoomIndex === ZOOM_STEPS.length - 1}
                   aria-label={labels.zoomIn}
-                  className="flex size-9 items-center justify-center rounded-xs border border-line bg-white disabled:opacity-40"
+                  className="flex size-11 items-center justify-center rounded-xs border border-line bg-white disabled:opacity-40"
                 >
                   +
                 </button>

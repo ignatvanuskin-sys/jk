@@ -52,8 +52,8 @@ export default async function ApartmentsPage({ params }: PageProps) {
 
   return (
     <>
-      <JsonLd id="ld-breadcrumb" data={breadcrumbSchema(locale, trail)} />
-      <JsonLd id="ld-faq" data={faqSchema(dict.faq.items.slice(0, 4))} />
+      <JsonLd id={`ld-breadcrumb-${locale}`} data={breadcrumbSchema(locale, trail)} />
+      <JsonLd id={`ld-faq-${locale}`} data={faqSchema(dict.faq.items.slice(0, 4))} />
 
       <PageHero
         locale={locale}

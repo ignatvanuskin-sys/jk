@@ -6,6 +6,7 @@ import { getDictionary } from '@/i18n/get-dictionary';
 import { PRIVACY_SECTIONS, PRIVACY_UPDATED_AT } from '@/content/privacy';
 import { PROJECT, CONTACTS } from '@/data/project';
 import { getSeoCopy } from '@/content/seo';
+import { formatIsoDate } from '@/lib/i18n/date';
 import { breadcrumbSchema, buildMetadata, fillSeoTokens } from '@/lib/seo';
 
 import { JsonLd } from '@/components/seo/JsonLd';
@@ -41,7 +42,7 @@ export default async function PrivacyPage({ params }: PageProps) {
 
   return (
     <>
-      <JsonLd id="ld-breadcrumb" data={breadcrumbSchema(locale, trail)} />
+      <JsonLd id={`ld-breadcrumb-${locale}`} data={breadcrumbSchema(locale, trail)} />
 
       <PageHero
         locale={locale}
@@ -50,7 +51,7 @@ export default async function PrivacyPage({ params }: PageProps) {
         lead={dict.documents.types.privacy}
         breadcrumbLabel={dict.nav.breadcrumb}
         trail={trail}
-        meta={[{ label: dict.common.updated, value: PRIVACY_UPDATED_AT }]}
+        meta={[{ label: dict.common.updated, value: formatIsoDate(PRIVACY_UPDATED_AT, locale) }]}
       />
 
       <section className="section bg-paper">

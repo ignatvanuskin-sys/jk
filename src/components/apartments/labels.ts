@@ -1,6 +1,7 @@
 import type { Dictionary } from '@/i18n/dictionaries/ru';
 import type { Locale } from '@/i18n/config';
 import { BLOCKS } from '@/data/project';
+import { MORTGAGE_PROGRAMS } from '@/data/mortgage-programs';
 import type { UnitStatus, ViewKind, FinishingKind } from '@/data/apartments';
 
 /**
@@ -31,7 +32,27 @@ export interface ApartmentCardLabels {
   openApartment: string;
   blockNames: Record<string, string>;
   blockFloors: Record<string, number>;
+  /** Indicative monthly payment, for the card's "from X/month" line. */
+  monthlyFrom: string;
+  monthlyNote: string;
+  /** Default financing terms the monthly figure is estimated from. */
+  finance: {
+    rate: number;
+    minDownPercent: number;
+    maxTermYears: number;
+    programLabel: string;
+  };
 }
+
+/**
+ * The programme the apartment card quotes a monthly figure for: the first
+ * calculator-ready published programme (today, the Bank CenterCredit mortgage).
+ * Quoting a real programme keeps the "from X/month" figure defensible; the
+ * label spells out which programme it is.
+ */
+const DEFAULT_FINANCE_PROGRAMME =
+  MORTGAGE_PROGRAMS.find((program) => program.calculatorReady && program.published) ??
+  MORTGAGE_PROGRAMS[0];
 
 export function buildApartmentCardLabels(locale: Locale, dict: Dictionary): ApartmentCardLabels {
   return {
@@ -53,6 +74,14 @@ export function buildApartmentCardLabels(locale: Locale, dict: Dictionary): Apar
     openApartment: dict.a11y.openApartment,
     blockNames: Object.fromEntries(BLOCKS.map((b) => [b.id, b.names[locale]])),
     blockFloors: Object.fromEntries(BLOCKS.map((b) => [b.id, b.floors])),
+    monthlyFrom: dict.apartments.card.monthlyFrom,
+    monthlyNote: dict.apartments.card.monthlyNote,
+    finance: {
+      rate: DEFAULT_FINANCE_PROGRAMME.rate,
+      minDownPercent: DEFAULT_FINANCE_PROGRAMME.minDownPercent,
+      maxTermYears: DEFAULT_FINANCE_PROGRAMME.maxTermYears ?? 15,
+      programLabel: DEFAULT_FINANCE_PROGRAMME.name[locale],
+    },
   };
 }
 
@@ -99,6 +128,9 @@ export interface UnitGridLabels {
   selectedUnit: string;
   closeSelection: string;
   openUnit: string;
+  filterMatch: string;
+  filterNoMatch: string;
+  filterLegend: string;
   card: ApartmentCardLabels;
 }
 
@@ -119,6 +151,9 @@ export function buildUnitGridLabels(locale: Locale, dict: Dictionary): UnitGridL
     selectedUnit: dict.apartments.detail.title,
     closeSelection: dict.common.close,
     openUnit: dict.common.learnMore,
+    filterMatch: dict.selector.filterMatch,
+    filterNoMatch: dict.selector.filterNoMatch,
+    filterLegend: dict.selector.filterLegend,
     card: buildApartmentCardLabels(locale, dict),
   };
 }

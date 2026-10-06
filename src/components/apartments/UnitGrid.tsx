@@ -1,13 +1,19 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useSyncExternalStore } from 'react';
 
 import type { Locale } from '@/i18n/config';
 import { formatArea, formatNumber, formatPrice } from '@/i18n/config';
 import type { UnitStatus } from '@/data/apartments';
 import { apartmentContext } from '@/lib/contacts';
 import { cn } from '@/lib/cn';
+import {
+  getCatalogueFilter,
+  isCatalogueFilterActive,
+  matchesCatalogueFilter,
+  subscribeCatalogueFilter,
+} from '@/lib/catalogue-filter';
 
 import type { UnitGridLabels } from './labels';
 import type { CardUnit } from './ApartmentCard';
@@ -51,6 +57,21 @@ export function UnitGrid({
   const [blockId, setBlockId] = useState<GridBlock['id']>(blocks[0]?.id ?? '10');
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
+  /**
+   * The catalogue filter, shared through a tiny store (see
+   * `@/lib/catalogue-filter`). When a rooms / block / price filter is active the
+   * grid highlights the units that match it and dims the rest, so the filter is
+   * legible on the шахматка and not only in the card list. The state is also
+   * exposed to assistive tech through `data-filter-match` and the cell's
+   * accessible name, never through colour alone.
+   */
+  const filter = useSyncExternalStore(
+    subscribeCatalogueFilter,
+    getCatalogueFilter,
+    getCatalogueFilter,
+  );
+  const filterActive = isCatalogueFilterActive(filter);
+
   const block = blocks.find((b) => b.id === blockId) ?? blocks[0];
 
   const byFloor = useMemo(() => {
@@ -91,7 +112,7 @@ export function UnitGrid({
                       setSelectedId(null);
                     }}
                     className={cn(
-                      'rounded-xs border px-3.5 py-2 text-sm uppercase transition-colors',
+                      'inline-flex min-h-11 items-center rounded-xs border px-3.5 text-sm uppercase transition-colors',
                       active
                         ? 'border-ink bg-ink text-paper'
                         : 'border-line bg-white text-ink-soft hover:border-ink/40',
@@ -162,16 +183,23 @@ export function UnitGrid({
                     return <td key={index} className="bg-line-soft/40" aria-hidden="true" />;
                   }
                   const isSelected = unit.id === selectedId;
+                  const matches = matchesCatalogueFilter(unit, filter);
+                  const showMatch = filterActive;
                   return (
                     <td key={unit.id}>
                       <button
                         type="button"
                         onClick={() => setSelectedId(isSelected ? null : unit.id)}
                         aria-pressed={isSelected}
-                        aria-label={`${labels.card.blockNames[unit.blockId]}, ${labels.floor} ${unit.floor}, ${labels.selectedUnit} №${unit.number}, ${labels.card.statuses[unit.status]}`}
+                        data-filter-match={showMatch ? String(matches) : undefined}
+                        aria-label={`${labels.card.blockNames[unit.blockId]}, ${labels.floor} ${unit.floor}, ${labels.selectedUnit} №${unit.number}, ${labels.card.statuses[unit.status]}${showMatch ? `, ${matches ? labels.filterMatch : labels.filterNoMatch}` : ''}`}
                         className={cn(
-                          'num flex h-11 w-full min-w-11 items-center justify-center rounded-xs border text-xs font-medium transition-colors',
+                          'num flex h-11 w-full min-w-11 items-center justify-center rounded-xs border text-xs font-medium transition-all',
                           CELL_STYLES[unit.status],
+                          // Match: a ring. No match: dimmed and desaturated. The
+                          // selected cell keeps its own stronger ring last so it
+                          // always reads as the selection.
+                          showMatch && (matches ? 'ring-2 ring-ok/70' : 'opacity-35 saturate-50'),
                           isSelected && 'ring-2 ring-clay ring-offset-1',
                         )}
                       >
@@ -187,6 +215,12 @@ export function UnitGrid({
       </div>
 
       <p className="mt-4 text-xs leading-relaxed text-muted">{labels.hint}</p>
+
+      {filterActive && (
+        <p className="mt-2 text-xs leading-relaxed text-ink-soft" role="status">
+          {labels.filterLegend}
+        </p>
+      )}
 
       {selected && (
         <div className="card mt-6 p-5 sm:p-6" aria-live="polite">

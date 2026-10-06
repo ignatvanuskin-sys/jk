@@ -8,6 +8,7 @@ import type { UnitSummary } from '@/data/apartments';
 import { getFloorPlan } from '@/data/floorplans';
 import { apartmentContext } from '@/lib/contacts';
 import { cn } from '@/lib/cn';
+import { estimateMonthlyPayment } from '@/lib/finance';
 
 import { LeadButton } from '@/components/forms/LeadButton';
 import { FloorPlanSvg } from '@/components/floorplans/FloorPlanSvg';
@@ -43,6 +44,14 @@ export function ApartmentCard({
   const blockName = labels.blockNames[unit.blockId];
   const href = `/${locale}/apartments/${unit.id}`;
   const isSold = unit.status === 'sold';
+
+  /**
+   * Indicative monthly payment under the default programme. Buyers compare on
+   * the monthly figure as much as on the price, so it belongs on the card —
+   * clearly labelled as an estimate tied to a named programme, never as a bank
+   * offer.
+   */
+  const monthly = Math.round(estimateMonthlyPayment(unit.price, labels.finance).monthly);
 
   const subject = [
     `${labels.apartment} №${unit.number}`,
@@ -117,6 +126,17 @@ export function ApartmentCard({
         <p className="num mt-1.5 text-sm text-muted">
           {formatNumber(unit.pricePerSqm, locale)} ₸ {labels.pricePerSqm}
         </p>
+
+        {!isSold && (
+          <>
+            <p className="num mt-3 text-[0.8125rem] text-ink-soft">
+              {labels.monthlyFrom.replace('{amount}', formatPrice(monthly, locale))}
+            </p>
+            <p className="mt-0.5 text-[0.6875rem] leading-snug text-muted">
+              {labels.monthlyNote.replace('{program}', labels.finance.programLabel)}
+            </p>
+          </>
+        )}
 
         <dl className="mt-4 grid grid-cols-3 gap-3 border-t border-line-soft pt-4 text-sm">
           <div>

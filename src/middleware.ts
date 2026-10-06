@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { locales, defaultLocale, type Locale } from '@/i18n/config';
+import { LOCALE_HEADER } from '@/lib/route-locale';
 
 /**
  * Locale routing.
@@ -9,9 +10,14 @@ import { locales, defaultLocale, type Locale } from '@/i18n/config';
  * (a client-side language toggle would break all three).
  *
  * This middleware:
- *   • redirects `/` (and any un-prefixed path) to a locale-prefixed URL,
+ *   • permanently redirects the language-code spelling `/kk` (and `/kk/*`) to
+ *     the `/kz/*` URL that actually serves Kazakh, so no guessed URL dead-ends,
+ *   • redirects `/` (and any other un-prefixed path) to a locale-prefixed URL,
  *   • picks the locale from the visitor's Accept-Language,
- *   • remembers an explicit choice in a cookie.
+ *   • remembers an explicit choice in a cookie,
+ *   • forwards the locale of a prefixed request as a request header, so a
+ *     route that Next renders without params — the 404 boundary — can still
+ *     localise itself from the pathname instead of defaulting to Russian.
  *
  * It never runs for static assets, the API route, or metadata files.
  */
@@ -44,10 +50,24 @@ function pickLocale(request: NextRequest): Locale {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const hasLocale = locales.some(
+  // The URL segment is `kz`, while the language and hreflang code for Kazakh is
+  // `kk`. Renaming the segment would be invasive; instead `/kk` is a permanent
+  // alias: `/kk` → `/kz` and `/kk/<path>` → `/kz/<path>`. 308 keeps the method
+  // and is cacheable as permanent by crawlers and browsers.
+  if (pathname === '/kk' || pathname.startsWith('/kk/')) {
+    const url = request.nextUrl.clone();
+    url.pathname = `/kz${pathname.slice('/kk'.length)}`;
+    return NextResponse.redirect(url, 308);
+  }
+
+  const matched = locales.find(
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`),
   );
-  if (hasLocale) return NextResponse.next();
+  if (matched) {
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set(LOCALE_HEADER, matched);
+    return NextResponse.next({ request: { headers: requestHeaders } });
+  }
 
   const url = request.nextUrl.clone();
   url.pathname = `/${pickLocale(request)}${pathname === '/' ? '' : pathname}`;

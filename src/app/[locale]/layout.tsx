@@ -114,9 +114,11 @@ export default async function LocaleLayout({
   return (
     <html lang={htmlLang[locale]} className={`${inter.variable} ${cormorant.variable}`}>
       <body className="min-h-dvh bg-paper text-ink antialiased">
-        <JsonLd id="ld-organization" data={organizationSchema(locale)} />
-        <JsonLd id="ld-complex" data={apartmentComplexSchema(locale)} />
-        <JsonLd id="ld-office" data={localBusinessSchema(locale)} />
+        {/* JSON-LD block ids are locale-qualified so no document can ever carry
+            the same id twice (the audit found `ld-organization` repeated). */}
+        <JsonLd id={`ld-organization-${locale}`} data={organizationSchema(locale)} />
+        <JsonLd id={`ld-complex-${locale}`} data={apartmentComplexSchema(locale)} />
+        <JsonLd id={`ld-office-${locale}`} data={localBusinessSchema(locale)} />
 
         <a
           href="#content"
@@ -148,7 +150,16 @@ export default async function LocaleLayout({
             }}
           />
 
-          <main id="content">{children}</main>
+          {/* On phones the fixed bottom action bar is 59px tall. `main` carries
+              the matching bottom padding (plus the safe-area inset) so the bar
+              can never cover the last block of a page; it is dropped from `md`
+              up, where the bar is hidden. */}
+          <main
+            id="content"
+            className="pb-[calc(59px+env(safe-area-inset-bottom))] md:pb-0"
+          >
+            {children}
+          </main>
 
           <Footer
             locale={locale}

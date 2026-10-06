@@ -21,10 +21,12 @@ export function Accordion({
       {items.map((item, index) => (
         <details key={item.q} className="group" name="faq" open={index === 0}>
           <summary className="flex cursor-pointer list-none items-start justify-between gap-6 py-5 text-left marker:hidden [&::-webkit-details-marker]:hidden">
-            {/* h2, not h3: the accordion is a top-level section wherever it is
-                used, so its questions must not skip a heading level below the
-                page h1 (which would break the screen-reader outline). */}
-            <h2 className="font-display text-xl leading-snug text-ink sm:text-2xl">{item.q}</h2>
+            {/* The accordion always sits under a section <h2> (its own
+                SectionHeading), so the questions are <h3>: that keeps the
+                outline h1 → h2 → h3 without skipping a level, instead of
+                promoting every question to an <h2> that competes with the
+                section title. */}
+            <h3 className="font-display text-xl leading-snug text-ink sm:text-2xl">{item.q}</h3>
             <span
               className="mt-1 flex size-7 flex-none items-center justify-center rounded-full border border-line text-ink transition-transform duration-300 group-open:rotate-45"
               aria-hidden="true"
