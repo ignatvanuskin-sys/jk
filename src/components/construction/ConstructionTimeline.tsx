@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 
 import type { Locale } from '@/i18n/config';
 import { cn } from '@/lib/cn';
+import { formatIsoDate } from '@/lib/i18n/date';
 import { useRailOverflow } from '@/hooks/useRailOverflow';
 import type { ConstructionLabels } from '@/components/apartments/labels';
 
@@ -24,16 +25,6 @@ export interface TimelineReport {
     height: number;
     blurDataURL?: string;
   };
-}
-
-const INTl_TAG: Record<Locale, string> = { ru: 'ru-RU', kz: 'kk-KZ', en: 'en-US' };
-
-function formatMonth(month: string, locale: Locale) {
-  const date = new Date(`${month}-01T12:00:00Z`);
-  const label = new Intl.DateTimeFormat(INTl_TAG[locale], { month: 'long', year: 'numeric' }).format(
-    date,
-  );
-  return label.charAt(0).toUpperCase() + label.slice(1);
 }
 
 /**
@@ -106,7 +97,7 @@ export function ConstructionTimeline({
                 {report ? `${report.progress}%` : '—'}
               </p>
               <p className="num mt-2 text-[0.6875rem] text-muted">
-                {report ? formatMonth(report.month, locale) : ''}
+                {report ? formatIsoDate(report.month, locale, 'month') : ''}
               </p>
             </div>
           );
@@ -162,7 +153,7 @@ export function ConstructionTimeline({
                     {labels.blockNames[report.blockId]}
                   </p>
                   <h2 className="mt-1.5 font-display text-2xl leading-none text-ink">
-                    {formatMonth(report.month, locale)}
+                    {formatIsoDate(report.month, locale, 'month')}
                   </h2>
                 </div>
                 <p className="num font-display text-3xl leading-none text-ink">{report.progress}%</p>

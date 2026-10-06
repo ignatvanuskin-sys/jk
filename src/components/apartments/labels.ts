@@ -1,7 +1,7 @@
 import type { Dictionary } from '@/i18n/dictionaries/ru';
 import type { Locale } from '@/i18n/config';
 import { BLOCKS } from '@/data/project';
-import type { UnitStatus, ViewKind, FinishKind } from '@/data/apartments';
+import type { UnitStatus, ViewKind, FinishingKind } from '@/data/apartments';
 
 /**
  * Compact label bundles for client components.
@@ -27,7 +27,7 @@ export interface ApartmentCardLabels {
   stateProgram: string;
   statuses: Record<UnitStatus, string>;
   views: Record<ViewKind, string>;
-  finishes: Record<FinishKind, string>;
+  finishes: Record<FinishingKind, string>;
   openApartment: string;
   blockNames: Record<string, string>;
   blockFloors: Record<string, number>;
@@ -66,6 +66,7 @@ export interface ExplorerLabels extends ApartmentCardLabels {
   resultsUnit: string;
   resultsFoundOne: string;
   resultsUnitOne: string;
+  resultsWithAvailable: string;
   emptyTitle: string;
   emptyText: string;
   reset: string;
@@ -86,6 +87,7 @@ export interface UnitGridLabels {
   title: string;
   lead: string;
   block: string;
+  floor: string;
   unitsOnFloor: string;
   legend: string;
   legendAvailable: string;
@@ -105,6 +107,7 @@ export function buildUnitGridLabels(locale: Locale, dict: Dictionary): UnitGridL
     title: dict.selector.title,
     lead: dict.selector.lead,
     block: dict.selector.block,
+    floor: dict.selector.floor,
     unitsOnFloor: dict.selector.unitsOnFloor,
     legend: dict.selector.legend,
     legendAvailable: dict.selector.legendAvailable,
@@ -261,6 +264,7 @@ export function buildExplorerLabels(locale: Locale, dict: Dictionary): ExplorerL
     resultsUnit: dict.apartments.resultsUnit,
     resultsFoundOne: dict.apartments.resultsFoundOne,
     resultsUnitOne: dict.apartments.resultsUnitOne,
+    resultsWithAvailable: dict.apartments.resultsWithAvailable,
     emptyTitle: dict.apartments.emptyTitle,
     emptyText: dict.apartments.emptyText,
     reset: dict.common.reset,

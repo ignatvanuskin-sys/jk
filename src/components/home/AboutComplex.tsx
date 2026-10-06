@@ -22,7 +22,7 @@ export function AboutComplex({
   dict: Dictionary;
 }) {
   const stats = [
-    { label: dict.stats.items.units, value: String(PROJECT.totalUnits) },
+    { label: dict.stats.items.units, value: String(INVENTORY_STATS.total) },
     { label: dict.stats.items.floors, value: `${PROJECT.storeys.min}–${PROJECT.storeys.max}` },
     { label: dict.stats.items.area, value: `${INVENTORY_STATS.minArea}–${INVENTORY_STATS.maxArea} м²` },
     { label: dict.stats.items.parking, value: String(PARKING.undergroundSpaces) },

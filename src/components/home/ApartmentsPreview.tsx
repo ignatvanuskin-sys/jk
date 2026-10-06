@@ -3,6 +3,7 @@ import Link from 'next/link';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries/ru';
 import { FEATURED_UNITS, INVENTORY_STATS, INVENTORY_UPDATED_AT } from '@/data/apartments';
+import { formatIsoDate } from '@/lib/i18n/date';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { ApartmentCard } from '@/components/apartments/ApartmentCard';
 import { buildApartmentCardLabels } from '@/components/apartments/labels';
@@ -63,7 +64,7 @@ export function ApartmentsPreview({
                   promise. The date is what tells the visitor — and the sales
                   team — when the number must be refreshed. */}
               <p className="mt-4 text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-muted">
-                {dict.common.updated} {INVENTORY_UPDATED_AT}
+                {dict.common.updated} {formatIsoDate(INVENTORY_UPDATED_AT, locale)}
               </p>
             </div>
           }

@@ -17,6 +17,7 @@ export interface GridBlock {
   id: 'a' | 'b' | 'c';
   floors: number;
   unitsPerFloor: number;
+  name: string;
 }
 
 const CELL_STYLES: Record<UnitStatus, string> = {
@@ -96,7 +97,7 @@ export function UnitGrid({
                         : 'border-line bg-white text-ink-soft hover:border-ink/40',
                     )}
                   >
-                    {item.id}
+                    {labels.card.blockNames[item.id]}
                   </button>
                 );
               })}
@@ -133,7 +134,7 @@ export function UnitGrid({
           <thead>
             <tr>
               <th scope="col" className="w-14 text-left text-[0.6875rem] font-medium text-muted">
-                {labels.block}
+                {labels.floor}
               </th>
               {Array.from({ length: block?.unitsPerFloor ?? 0 }, (_, index) => (
                 <th
@@ -167,7 +168,7 @@ export function UnitGrid({
                         type="button"
                         onClick={() => setSelectedId(isSelected ? null : unit.id)}
                         aria-pressed={isSelected}
-                        aria-label={`${labels.selectedUnit} №${unit.number}, ${labels.block} ${unit.blockId.toUpperCase()}, ${unit.rooms}-${labels.card.roomSuffix}, ${formatArea(unit.area, locale)}, ${labels.card.statuses[unit.status]}`}
+                        aria-label={`${labels.card.blockNames[unit.blockId]}, ${labels.floor} ${unit.floor}, ${labels.selectedUnit} №${unit.number}, ${labels.card.statuses[unit.status]}`}
                         className={cn(
                           'num flex h-11 w-full min-w-11 items-center justify-center rounded-xs border text-xs font-medium transition-colors',
                           CELL_STYLES[unit.status],

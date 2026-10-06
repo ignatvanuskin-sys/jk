@@ -5,6 +5,7 @@ import { isLocale, formatPrice, type Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/get-dictionary';
 import { MORTGAGE_PROGRAMS, MORTGAGE_SOURCES, getSources } from '@/data/mortgage-programs';
 import { getSeoCopy } from '@/content/seo';
+import { formatIsoDate } from '@/lib/i18n/date';
 import { breadcrumbSchema, buildMetadata, fillSeoTokens } from '@/lib/seo';
 
 import { JsonLd } from '@/components/seo/JsonLd';
@@ -157,7 +158,7 @@ export default async function MortgagePage({ params }: PageProps) {
                           >
                             {source.label}
                           </a>
-                          <span className="num ml-1.5 text-muted/70">{source.date}</span>
+                          <span className="num ml-1.5 text-muted/70">{source.date.length === 4 ? source.date : formatIsoDate(source.date, locale, source.date.length === 7 ? 'month' : 'date')}</span>
                         </li>
                       ))}
                     </ul>

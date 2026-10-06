@@ -3,7 +3,7 @@
  *
  * The complete sales inventory of the complex — 214 apartments across blocks A,
  * B and C — modelled in one place. Every unit is produced by a deterministic,
- * seeded generator, so a unit's number, area, price, status, finish and view are
+ * seeded generator, so a unit's number, area, price, status, finishing and view are
  * identical on the server, in the browser and in the generated JSON-LD: the
  * catalogue, the unit grid and the structured data can never drift apart.
  *
@@ -17,10 +17,11 @@
 
 import { BLOCKS, PROJECT, type Block } from './project';
 import { FLOOR_PLANS, getFloorPlan } from './floorplans';
+import { countInventory } from '@/lib/domain/inventory';
 
 export type UnitStatus = 'available' | 'reserved' | 'sold';
 export type ViewKind = 'courtyard' | 'city' | 'steppe' | 'park';
-export type FinishKind = 'shell' | 'white' | 'turnkey';
+export type FinishingKind = 'pre' | 'clean' | 'turnkey';
 
 export interface Apartment {
   /** Stable id used in URLs, e.g. `a-03-2`. */
@@ -43,7 +44,7 @@ export interface Apartment {
   pricePerSqm: number;
   status: UnitStatus;
   view: ViewKind;
-  finish: FinishKind;
+  finishing: FinishingKind;
   /** Sold on a developer payment plan. */
   installment: boolean;
   /** Price sits under the state-programme cap for this city. */
@@ -104,7 +105,7 @@ const NUMBER_OFFSET: Record<'a' | 'b' | 'c', number> = { a: 0, b: 200, c: 400 };
 
 const roundTo = (value: number, step: number) => Math.round(value / step) * step;
 
-/* ── Sales model: status, finish, bathrooms, payment plan ─────────────────── */
+/* ── Sales model: status, finishing, bathrooms, payment plan ──────────────── */
 
 /**
  * Where a unit sits in the sales cycle.
@@ -126,15 +127,9 @@ function statusFor(block: Block, floor: number, roll: number): UnitStatus {
   return 'available';
 }
 
-/**
- * Handover condition, driven by the release schedule rather than chance.
- * The ground floors of block C come turnkey, the larger homes on the top two
- * floors of every block are offered white-box, and the rest ship as shell.
- */
-function finishFor(block: Block, floor: number, rooms: number): FinishKind {
-  if (block.id === 'c' && floor <= 2) return 'turnkey';
-  if (floor >= block.floors - 1 && rooms >= 3) return 'white';
-  return 'shell';
+/** Every demo apartment is handed over with the documented pre-finishing. */
+function finishingFor(): FinishingKind {
+  return 'pre';
 }
 
 /**
@@ -202,7 +197,7 @@ function buildInventory(): Apartment[] {
           pricePerSqm: roundTo(price / plan.totalArea, 100),
           status,
           view,
-          finish: finishFor(block, floor, plan.rooms),
+          finishing: finishingFor(),
           installment,
           stateProgram: price < PROJECT.stateProgramPriceCap,
           position: pos + 1,
@@ -236,7 +231,7 @@ export type UnitSummary = Pick<
   | 'pricePerSqm'
   | 'status'
   | 'view'
-  | 'finish'
+  | 'finishing'
   | 'ceiling'
   | 'stateProgram'
 >;
@@ -253,7 +248,7 @@ export const UNIT_SUMMARIES: UnitSummary[] = APARTMENTS.map((unit) => ({
   pricePerSqm: unit.pricePerSqm,
   status: unit.status,
   view: unit.view,
-  finish: unit.finish,
+  finishing: unit.finishing,
   ceiling: unit.ceiling,
   stateProgram: unit.stateProgram,
 }));
@@ -312,19 +307,17 @@ export const INVENTORY_UPDATED_AT = '2026-10-05';
 /* ── Derived aggregates, computed once ────────────────────────────────────── */
 
 const available = APARTMENTS.filter((a) => a.status === 'available');
+const inventoryCounts = countInventory(APARTMENTS);
 
 export const INVENTORY_STATS = {
-  total: APARTMENTS.length,
-  available: available.length,
-  reserved: APARTMENTS.filter((a) => a.status === 'reserved').length,
-  sold: APARTMENTS.filter((a) => a.status === 'sold').length,
+  ...inventoryCounts,
   minPrice: Math.min(...APARTMENTS.map((a) => a.price)),
   maxPrice: Math.max(...APARTMENTS.map((a) => a.price)),
   minAvailablePrice: available.length ? Math.min(...available.map((a) => a.price)) : 0,
   minArea: Math.min(...APARTMENTS.map((a) => a.area)),
   maxArea: Math.max(...APARTMENTS.map((a) => a.area)),
   /** Units that fit under the state-programme price cap. */
-  stateProgramUnits: available.filter((a) => a.stateProgram).length,
+  stateProgramUnits: countInventory(APARTMENTS.filter((a) => a.stateProgram)).available,
   availableByPlan: Object.fromEntries(
     FLOOR_PLANS.map((plan) => [
       plan.id,

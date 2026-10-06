@@ -93,7 +93,7 @@ export default async function ApartmentPage({ params }: PageProps) {
     { label: dict.apartments.detail.ceilingHeight, value: `${unit.ceiling} м` },
     { label: dict.common.balcony, value: String(unit.balconies) },
     { label: dict.apartments.detail.view, value: dict.apartments.views[unit.view] },
-    { label: dict.apartments.detail.finishing, value: dict.apartments.finishes[unit.finish] },
+    { label: dict.apartments.detail.finishing, value: dict.apartments.finishes[unit.finishing] },
     {
       label: dict.apartments.detail.deliveryDate,
       value: block?.delivery[locale] ?? PROJECT.delivery[locale],

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries/ru';
 import { PROJECT_DOCUMENTS } from '@/data/documents';
+import { formatIsoDate } from '@/lib/i18n/date';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 
 /**
@@ -74,7 +75,7 @@ export function DocumentsPreview({
                       ? dict.documents.statusProvided
                       : dict.documents.statusRequest}
                   </span>
-                  <span className="num text-xs text-muted">{document.updatedAt}</span>
+                  <span className="num text-xs text-muted">{formatIsoDate(document.updatedAt, locale)}</span>
                   <span
                     className="text-ink-soft transition-transform group-hover:translate-x-1"
                     aria-hidden="true"

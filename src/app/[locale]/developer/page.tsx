@@ -6,6 +6,7 @@ import { getDictionary } from '@/i18n/get-dictionary';
 import { PROJECT } from '@/data/project';
 import { PROJECT_DOCUMENTS } from '@/data/documents';
 import { getSeoCopy } from '@/content/seo';
+import { formatIsoDate } from '@/lib/i18n/date';
 import { breadcrumbSchema, buildMetadata, fillSeoTokens } from '@/lib/seo';
 
 import { JsonLd } from '@/components/seo/JsonLd';
@@ -80,7 +81,7 @@ export default async function DeveloperPage({ params }: PageProps) {
                 <span className="text-[0.9375rem] text-ink">
                   {dict.documents.types[document.typeKey]}
                 </span>
-                <span className="num text-xs text-muted">{document.updatedAt}</span>
+                <span className="num text-xs text-muted">{formatIsoDate(document.updatedAt, locale)}</span>
               </li>
             ))}
           </ul>

@@ -3,19 +3,16 @@ import Link from 'next/link';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries/ru';
 import { PROJECT } from '@/data/project';
-import { AWARDS_PLACEHOLDER, COMPLETED_PROJECTS, DEVELOPER_FACTS } from '@/data/developer';
+import { PUBLISHED_COMPLETED_PROJECTS, getDeveloperFacts } from '@/data/developer';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Reveal } from '@/components/ui/Reveal';
 
 /**
  * Developer block — the trust section.
  *
- * Two deliberate choices:
- *   • completed projects are shown as facts (year, city, units, m²) with
- *     neutral labels, because inventing project names would be a fake claim;
- *   • the awards slot is an HONEST EMPTY STATE telling the visitor that only
- *     document-backed awards will be published. On a real launch it is replaced
- *     by the developer's certificates.
+ * Published completed projects are explicitly marked demo records and include
+ * the full data contract required by the portfolio: name, city, year, units,
+ * area, map URL and photo.
  */
 export function DeveloperSection({
   locale,
@@ -24,6 +21,8 @@ export function DeveloperSection({
   locale: Locale;
   dict: Dictionary;
 }) {
+  const developerFacts = getDeveloperFacts();
+
   return (
     <section className="section bg-bone" id="developer">
       <div className="shell">
@@ -39,7 +38,7 @@ export function DeveloperSection({
         />
 
         <dl className="mt-12 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-line pt-10 sm:grid-cols-3 lg:grid-cols-6">
-          {DEVELOPER_FACTS.map((fact) => (
+          {developerFacts.map((fact) => (
             <div key={fact.label[locale]}>
               <dd className="num font-display text-4xl leading-none text-ink">
                 {fact.value}
@@ -53,27 +52,36 @@ export function DeveloperSection({
         </dl>
 
         <div className="mt-14 grid gap-8 lg:grid-cols-[1.3fr_1fr]">
-          <div>
-            <h3 className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-clay">
-              {dict.developer.projectsTitle}
-            </h3>
-            <ul className="mt-5 divide-y divide-line border-y border-line">
-              {COMPLETED_PROJECTS.map((project) => (
-                <li
-                  key={project.id}
-                  className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 py-4"
-                >
-                  <span className="text-[0.9375rem] text-ink">{project.label[locale]}</span>
-                  <span className="text-sm text-ink-soft">
-                    {project.city[locale]}, {project.year}
-                  </span>
-                  <span className="num text-sm text-muted">
-                    {project.units} · {project.area.toLocaleString('ru-RU')} м²
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {PUBLISHED_COMPLETED_PROJECTS.length > 0 && (
+            <div>
+              <h3 className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-clay">
+                {dict.developer.projectsTitle}
+              </h3>
+              <ul className="mt-5 divide-y divide-line border-y border-line">
+                {PUBLISHED_COMPLETED_PROJECTS.map((project) => (
+                  <li
+                    key={project.id}
+                    className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 py-4"
+                  >
+                    <a
+                      href={project.mapUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[0.9375rem] text-ink underline decoration-line underline-offset-4"
+                    >
+                      {project.name[locale]}
+                    </a>
+                    <span className="text-sm text-ink-soft">
+                      {project.city[locale]}, {project.year}
+                    </span>
+                    <span className="num text-sm text-muted">
+                      {project.units} · {project.area.toLocaleString('ru-RU')} м²
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <div>
             <h3 className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-clay">
@@ -90,21 +98,6 @@ export function DeveloperSection({
               ))}
             </ul>
 
-            <div className="mt-8 rounded-sm border border-line bg-paper p-5">
-              <h4 className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-muted">
-                {AWARDS_PLACEHOLDER.title[locale]}
-              </h4>
-              <p className="mt-3 text-xs leading-relaxed text-ink-soft">
-                {AWARDS_PLACEHOLDER.text[locale]}
-              </p>
-              <Link
-                href={`/${locale}/documents`}
-                className="mt-4 inline-flex items-center gap-2 border-b border-line pb-0.5 text-xs text-ink transition-colors hover:border-clay hover:text-clay"
-              >
-                {AWARDS_PLACEHOLDER.action[locale]}
-                <span aria-hidden="true">→</span>
-              </Link>
-            </div>
           </div>
         </div>
 

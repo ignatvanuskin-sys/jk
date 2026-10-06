@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { Locale } from '@/i18n/config';
 import type { UnitStatus } from '@/data/apartments';
 import { cn } from '@/lib/cn';
+import { countInventoryResults } from '@/lib/domain/inventory';
 
 import { ApartmentCard, type CardUnit } from './ApartmentCard';
 import type { ExplorerLabels } from './labels';
@@ -62,7 +63,7 @@ export function ApartmentsExplorer({
 }: ApartmentsExplorerProps) {
   const [rooms, setRooms] = useState<number[]>([]);
   const [blocks, setBlocks] = useState<string[]>([]);
-  const [statuses, setStatuses] = useState<UnitStatus[]>(['available', 'reserved']);
+  const [statuses, setStatuses] = useState<UnitStatus[]>(['available']);
   const [areaMin, setAreaMin] = useState('');
   const [areaMax, setAreaMax] = useState('');
   const [floorMin, setFloorMin] = useState('');
@@ -123,7 +124,7 @@ export function ApartmentsExplorer({
     const params = new URLSearchParams();
     if (rooms.length) params.set('rooms', rooms.join(','));
     if (blocks.length) params.set('blocks', blocks.join(','));
-    if (statuses.length !== 2 || !statuses.includes('available') || !statuses.includes('reserved')) {
+    if (statuses.length !== 1 || !statuses.includes('available')) {
       params.set('status', statuses.join(','));
     }
     if (areaMin) params.set('areaMin', areaMin);
@@ -194,7 +195,7 @@ export function ApartmentsExplorer({
   const reset = useCallback(() => {
     setRooms([]);
     setBlocks([]);
-    setStatuses(['available', 'reserved']);
+    setStatuses(['available']);
     setAreaMin('');
     setAreaMax('');
     setFloorMin('');
@@ -216,10 +217,15 @@ export function ApartmentsExplorer({
       : statuses.length) +
     [areaMin, areaMax, floorMin, floorMax, priceMin, priceMax].filter(Boolean).length;
 
-  const countLabel =
-    filtered.length === 1
-      ? `${labels.resultsFoundOne} ${filtered.length} ${labels.resultsUnitOne}`
-      : `${labels.resultsFound} ${filtered.length} ${labels.resultsUnit}`;
+  const counts = countInventoryResults(units, filtered);
+  const onlyAvailable = statuses.length === 1 && statuses[0] === 'available';
+  const countLabel = onlyAvailable
+    ? counts.found === 1
+      ? `${labels.resultsFoundOne} ${counts.found} ${labels.resultsUnitOne}`
+      : `${labels.resultsFound} ${counts.found} ${labels.resultsUnit}`
+    : labels.resultsWithAvailable
+        .replace('{found}', String(counts.found))
+        .replace('{available}', String(counts.available));
 
   return (
     <div className="grid gap-8 lg:grid-cols-[19rem_1fr] lg:gap-10">
@@ -303,7 +309,7 @@ export function ApartmentsExplorer({
                           : 'border-line bg-white text-ink-soft hover:border-ink/40',
                       )}
                     >
-                      {value}
+                      {labels.blockNames[value]}
                     </button>
                   );
                 })}
@@ -509,7 +515,7 @@ export function ApartmentsExplorer({
                   onClick={() => setVisible((count) => count + PAGE_SIZE)}
                   className="btn btn-outline"
                 >
-                  {labels.viewAll} ({filtered.length - visible})
+                  {labels.viewAll} ({counts.found})
                 </button>
               </div>
             )}

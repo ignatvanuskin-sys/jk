@@ -11,6 +11,7 @@ import {
 } from '@/data/apartments';
 import { BLOCKS, PROJECT } from '@/data/project';
 import { getSeoCopy } from '@/content/seo';
+import { formatIsoDate } from '@/lib/i18n/date';
 import { breadcrumbSchema, buildMetadata, faqSchema, fillSeoTokens } from '@/lib/seo';
 
 import { JsonLd } from '@/components/seo/JsonLd';
@@ -63,7 +64,7 @@ export default async function ApartmentsPage({ params }: PageProps) {
         trail={trail}
         image="interior-living"
         meta={[
-          { label: dict.stats.items.units, value: String(PROJECT.totalUnits) },
+          { label: dict.stats.items.units, value: String(INVENTORY_STATS.total) },
           { label: dict.common.inProgress, value: String(INVENTORY_STATS.available) },
           { label: dict.hero.priceLabel, value: formatPriceCompact(INVENTORY_STATS.minAvailablePrice, locale) },
           {
@@ -72,7 +73,7 @@ export default async function ApartmentsPage({ params }: PageProps) {
           },
           // Prices and availability are only actionable with the date they are
           // valid for — see INVENTORY_UPDATED_AT.
-          { label: dict.common.updated, value: INVENTORY_UPDATED_AT },
+          { label: dict.common.updated, value: formatIsoDate(INVENTORY_UPDATED_AT, locale) },
         ]}
       />
 
@@ -109,6 +110,7 @@ export default async function ApartmentsPage({ params }: PageProps) {
                 id: block.id,
                 floors: block.floors,
                 unitsPerFloor: block.unitsPerFloor,
+                name: block.names[locale],
               }))}
               locale={locale}
               labels={buildUnitGridLabels(locale, dict)}

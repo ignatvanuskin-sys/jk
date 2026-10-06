@@ -1,6 +1,7 @@
 import type { Locale } from '@/i18n/config';
 import { FLOOR_PLANS } from './floorplans';
 import { APARTMENTS } from './apartments';
+import { countInventory } from '@/lib/domain/inventory';
 
 /**
  * Compact, serialisable projection of each floor plan.
@@ -54,7 +55,7 @@ export const PLAN_SUMMARIES: PlanSummary[] = FLOOR_PLANS.map((plan) => {
     balconies: plan.layout.filter((room) => room.outside).length,
     kitchenInLiving: plan.kitchenInLiving,
     floors: Array.from(new Set(available.map((unit) => unit.floor))).sort((a, b) => a - b),
-    available: available.length,
+    available: countInventory(units).available,
     priceFrom: pricePool.length ? Math.min(...pricePool.map((unit) => unit.price)) : 0,
   };
 });

@@ -225,6 +225,7 @@ const en: Dictionary = {
     resultsUnit: 'apartments',
     resultsFoundOne: 'Found',
     resultsUnitOne: 'apartment',
+    resultsWithAvailable: 'Found {found}: {available} available',
     emptyTitle: 'Nothing matches these filters',
     emptyText:
       'Try widening the area or price range — or send a request and a manager will shortlist options by hand.',
@@ -259,13 +260,13 @@ const en: Dictionary = {
       sold: 'Sold',
     },
     finishes: {
-      shell: 'Pre-finishing',
-      white: 'Finished',
-      turnkey: 'Move-in ready',
+      pre: 'Pre-finishing',
+      clean: 'Clean finish',
+      turnkey: 'Turnkey',
     },
     views: {
-      courtyard: 'Courtyard',
-      city: 'City',
+      courtyard: 'Courtyard view',
+      city: 'City view',
       steppe: 'Steppe',
       park: 'Park',
     },
@@ -316,7 +317,7 @@ const en: Dictionary = {
   floorplans: {
     eyebrow: 'Floor plans',
     title: 'Floor plans and areas',
-    lead: 'Four layout types. Select an image to open the plan enlarged, check room dimensions and zoom into individual zones.',
+    lead: 'Every layout in the complex, from compact one-room units to panoramic four-room homes. Select an image to open the plan enlarged, check room dimensions and zoom into individual zones.',
     tabsLabel: 'Layout type',
     plan: 'Layout',
     room: 'room',
@@ -664,7 +665,7 @@ const en: Dictionary = {
     items: [
       {
         q: 'What finishing is the apartment handed over with?',
-        a: 'Pre-finishing: floor screed, plastered walls, electrical and plumbing first fix, radiators installed, and a glazed balcony. Full finishing is an option and is priced separately.',
+        a: 'Pre-finishing: floor screed, plastered walls, electrical and plumbing first fix, radiators installed, and a glazed balcony.',
       },
       {
         q: 'Can I change the internal layout?',

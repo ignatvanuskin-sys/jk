@@ -4,6 +4,7 @@ import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries/ru';
 import { BLOCKS } from '@/data/project';
 import { getLatestReport, OVERALL_PROGRESS } from '@/data/construction';
+import { formatIsoDate } from '@/lib/i18n/date';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 
 /**
@@ -71,7 +72,7 @@ export function ConstructionPreview({
                     />
                   </div>
                   <p className="num mt-4 text-xs text-muted">
-                    {dict.construction.reportDate}: {report?.month}
+                    {dict.construction.reportDate}: {report ? formatIsoDate(report.month, locale, 'month') : '—'}
                   </p>
                 </li>
               );

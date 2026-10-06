@@ -39,6 +39,7 @@ next-env.d.ts
 
 # browser-audit output (screenshots + measurement scripts)
 mobile-audit/
+production-audit.md
 
 audit-shots/
 

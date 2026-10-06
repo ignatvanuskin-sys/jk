@@ -6,6 +6,7 @@ import { formatPriceCompact } from '@/i18n/config';
 import { PROJECT } from '@/data/project';
 import { INVENTORY_STATS, INVENTORY_UPDATED_AT } from '@/data/apartments';
 import { MediaImage } from '@/components/ui/MediaImage';
+import { formatIsoDate } from '@/lib/i18n/date';
 import { LeadButton } from '@/components/forms/LeadButton';
 
 /**
@@ -79,7 +80,7 @@ export function Hero({
         {/* The availability count also rides on the catalogue button below. The
             date is what keeps it from reading as a permanent guarantee. */}
         <p className="mt-4 text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-paper/55">
-          {dict.common.updated} {INVENTORY_UPDATED_AT}
+          {dict.common.updated} {formatIsoDate(INVENTORY_UPDATED_AT, locale)}
         </p>
 
         <div className="mt-10 flex flex-wrap items-center gap-3">

@@ -6,6 +6,7 @@ import { getDictionary } from '@/i18n/get-dictionary';
 import { DOCUMENTS_UPDATED_AT, PROJECT_DOCUMENTS } from '@/data/documents';
 import { PROJECT } from '@/data/project';
 import { getSeoCopy } from '@/content/seo';
+import { formatIsoDate } from '@/lib/i18n/date';
 import { breadcrumbSchema, buildMetadata, fillSeoTokens } from '@/lib/seo';
 
 import { JsonLd } from '@/components/seo/JsonLd';
@@ -54,7 +55,7 @@ export default async function DocumentsPage({ params }: PageProps) {
         trail={trail}
         meta={[
           { label: dict.documents.status, value: `${published} / ${PROJECT_DOCUMENTS.length}` },
-          { label: dict.common.updated, value: DOCUMENTS_UPDATED_AT },
+          { label: dict.common.updated, value: formatIsoDate(DOCUMENTS_UPDATED_AT, locale) },
           { label: dict.contacts.requisitesTitle, value: PROJECT.developerBin },
         ]}
       />
@@ -96,7 +97,7 @@ export default async function DocumentsPage({ params }: PageProps) {
                             : dict.documents.statusRequest}
                         </span>
                         <span className="num">
-                          {dict.common.updated}: {document.updatedAt}
+                          {dict.common.updated}: {formatIsoDate(document.updatedAt, locale)}
                         </span>
                       </p>
                     </div>

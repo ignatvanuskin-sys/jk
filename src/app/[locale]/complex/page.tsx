@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { isLocale, type Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/get-dictionary';
 import { BLOCKS, PARKING, PROJECT } from '@/data/project';
+import { INVENTORY_STATS } from '@/data/apartments';
 import { getSeoCopy } from '@/content/seo';
 import { breadcrumbSchema, buildMetadata, fillSeoTokens } from '@/lib/seo';
 
@@ -57,7 +58,7 @@ export default async function ComplexPage({ params }: PageProps) {
         image="night-facade"
         meta={[
           { label: dict.stats.items.floors, value: `${PROJECT.storeys.min}–${PROJECT.storeys.max}` },
-          { label: dict.stats.items.units, value: String(PROJECT.totalUnits) },
+          { label: dict.stats.items.units, value: String(INVENTORY_STATS.total) },
           { label: dict.stats.items.parking, value: String(PARKING.undergroundSpaces) },
           { label: dict.stats.items.delivery, value: PROJECT.delivery[locale] },
         ]}

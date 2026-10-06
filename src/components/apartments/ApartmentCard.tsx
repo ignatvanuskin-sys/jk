@@ -148,7 +148,7 @@ export function ApartmentCard({
             {labels.views[unit.view]}
           </li>
           <li className="rounded-xs bg-bone px-2 py-1 text-[0.6875rem] text-ink-soft">
-            {labels.finishes[unit.finish]}
+            {labels.finishes[unit.finishing]}
           </li>
         </ul>
 
