@@ -21,6 +21,9 @@ export function DocumentsPreview({
   locale: Locale;
   dict: Dictionary;
 }) {
+  // No document is confirmed by the dossier — no data, no block.
+  if (PROJECT_DOCUMENTS.length === 0) return null;
+
   return (
     <section className="section bg-paper" id="documents">
       <div className="shell">

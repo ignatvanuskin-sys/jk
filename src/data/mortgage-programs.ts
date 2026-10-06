@@ -1,15 +1,16 @@
 /**
- * Financing programmes available to buyers in Kazakhstan.
+ * Ways to buy, as published for Asylym Park 1 (developer NAK).
  *
  * ⚠️  READ THIS BEFORE PUBLISHING
- * Rates and caps below were taken from the sources listed in `MORTGAGE_SOURCES`
- * during desk research and are shown with the date of the source. Programme
- * terms change often — they MUST be re-checked against the official rules
- * (otbasybank.kz, gov.kz, bank websites) before the site goes live.
+ * The options below are exactly the ones the developer publishes (see
+ * `docs/real-data-dossier.md`, §2 "Как купить", captured 06.10.2026, prices and
+ * availability valid as at 21 August 2026). Programmes NOT used by this complex
+ * — in particular the state subsidy programme — are deliberately absent, and no
+ * programme name or rate is hard-coded anywhere outside this data file.
  *
- * Programmes whose parameters could not be confirmed in full are marked
- * `calculatorReady: false`: they are still listed for the buyer, but the
- * calculator will not use them to produce a payment figure.
+ * Every programme carries the date its terms were verified (`verified_at`) and a
+ * `published` flag. Only programmes whose full parameter set is confirmed are
+ * marked `calculatorReady: true`.
  */
 
 export interface MortgageSource {
@@ -19,43 +20,25 @@ export interface MortgageSource {
   date: string;
 }
 
-/** Every URL below was returned by web_search/web_fetch during research. */
+/** Every URL below belongs to a page opened while collecting the dossier. */
 export const MORTGAGE_SOURCES: MortgageSource[] = [
   {
-    id: 'finratings',
-    label: 'Finratings.kz — обзор ипотечных программ Казахстана',
-    url: 'https://finratings.kz/news/2589-ipoteka-v-kazakhstane-2025-obzor-samykh-populiarnykh-programm/',
-    date: '2025-04-25',
+    id: 'korter',
+    label: 'Korter.kz — ЖК Asylym Park 1: планировки, цены и способы покупки',
+    url: 'https://korter.kz/%D0%B6%D0%BA-asylym-park-1-%D0%BD%D1%83%D1%80-%D1%81%D1%83%D0%BB%D1%82%D0%B0%D0%BD-%D0%B0%D1%81%D1%82%D0%B0%D0%BD%D0%B0',
+    date: '2026-08-21',
   },
   {
-    id: 'zakon',
-    label: 'Zakon.kz — государственные жилищные программы',
-    url: 'https://special.zakon.kz/halyk_mortgage_programs',
-    date: '2025',
+    id: 'nak',
+    label: 'Nak.kz — официальный сайт застройщика NAK',
+    url: 'https://nak.kz',
+    date: '2026-10-06',
   },
   {
-    id: 'krisha-nauryz',
-    label: 'Krisha.kz — ипотеки «Наурыз» и «Наурыз жұмыскер»: ответы на главные вопросы',
-    url: 'https://krisha.kz/kz/content/articles/2025/2025-ipoteki-nauryz-i-nauryz-zhumysker-otvety-na-glavnye-voprosy',
-    date: '2025-11',
-  },
-  {
-    id: 'krisha-instalment',
-    label: 'Krisha.kz — рассрочка вместо ипотеки: как купить квартиру без переплаты',
-    url: 'https://krisha.kz/content/articles/2025/2025-rassrochka-vmesto-ipoteki-kak-kupit-kvartiru-bez-pereplaty',
-    date: '2025-06-04',
-  },
-  {
-    id: 'digitalbusiness',
-    label: 'Digitalbusiness.kz — жильё в рассрочку: что предлагают застройщики в Казахстане',
-    url: 'https://digitalbusiness.kz/2025-03-08/zhile-v-rassrochku-chto-seychas-predlagayut-zastroyshchiki-v-kazahstane/',
-    date: '2025-03-08',
-  },
-  {
-    id: 'inbusiness',
-    label: 'Inbusiness.kz — в РК утвердили новые правила господдержки на жильё',
-    url: 'https://inbusiness.kz/ru/last/v-rk-utverdili-novye-pravila-gospodderzhki-na-zhile',
-    date: '2025-06-05',
+    id: 'nak-2gis',
+    label: '2ГИС — карточка NAK / Asylym Prime',
+    url: 'https://2gis.kz/astana/firm/70000001077133651',
+    date: '2026-10-06',
   },
 ];
 
@@ -63,265 +46,144 @@ export interface MortgageProgram {
   id: string;
   provider: string;
   name: { ru: string; kz: string; en: string };
-  /** Annual rate in percent — the programme's headline figure. */
+  /** Annual rate in percent — 0 for the interest-free developer plan. */
   rate: number;
-  /** Rate floor and ceiling where the programme is graded by category. */
-  rateRange?: { min: number; max: number; note: { ru: string; kz: string; en: string } };
+  /** True when `rate` is a loyalty discount rather than a loan rate. */
+  rateIsDiscount?: boolean;
   minDownPercent: number;
-  /** Higher down payment where a programme distinguishes finishing types. */
-  minDownPercentFinished?: number;
-  maxTermYears: number;
-  /** Cap on the price of the property, where the programme sets one. */
-  priceCap?: number;
+  /** A second published down-payment tier, where the developer sets one. */
+  minDownPercentAlt?: number;
+  maxTermYears?: number;
   maxLoan?: number;
+  priceCap?: number;
+  /** One-off booking fee, in KZT. */
+  bookingFee?: number;
   /** Extra, buyer-relevant facts. */
   highlights: { ru: string; kz: string; en: string }[];
   /** Declared risk: what still has to be verified before publication. */
   caveat?: { ru: string; kz: string; en: string };
-  /** True only when every figure used by the calculator is sourced. */
+  /** True only when every figure used by the calculator is confirmed. */
   calculatorReady: boolean;
   sourceIds: string[];
+  /** ISO date the programme's terms were last verified against the source. */
+  verified_at: string;
+  published: boolean;
 }
-
-const CITY_LIMIT_NOTE = {
-  ru: 'Лимит стоимости жилья для Астаны',
-  kz: 'Астана үшін тұрғын үй құнының шегі',
-  en: 'Property price cap for Astana',
-};
 
 export const MORTGAGE_PROGRAMS: MortgageProgram[] = [
   {
-    id: '7-20-25',
-    provider: 'Отбасы банк / банки-партнёры',
-    name: {
-      ru: 'Государственная программа «7-20-25»',
-      kz: '«7-20-25» мемлекеттік бағдарламасы',
-      en: 'State programme "7-20-25"',
-    },
-    rate: 7,
-    minDownPercent: 20,
-    maxTermYears: 25,
-    priceCap: 25_000_000,
-    highlights: [
-      { ru: 'Ставка 7% годовых', kz: 'Жылдық 7% мөлшерлеме', en: '7% annual rate' },
-      {
-        ru: 'Первоначальный взнос от 20%',
-        kz: 'Бастапқы жарна 20%-дан',
-        en: 'Down payment from 20%',
-      },
-      { ru: 'Срок до 25 лет', kz: 'Мерзімі 25 жылға дейін', en: 'Term up to 25 years' },
-      {
-        ru: 'Лимит стоимости жилья для Астаны — 25 млн ₸',
-        kz: 'Астана үшін тұрғын үй құнының шегі — 25 млн ₸',
-        en: 'Property price cap in Astana — ₸25 million',
-      },
-    ],
-    caveat: {
-      ru: 'Лимиты и условия программы периодически пересматриваются. Перед публикацией сверьте с правилами на официальном ресурсе оператора программы.',
-      kz: 'Бағдарламаның шектеулері мен шарттары мезгіл-мезгіл қайта қаралады. Жариялау алдында бағдарлама операторының ресми ресурсындағы ережелермен салыстырыңыз.',
-      en: 'Programme limits and terms are revised periodically. Before publication, verify against the official rules of the programme operator.',
-    },
-    calculatorReady: true,
-    sourceIds: ['finratings', 'zakon'],
-  },
-  {
-    id: 'nauryz',
-    provider: 'Отбасы банк',
-    name: {
-      ru: 'Программа «Наурыз»',
-      kz: '«Наурыз» бағдарламасы',
-      en: 'Programme "Nauryz"',
-    },
-    rate: 9,
-    rateRange: {
-      min: 7,
-      max: 9,
-      note: {
-        ru: '7% — для социально уязвимых категорий, 9% — для остальных',
-        kz: '7% — әлеуметтік осал санаттар үшін, 9% — қалғандары үшін',
-        en: '7% for vulnerable groups, 9% for everyone else',
-      },
-    },
-    minDownPercent: 20,
-    minDownPercentFinished: 10,
-    maxTermYears: 19,
-    highlights: [
-      {
-        ru: 'Первоначальный взнос 10% при чистовой отделке, 20% при черновой',
-        kz: 'Таза әрлеуде бастапқы жарна 10%, шикі әрлеуде 20%',
-        en: 'Down payment 10% with finished interiors, 20% with shell',
-      },
-      {
-        ru: 'Срок до 19 лет',
-        kz: 'Мерзімі 19 жылға дейін',
-        en: 'Term up to 19 years',
-      },
-      {
-        ru: 'Только через Отбасы банк и только для тех, кто не владел жильём последние 5 лет',
-        kz: 'Тек Отбасы банк арқылы және соңғы 5 жылда тұрғын үйі болмағандарға',
-        en: 'Available only via Otbasy Bank, and only if you have owned no housing in the last 5 years',
-      },
-    ],
-    caveat: {
-      ru: 'Программа работает по конкурсному отбору (баллы) либо по отдельным условиям для работников. Максимальная сумма займа в источниках указана по-разному (30 или 36 млн ₸) — требует сверки.',
-      kz: 'Бағдарлама конкурстық іріктеу (балл) бойынша немесе жұмысшыларға арналған жекелеген шарттар бойынша жүреді. Ең жоғары несие сомасы дереккөздерде әртүрлі (30 немесе 36 млн ₸) — салыстыру қажет.',
-      en: 'The programme runs on a points-based selection, or on separate terms for employees. The maximum loan amount differs between sources (₸30m or ₸36m) and needs verification.',
-    },
-    calculatorReady: true,
-    sourceIds: ['krisha-nauryz', 'inbusiness'],
-  },
-  {
-    id: 'orda-aimak',
-    provider: 'Казахстанская Жилищная Компания (КЖК)',
-    name: {
-      ru: 'Программа «Орда Аймақ»',
-      kz: '«Орда Аймақ» бағдарламасы',
-      en: 'Programme "Orda Aimak"',
-    },
-    rate: 15.9,
-    minDownPercent: 20,
-    maxTermYears: 20,
-    maxLoan: 75_000_000,
-    highlights: [
-      {
-        ru: 'Для строящихся аккредитованных ЖК в регионах',
-        kz: 'Аймақтардағы салынып жатқан аккредиттелген ТҮК үшін',
-        en: 'For accredited developments under construction in the regions',
-      },
-      {
-        ru: 'Сумма займа от 1 до 75 млн ₸',
-        kz: 'Несие сомасы 1-ден 75 млн ₸-ға дейін',
-        en: 'Loan from ₸1m to ₸75m',
-      },
-      {
-        ru: 'КЖК берёт на себя обязательства по завершению строительства',
-        kz: 'КЖК құрылысты аяқтау бойынша міндеттемелер алады',
-        en: 'KHC assumes the obligation to complete construction',
-      },
-    ],
-    caveat: {
-      ru: 'Ставка 15,9% указана в обзоре; эффективная ставка (ГЭСВ) по источнику выше — от 17,26%. Актуальные условия уточняйте в банке.',
-      kz: '15,9% мөлшерлемесі шолуда көрсетілген; дереккөз бойынша тиімді мөлшерлеме (ЖТМС) жоғары — 17,26%-дан. Өзекті шарттарды банктен нақтылаңыз.',
-      en: 'The 15.9% rate comes from the review; the effective rate per the source is higher — from 17.26%. Check the current terms with the bank.',
-    },
-    calculatorReady: true,
-    sourceIds: ['finratings'],
-  },
-  {
-    id: 'zelenaya',
-    provider: 'Отбасы банк / банки-партнёры',
-    name: {
-      ru: '«Зелёная ипотека»',
-      kz: '«Жасыл ипотека»',
-      en: '"Green mortgage"',
-    },
-    rate: 7,
-    rateRange: {
-      min: 7,
-      max: 12.5,
-      note: {
-        ru: 'Ставка зависит от класса энергоэффективности дома',
-        kz: 'Мөлшерлеме үйдің энергия тиімділігі сыныбына байланысты',
-        en: 'The rate depends on the building’s energy-efficiency rating',
-      },
-    },
-    minDownPercent: 20,
-    maxTermYears: 20,
-    maxLoan: 50_000_000,
-    highlights: [
-      {
-        ru: 'Только для ЖК с сертификатом энергоэффективности',
-        kz: 'Тек энергия тиімділігі сертификаты бар ТҮК үшін',
-        en: 'Only for buildings with an energy-efficiency certificate',
-      },
-      { ru: 'Сумма до 50 млн ₸', kz: 'Сомасы 50 млн ₸-ға дейін', en: 'Loan up to ₸50m' },
-      {
-        ru: 'Первоначальный взнос от 20%',
-        kz: 'Бастапқы жарна 20%-дан',
-        en: 'Down payment from 20%',
-      },
-    ],
-    caveat: {
-      ru: 'Срок займа и максимальная сумма подтверждены не полностью — программа вынесена из расчёта и приведена для справки.',
-      kz: 'Несие мерзімі мен ең жоғары сома толық расталмаған — бағдарлама есептеуден шығарылды және анықтама ретінде берілген.',
-      en: 'The term and the maximum amount are not fully confirmed — the programme is excluded from the calculator and listed for reference only.',
-    },
-    calculatorReady: false,
-    sourceIds: ['finratings'],
-  },
-  {
-    id: 'bank',
-    provider: 'Банки-партнёры',
-    name: {
-      ru: 'Банковская ипотека (ставку задаёт банк)',
-      kz: 'Банк ипотекасы (мөлшерлемені банк белгілейді)',
-      en: 'Bank mortgage (rate set by the bank)',
-    },
-    rate: 18,
-    minDownPercent: 20,
-    maxTermYears: 20,
-    highlights: [
-      {
-        ru: 'Отбасы банк, Halyk Bank, Freedom Bank, Банк ЦентрКредит, ForteBank, Altyn Bank',
-        kz: 'Отбасы банк, Halyk Bank, Freedom Bank, Банк ЦентрКредит, ForteBank, Altyn Bank',
-        en: 'Otbasy Bank, Halyk Bank, Freedom Bank, Bank CenterCredit, ForteBank, Altyn Bank',
-      },
-      {
-        ru: 'Одну заявку можно подать в несколько банков через менеджера',
-        kz: 'Бір өтінімді менеджер арқылы бірнеше банкке беруге болады',
-        en: 'One manager can submit a single application to several banks',
-      },
-      {
-        ru: 'Ставка в расчёте — пример. Фактическую ставку банк указывает в решении по заявке',
-        kz: 'Есептеудегі мөлшерлеме — мысал. Нақты мөлшерлемені банк өтінім шешімінде көрсетеді',
-        en: 'The rate in the calculation is an example. The bank states the actual rate in its decision',
-      },
-    ],
-    caveat: {
-      ru: 'Ставка 18% — ориентир для расчёта, а не предложение банка. Точную ставку банк указывает в решении по заявке.',
-      kz: '18% мөлшерлемесі — есептеуге арналған бағдар, банктің ұсынысы емес. Нақты мөлшерлемені банк өтінім бойынша шешімінде көрсетеді.',
-      en: 'The 18% rate is a guide for the calculation, not a bank offer. The bank states the exact rate in its decision on the application.',
-    },
-    calculatorReady: true,
-    sourceIds: [],
-  },
-  {
     id: 'instalment',
-    provider: 'QONYS Development',
+    provider: 'ТОО «Nur Astana Kurylys» (NAK)',
     name: {
       ru: 'Рассрочка от застройщика',
       kz: 'Құрылыс салушының бөліп төлеуі',
       en: 'Developer payment plan',
     },
     rate: 0,
-    minDownPercent: 20,
-    maxTermYears: 2,
+    minDownPercent: 50,
+    minDownPercentAlt: 70,
+    bookingFee: 1_000_000,
     highlights: [
-      {
-        ru: 'Первоначальный взнос от 20%',
-        kz: 'Бастапқы жарна 20%-дан',
-        en: 'Down payment from 20%',
-      },
-      {
-        ru: 'Без процентов; срок — до окончания строительства',
-        kz: 'Пайызсыз; мерзімі құрылыс аяқталғанға дейін',
-        en: 'Interest-free; runs until construction completes',
-      },
-      {
-        ru: 'Право собственности переходит после 100% оплаты',
-        kz: 'Меншік құқығы 100% төлемнен кейін ауысады',
-        en: 'Ownership transfers after 100% payment',
-      },
+      { ru: 'Первоначальный взнос от 50% и 70%', kz: 'Бастапқы жарна 50% және 70%-дан', en: 'Down payment from 50% and 70%' },
+      { ru: 'Бронь квартиры — 1 000 000 ₸', kz: 'Пәтерді брондау — 1 000 000 ₸', en: 'Unit reservation — ₸1,000,000' },
+      { ru: 'Первый взнос, далее ипотека', kz: 'Алдымен бастапқы жарна, одан кейін ипотека', en: 'Down payment first, then a mortgage' },
     ],
     caveat: {
-      ru: 'На рынке часть застройщиков добавляет к цене 3–5% при рассрочке. Условия по конкретному лоту подтверждает менеджер.',
-      kz: 'Нарықта кейбір құрылыс салушылар бөліп төлеу кезінде бағаға 3–5% қосады. Нақты лот бойынша шарттарды менеджер растайды.',
-      en: 'On the market, some developers add 3–5% to the price for a payment plan. A manager confirms the terms for a specific unit.',
+      ru: 'Срок рассрочки застройщиком не опубликован — уточняется в отделе продаж. Расчёт в калькуляторе для неё не выполняется.',
+      kz: 'Бөліп төлеу мерзімі құрылыс салушы жарияламаған — сату бөлімінде нақтыланады. Калькуляторда есептеу жүргізілмейді.',
+      en: 'The developer does not publish the payment-plan term — confirm it with the sales office. The calculator does not model it.',
+    },
+    calculatorReady: false,
+    sourceIds: ['korter', 'nak'],
+    verified_at: '2026-08-21',
+    published: true,
+  },
+  {
+    id: 'ckb-income',
+    provider: 'Банк Центр Кредит',
+    name: {
+      ru: 'Ипотека Банк Центр Кредит (с подтверждением дохода)',
+      kz: 'Банк Центр Кредит ипотекасы (табысты растаумен)',
+      en: 'Bank CenterCredit mortgage (income confirmed)',
+    },
+    rate: 5,
+    minDownPercent: 20,
+    maxTermYears: 15,
+    maxLoan: 80_000_000,
+    highlights: [
+      { ru: 'Ставка от 5% годовых', kz: 'Жылдық мөлшерлеме 5%-дан', en: 'Rate from 5% per year' },
+      { ru: 'Первоначальный взнос 20%', kz: 'Бастапқы жарна 20%', en: 'Down payment 20%' },
+      { ru: 'Срок до 15 лет', kz: 'Мерзімі 15 жылға дейін', en: 'Term up to 15 years' },
+      { ru: 'Сумма займа до 80 000 000 ₸', kz: 'Несие сомасы 80 000 000 ₸-ға дейін', en: 'Loan up to ₸80,000,000' },
+    ],
+    caveat: {
+      ru: 'Условия публикует застройщик для ЖК Asylym Park 1. Точную ставку банк указывает в решении по заявке.',
+      kz: 'Шарттарды құрылыс салушы Asylym Park 1 ТҮК үшін жариялайды. Нақты мөлшерлемені банк өтінім шешімінде көрсетеді.',
+      en: 'The developer publishes these terms for Asylym Park 1. The bank states the exact rate in its decision.',
     },
     calculatorReady: true,
-    sourceIds: ['krisha-instalment', 'digitalbusiness'],
+    sourceIds: ['korter'],
+    verified_at: '2026-08-21',
+    published: true,
+  },
+  {
+    id: 'ckb-no-income',
+    provider: 'Банк Центр Кредит',
+    name: {
+      ru: 'Ипотека Банк Центр Кредит (без подтверждения дохода)',
+      kz: 'Банк Центр Кредит ипотекасы (табысты растамай)',
+      en: 'Bank CenterCredit mortgage (no income proof)',
+    },
+    rate: 6.5,
+    minDownPercent: 30,
+    maxTermYears: 15,
+    maxLoan: 80_000_000,
+    highlights: [
+      { ru: 'Ставка от 6,5% годовых', kz: 'Жылдық мөлшерлеме 6,5%-дан', en: 'Rate from 6.5% per year' },
+      { ru: 'Без подтверждения дохода', kz: 'Табысты растамай', en: 'Without proof of income' },
+      { ru: 'Первоначальный взнос 30%', kz: 'Бастапқы жарна 30%', en: 'Down payment 30%' },
+      { ru: 'Срок до 15 лет', kz: 'Мерзімі 15 жылға дейін', en: 'Term up to 15 years' },
+      { ru: 'Сумма займа до 80 000 000 ₸', kz: 'Несие сомасы 80 000 000 ₸-ға дейін', en: 'Loan up to ₸80,000,000' },
+    ],
+    caveat: {
+      ru: 'Условия публикует застройщик для ЖК Asylym Park 1. Точную ставку банк указывает в решении по заявке.',
+      kz: 'Шарттарды құрылыс салушы Asylym Park 1 ТҮК үшін жариялайды. Нақты мөлшерлемені банк өтінім шешімінде көрсетеді.',
+      en: 'The developer publishes these terms for Asylym Park 1. The bank states the exact rate in its decision.',
+    },
+    calculatorReady: true,
+    sourceIds: ['korter'],
+    verified_at: '2026-08-21',
+    published: true,
+  },
+  {
+    id: 'nak-club',
+    provider: 'NAK',
+    name: {
+      ru: 'Программа лояльности NAK Club',
+      kz: 'NAK Club адалдық бағдарламасы',
+      en: 'NAK Club loyalty programme',
+    },
+    rate: 3,
+    rateIsDiscount: true,
+    minDownPercent: 0,
+    highlights: [
+      { ru: 'Скидка 3% на первую покупку', kz: 'Бірінші сатып алуға 3% жеңілдік', en: '3% off the first purchase' },
+      { ru: 'Скидка 4% на 2–3-ю покупку', kz: '2–3-ші сатып алуға 4% жеңілдік', en: '4% off the 2nd–3rd purchase' },
+      { ru: 'Скидка 5% на 4–5-ю покупку', kz: '4–5-ші сатып алуға 5% жеңілдік', en: '5% off the 4th–5th purchase' },
+    ],
+    caveat: {
+      ru: 'Программа лояльности застройщика, а не ипотека — скидка к цене квартиры. Расчёт в калькуляторе не выполняется.',
+      kz: 'Бұл — ипотека емес, құрылыс салушының адалдық бағдарламасы: пәтер бағасына жеңілдік. Калькуляторда есептелмейді.',
+      en: 'A developer loyalty programme, not a mortgage — a discount off the unit price. The calculator does not model it.',
+    },
+    calculatorReady: false,
+    sourceIds: ['korter', 'nak-2gis'],
+    verified_at: '2026-08-21',
+    published: true,
   },
 ];
+
+export const PUBLISHED_MORTGAGE_PROGRAMS = MORTGAGE_PROGRAMS.filter((p) => p.published);
 
 export const CALCULATOR_PROGRAMS = MORTGAGE_PROGRAMS.filter((p) => p.calculatorReady);
 
@@ -331,4 +193,8 @@ export const getProgram = (id: string): MortgageProgram | undefined =>
 export const getSources = (ids: string[]): MortgageSource[] =>
   MORTGAGE_SOURCES.filter((s) => ids.includes(s.id));
 
-export const CITY_LIMIT_LABEL = CITY_LIMIT_NOTE;
+export const CITY_LIMIT_LABEL = {
+  ru: 'Лимит стоимости жилья для Астаны',
+  kz: 'Астана үшін тұрғын үй құнының шегі',
+  en: 'Property price cap for Astana',
+};

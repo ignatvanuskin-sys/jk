@@ -24,6 +24,15 @@ const BANNED_PHRASES = [
   'Four layout types',
   // 1.4 — "Объект 01…05" placeholder labels instead of real project names.
   'Объект 0',
+  // The fictional demo identity and its placeholder contacts must never return.
+  'QONYS',
+  'qonys',
+  '123-45-67',
+  '77001234567',
+  'sales@qonys',
+  '210340018927',
+  // The complex does not use the state "7-20-25" programme.
+  '7-20-25',
 ];
 
 function walk(dir: string): string[] {

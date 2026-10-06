@@ -51,14 +51,6 @@ export function ApartmentsPreview({
                     {INVENTORY_STATS.available}
                   </dd>
                 </div>
-                <div>
-                  <dt className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-muted">
-                    {dict.apartments.filters.stateProgram}
-                  </dt>
-                  <dd className="num mt-1.5 font-display text-3xl leading-none text-ink">
-                    {INVENTORY_STATS.stateProgramUnits}
-                  </dd>
-                </div>
               </dl>
               {/* An availability figure without a date reads as a permanent
                   promise. The date is what tells the visitor — and the sales

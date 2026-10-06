@@ -4,23 +4,14 @@ import { notFound } from 'next/navigation';
 import { isLocale, type Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/get-dictionary';
 import { BLOCKS } from '@/data/project';
-import {
-  MONTHLY_REPORTS,
-  OVERALL_PROGRESS,
-  phaseInProgress,
-  phasesDone,
-} from '@/data/construction';
-import { getImage } from '@/data/media';
+import { HANDOVER_YEAR } from '@/data/construction';
 import { getSeoCopy } from '@/content/seo';
 import { breadcrumbSchema, buildMetadata, fillSeoTokens } from '@/lib/seo';
 
 import { JsonLd } from '@/components/seo/JsonLd';
 import { PageHero } from '@/components/ui/PageHero';
-import {
-  ConstructionTimeline,
-  type TimelineReport,
-} from '@/components/construction/ConstructionTimeline';
-import { buildConstructionLabels } from '@/components/apartments/labels';
+import { SectionHeading } from '@/components/ui/SectionHeading';
+import { LeadButton } from '@/components/forms/LeadButton';
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -39,6 +30,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   });
 }
 
+/**
+ * Construction.
+ *
+ * The house is delivered (2024), so this page states the delivered status and
+ * nothing else. No percentage, no photo log and no camera are invented — the
+ * project rule is "no data → the block is absent", and there is simply no
+ * in-progress construction to report.
+ */
 export default async function ConstructionPage({ params }: PageProps) {
   const { locale: raw } = await params;
   if (!isLocale(raw)) notFound();
@@ -49,26 +48,6 @@ export default async function ConstructionPage({ params }: PageProps) {
     { name: dict.nav.home, path: '' },
     { name: dict.nav.construction, path: 'construction' },
   ];
-
-  // Localised, serialisable report list for the client timeline.
-  const reports: TimelineReport[] = MONTHLY_REPORTS.map((report) => {
-    const image = getImage(report.image);
-    return {
-      id: report.id,
-      blockId: report.blockId,
-      month: report.month,
-      progress: report.progress,
-      done: phasesDone(report.progress).map((phase) => phase.name[locale]),
-      current: phaseInProgress(report.progress)?.name[locale] ?? '',
-      image: {
-        src: image.src,
-        alt: image.alt[locale],
-        width: image.width,
-        height: image.height,
-        blurDataURL: image.blurDataURL,
-      },
-    };
-  }).sort((a, b) => b.month.localeCompare(a.month));
 
   return (
     <>
@@ -83,32 +62,42 @@ export default async function ConstructionPage({ params }: PageProps) {
         trail={trail}
         image="construction-frame"
         meta={[
-          { label: dict.construction.totalProgress, value: `${OVERALL_PROGRESS}%` },
-          ...BLOCKS.map((block) => ({
-            label: block.names[locale],
-            value: block.delivery[locale],
-          })),
+          { label: dict.construction.status, value: dict.construction.delivered },
+          { label: dict.construction.deliveredValue, value: String(HANDOVER_YEAR) },
         ]}
       />
 
       <section className="section bg-paper">
         <div className="shell">
-          <ConstructionTimeline
-            reports={reports}
-            blocks={BLOCKS.map((block) => ({ id: block.id, floors: block.floors }))}
-            labels={buildConstructionLabels(locale, dict)}
-            locale={locale}
+          <SectionHeading
+            eyebrow={dict.construction.status}
+            title={dict.construction.title}
+            lead={dict.construction.deliveredText}
           />
+
+          <ul className="mt-10 grid gap-px overflow-hidden rounded-md border border-line bg-line sm:grid-cols-2">
+            {BLOCKS.map((block) => (
+              <li key={block.id} className="flex items-baseline justify-between gap-4 bg-paper p-6">
+                <span className="font-display text-xl text-ink">{block.names[locale]}</span>
+                <span className="num text-sm text-clay">{block.delivery[locale]}</span>
+              </li>
+            ))}
+          </ul>
 
           <div className="mt-12 rounded-sm border border-line bg-bone p-6">
             <h2 className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-clay">
-              {dict.construction.cameraTitle}
+              {dict.construction.status}
             </h2>
             <p className="mt-3 max-w-[70ch] text-sm leading-relaxed text-ink-soft">
-              {dict.construction.cameraText}
+              {dict.construction.deliveredText}
             </p>
           </div>
 
+          <div className="mt-10">
+            <LeadButton source="construction" variant="primary" className="px-7 py-4">
+              {dict.cta.getConsultation}
+            </LeadButton>
+          </div>
         </div>
       </section>
     </>

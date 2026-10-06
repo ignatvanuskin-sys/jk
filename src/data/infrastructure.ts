@@ -1,16 +1,17 @@
 /**
  * Neighbourhood infrastructure.
  *
- * DATA SOURCE
- * Objects are described by GENERIC TYPE, never by an invented proper name — no
- * fake school numbers, no invented shopping-centre brands, no fabricated
- * distances presented as fact. Times and distances below are placeholders and
- * the section carries a visible notice saying so.
+ * SOURCE OF TRUTH: `docs/real-data-dossier.md`, §4 "Локация и инфраструктура"
+ * (the developer's own description on korter.kz, captured 06.10.2026).
  *
- * Replace with real, verified POIs (name + address + walking time) before
- * launch. The grouping and the "time to landmark" presentation come from the
- * market research: it is how the strongest KZ developer sites handle location.
+ * Distances and travel times are the figures the developer publishes, shown with
+ * the caption "по данным застройщика" (`INFRA_CAPTION`). Where the source gives a
+ * distance it is stored as a distance; where it gives a time it is stored as a
+ * time — nothing is converted or invented. The schematic map places each object
+ * by an approximate walking-time proxy that is used for the drawing only.
  */
+
+import type { Locale } from '@/i18n/config';
 
 export type InfraCategory =
   | 'education'
@@ -22,15 +23,24 @@ export type InfraCategory =
   | 'cafes'
   | 'transport';
 
+export interface InfraMetric {
+  /** `m` / `km` — a distance; `min` — a travel time. */
+  kind: 'm' | 'km' | 'min';
+  value: number;
+}
+
 export interface InfraObject {
   id: string;
   category: InfraCategory;
-  /** Generic descriptor — deliberately not a brand or institution name. */
   label: { ru: string; kz: string; en: string };
-  /** Walking minutes from the main entrance (placeholder). */
-  minutes: number;
-  /** How the time was measured, so "7 мин" is never ambiguous. */
+  /** The figure exactly as the developer publishes it. */
+  distance: InfraMetric;
+  /** How the figure was measured, so the number is never ambiguous. */
   mode: 'walk' | 'transport';
+  /** Extra published detail (bus routes, a time range), where present. */
+  note?: { ru: string; kz: string; en: string };
+  /** Approximate walking minutes — used only to place the object on the map. */
+  minutes: number;
 }
 
 export const INFRA_CATEGORIES: InfraCategory[] = [
@@ -44,199 +54,271 @@ export const INFRA_CATEGORIES: InfraCategory[] = [
   'transport',
 ];
 
+/** The on-page notice that the location figures come from the developer. */
+export const INFRA_CAPTION = {
+  ru: 'Расстояния и время в пути — по данным застройщика.',
+  kz: 'Қашықтық пен жол уақыты — құрылыс салушының деректері бойынша.',
+  en: 'Distances and travel times are per the developer’s data.',
+};
+
 export const INFRASTRUCTURE: InfraObject[] = [
+  // ── Education ────────────────────────────────────────────────────────────
   {
-    id: 'school',
+    id: 'school-45',
+    category: 'education',
+    label: { ru: 'Школа №45', kz: '№45 мектеп', en: 'School No. 45' },
+    distance: { kind: 'km', value: 1 },
+    mode: 'walk',
+    minutes: 12,
+  },
+  {
+    id: 'school-75',
+    category: 'education',
+    label: { ru: 'Школа №75', kz: '№75 мектеп', en: 'School No. 75' },
+    distance: { kind: 'km', value: 1 },
+    mode: 'walk',
+    minutes: 12,
+  },
+  {
+    id: 'lyceum-76',
+    category: 'education',
+    label: { ru: 'Школа-лицей №76', kz: '№76 мектеп-лицей', en: 'School-lyceum No. 76' },
+    distance: { kind: 'km', value: 1 },
+    mode: 'walk',
+    minutes: 12,
+  },
+  {
+    id: 'nurseries',
     category: 'education',
     label: {
-      ru: 'Общеобразовательная школа',
-      kz: 'Жалпы білім беретін мектеп',
-      en: 'Secondary school',
+      ru: 'Детсады №78 «Асыл», «Данышпан», «Карлыгаш»',
+      kz: '№78 «Асыл», «Данышпан», «Қарлығаш» балабақшалары',
+      en: 'Kindergartens No. 78 Asyl, Danyshpan, Karlygash',
     },
+    distance: { kind: 'km', value: 1 },
+    mode: 'walk',
+    minutes: 12,
+  },
+  {
+    id: 'rfm-school',
+    category: 'education',
+    label: {
+      ru: 'Республиканская физико-математическая школа',
+      kz: 'Республикалық физика-математика мектебі',
+      en: 'Republican Physics and Mathematics School',
+    },
+    distance: { kind: 'km', value: 1.5 },
+    mode: 'walk',
+    minutes: 18,
+  },
+  {
+    id: 'nurseries-15',
+    category: 'education',
+    label: {
+      ru: 'Детсады №15 «Дарын», №87, «Олимпикус»',
+      kz: '№15 «Дарын», №87, «Олимпикус» балабақшалары',
+      en: 'Kindergartens No. 15 Daryn, No. 87, Olympicus',
+    },
+    distance: { kind: 'km', value: 1.5 },
+    mode: 'walk',
+    minutes: 18,
+  },
+
+  // ── Medicine ─────────────────────────────────────────────────────────────
+  {
+    id: 'polyclinic-9',
+    category: 'medicine',
+    label: { ru: 'Поликлиника №9', kz: '№9 емхана', en: 'Polyclinic No. 9' },
+    distance: { kind: 'km', value: 1.5 },
+    mode: 'walk',
+    minutes: 18,
+  },
+  {
+    id: 'iclinic',
+    category: 'medicine',
+    label: { ru: 'Медицинский центр IClinic', kz: 'IClinic медициналық орталығы', en: 'IClinic medical centre' },
+    distance: { kind: 'km', value: 2 },
+    mode: 'transport',
     minutes: 5,
-    mode: 'walk',
   },
+
+  // ── Shops ────────────────────────────────────────────────────────────────
   {
-    id: 'kindergarten',
-    category: 'education',
-    label: { ru: 'Детский сад', kz: 'Балабақша', en: 'Kindergarten' },
-    minutes: 4,
-    mode: 'walk',
-  },
-  {
-    id: 'gymnasium',
-    category: 'education',
-    label: { ru: 'Гимназия', kz: 'Гимназия', en: 'Gymnasium' },
-    minutes: 8,
-    mode: 'walk',
-  },
-  {
-    id: 'art-school',
-    category: 'education',
+    id: 'shops-1km',
+    category: 'shops',
     label: {
-      ru: 'Детская школа искусств',
-      kz: 'Балалар өнер мектебі',
-      en: "Children's art school",
+      ru: 'Магазины, аптеки и банкоматы',
+      kz: 'Дүкендер, дәріханалар және банкоматтар',
+      en: 'Shops, pharmacies and ATMs',
     },
+    distance: { kind: 'km', value: 1 },
+    mode: 'walk',
     minutes: 12,
-    mode: 'walk',
   },
   {
-    id: 'polyclinic',
-    category: 'medicine',
-    label: { ru: 'Поликлиника', kz: 'Емхана', en: 'Outpatient clinic' },
-    minutes: 8,
-    mode: 'transport',
-  },
-  {
-    id: 'hospital',
-    category: 'medicine',
-    label: { ru: 'Больница', kz: 'Аурухана', en: 'Hospital' },
-    minutes: 15,
-    mode: 'transport',
-  },
-  {
-    id: 'pharmacy',
-    category: 'medicine',
-    label: { ru: 'Аптека', kz: 'Дәріхана', en: 'Pharmacy' },
-    minutes: 3,
-    mode: 'walk',
-  },
-  {
-    id: 'dentist',
-    category: 'medicine',
-    label: { ru: 'Стоматология', kz: 'Стоматология', en: 'Dental clinic' },
-    minutes: 6,
-    mode: 'walk',
-  },
-  {
-    id: 'supermarket',
+    id: 'supermarkets',
     category: 'shops',
-    label: { ru: 'Супермаркет', kz: 'Супермаркет', en: 'Supermarket' },
-    minutes: 4,
+    label: { ru: 'Супермаркеты', kz: 'Супермаркеттер', en: 'Supermarkets' },
+    distance: { kind: 'km', value: 2 },
     mode: 'walk',
+    minutes: 24,
   },
+
+  // ── Malls ────────────────────────────────────────────────────────────────
   {
-    id: 'minimarket',
-    category: 'shops',
-    label: {
-      ru: 'Минимаркет в доме',
-      kz: 'Үйдегі минимаркет',
-      en: 'Convenience store in the building',
-    },
-    minutes: 1,
-    mode: 'walk',
-  },
-  {
-    id: 'market',
-    category: 'shops',
-    label: { ru: 'Рынок', kz: 'Базар', en: 'Market' },
-    minutes: 10,
-    mode: 'walk',
-  },
-  {
-    id: 'mall-1',
+    id: 'abu-dhabi-plaza',
     category: 'malls',
-    label: { ru: 'Торгово-развлекательный центр', kz: 'Сауда-ойын-сауық орталығы', en: 'Shopping mall' },
-    minutes: 7,
+    label: { ru: 'ТРЦ «Абу Даби Плаза»', kz: '«Абу Даби Плаза» СОО', en: 'Abu Dhabi Plaza mall' },
+    distance: { kind: 'min', value: 8 },
     mode: 'transport',
+    note: { ru: '5–10 минут езды', kz: '5–10 минут көлікпен', en: '5–10 minutes by car' },
+    minutes: 8,
   },
   {
-    id: 'mall-2',
+    id: 'expo-2017',
     category: 'malls',
+    label: { ru: '«Экспо-2017»', kz: '«Экспо-2017»', en: 'Expo 2017' },
+    distance: { kind: 'min', value: 8 },
+    mode: 'transport',
+    note: { ru: '5–10 минут езды', kz: '5–10 минут көлікпен', en: '5–10 minutes by car' },
+    minutes: 8,
+  },
+  {
+    id: 'mega-silk-way',
+    category: 'malls',
+    label: { ru: 'ТРЦ Mega Silk Way', kz: 'Mega Silk Way СОО', en: 'Mega Silk Way mall' },
+    distance: { kind: 'min', value: 8 },
+    mode: 'transport',
+    note: { ru: '5–10 минут езды', kz: '5–10 минут көлікпен', en: '5–10 minutes by car' },
+    minutes: 8,
+  },
+
+  // ── Parks & landmarks ────────────────────────────────────────────────────
+  {
+    id: 'botanical',
+    category: 'parks',
     label: {
-      ru: 'Второй торговый центр',
-      kz: 'Екінші сауда орталығы',
-      en: 'Second shopping centre',
+      ru: 'Ботанический сад и Триумфальная арка',
+      kz: 'Ботаникалық бақ және Триумф аркасы',
+      en: 'Botanical garden and Triumphal Arch',
     },
+    distance: { kind: 'km', value: 1 },
+    mode: 'walk',
     minutes: 12,
-    mode: 'transport',
   },
   {
-    id: 'park-city',
+    id: 'ishim-river',
     category: 'parks',
-    label: { ru: 'Городской парк', kz: 'Қалалық саябақ', en: 'City park' },
-    minutes: 12,
+    label: {
+      ru: 'Река Ишим и Центральный бульвар',
+      kz: 'Есіл өзені және Орталық бульвар',
+      en: 'Ishim river and Central boulevard',
+    },
+    distance: { kind: 'min', value: 20 },
     mode: 'walk',
+    note: { ru: '20 минут пешком', kz: '20 минут жаяу', en: '20 minutes on foot' },
+    minutes: 20,
   },
   {
-    id: 'square',
+    id: 'nazarbayev-centre',
     category: 'parks',
-    label: { ru: 'Сквер', kz: 'Сквер', en: 'Public square' },
-    minutes: 6,
+    label: { ru: 'Назарбаев центр', kz: 'Назарбаев орталығы', en: 'Nazarbayev Centre' },
+    distance: { kind: 'km', value: 1.5 },
     mode: 'walk',
+    minutes: 18,
   },
-  {
-    id: 'embankment',
-    category: 'parks',
-    label: { ru: 'Набережная', kz: 'Жағалау', en: 'Embankment' },
-    minutes: 9,
-    mode: 'walk',
-  },
-  {
-    id: 'fitness',
-    category: 'sport',
-    label: { ru: 'Фитнес-клуб', kz: 'Фитнес-клуб', en: 'Fitness club' },
-    minutes: 7,
-    mode: 'walk',
-  },
-  {
-    id: 'pool',
-    category: 'sport',
-    label: { ru: 'Бассейн', kz: 'Бассейн', en: 'Swimming pool' },
-    minutes: 11,
-    mode: 'transport',
-  },
+
+  // ── Sport ────────────────────────────────────────────────────────────────
   {
     id: 'stadium',
     category: 'sport',
     label: { ru: 'Стадион', kz: 'Стадион', en: 'Stadium' },
-    minutes: 14,
-    mode: 'transport',
+    distance: { kind: 'km', value: 1 },
+    mode: 'walk',
+    minutes: 12,
+  },
+
+  // ── Cafés ────────────────────────────────────────────────────────────────
+  {
+    id: 'restaurants',
+    category: 'cafes',
+    label: { ru: 'Кафе и рестораны', kz: 'Кафелер мен мейрамханалар', en: 'Cafés and restaurants' },
+    distance: { kind: 'km', value: 1 },
+    mode: 'walk',
+    minutes: 12,
   },
   {
-    id: 'coffee',
+    id: 'coffee-bar',
     category: 'cafes',
-    label: { ru: 'Кофейня', kz: 'Кофехана', en: 'Coffee shop' },
-    minutes: 2,
+    label: { ru: 'Кофейни и бары', kz: 'Кофеханалар мен барлар', en: 'Coffee shops and bars' },
+    distance: { kind: 'km', value: 2 },
     mode: 'walk',
+    minutes: 24,
   },
-  {
-    id: 'restaurant',
-    category: 'cafes',
-    label: { ru: 'Ресторан', kz: 'Мейрамхана', en: 'Restaurant' },
-    minutes: 5,
-    mode: 'walk',
-  },
-  {
-    id: 'bakery',
-    category: 'cafes',
-    label: { ru: 'Пекарня', kz: 'Наубайхана', en: 'Bakery' },
-    minutes: 3,
-    mode: 'walk',
-  },
+
+  // ── Transport ────────────────────────────────────────────────────────────
   {
     id: 'bus-stop',
     category: 'transport',
-    label: { ru: 'Остановка автобуса', kz: 'Автобус аялдамасы', en: 'Bus stop' },
-    minutes: 4,
+    label: {
+      ru: 'Автобусная остановка',
+      kz: 'Автобус аялдамасы',
+      en: 'Bus stop',
+    },
+    distance: { kind: 'm', value: 195 },
     mode: 'walk',
+    note: {
+      ru: 'Маршруты 15, 15А, 28, 35, 46, 52, 54, 70; интервал 8–10 минут',
+      kz: '15, 15А, 28, 35, 46, 52, 54, 70 бағыттары; аралығы 8–10 минут',
+      en: 'Routes 15, 15A, 28, 35, 46, 52, 54, 70; every 8–10 minutes',
+    },
+    minutes: 3,
   },
   {
-    id: 'brt-stop',
+    id: 'rail-nursultan-1',
     category: 'transport',
-    label: { ru: 'Остановка BRT', kz: 'BRT аялдамасы', en: 'BRT stop' },
-    minutes: 9,
-    mode: 'walk',
-  },
-  {
-    id: 'railway',
-    category: 'transport',
-    label: { ru: 'Железнодорожный вокзал', kz: 'Теміржол вокзалы', en: 'Railway station' },
-    minutes: 20,
+    label: {
+      ru: 'Автовокзал и ж/д «Нур-Султан-1»',
+      kz: 'Автовокзал және «Нұр-Сұлтан-1» т/ж',
+      en: 'Bus station and Nur-Sultan-1 rail terminal',
+    },
+    distance: { kind: 'km', value: 11.5 },
     mode: 'transport',
+    minutes: 20,
+  },
+  {
+    id: 'rail-nurly-zhol',
+    category: 'transport',
+    label: { ru: 'Ж/д «Нурлы Жол»', kz: '«Нұрлы Жол» т/ж', en: 'Nurly Zhol rail station' },
+    distance: { kind: 'km', value: 9 },
+    mode: 'transport',
+    minutes: 16,
+  },
+  {
+    id: 'airport',
+    category: 'transport',
+    label: {
+      ru: 'Аэропорт «Нурсултан Назарбаев»',
+      kz: '«Нұрсұлтан Назарбаев» әуежайы',
+      en: 'Nursultan Nazarbayev airport',
+    },
+    distance: { kind: 'min', value: 16 },
+    mode: 'transport',
+    minutes: 16,
   },
 ];
+
+/** Human-readable distance/time for an object, in the visitor's locale. */
+export function formatInfraDistance(object: InfraObject, locale: Locale): string {
+  const { kind, value } = object.distance;
+  const formatted = new Intl.NumberFormat(locale === 'en' ? 'en-US' : 'ru-RU', {
+    maximumFractionDigits: 2,
+  }).format(value);
+
+  if (kind === 'min') return `${formatted} ${locale === 'en' ? 'min' : 'мин'}`;
+  if (kind === 'km') return `${formatted} ${locale === 'en' ? 'km' : 'км'}`;
+  return `${formatted} ${locale === 'en' ? 'm' : 'м'}`;
+}
 
 export const INFRA_BY_CATEGORY = INFRA_CATEGORIES.map((category) => ({
   category,
@@ -244,42 +326,3 @@ export const INFRA_BY_CATEGORY = INFRA_CATEGORIES.map((category) => ({
     (a, b) => a.minutes - b.minutes,
   ),
 }));
-
-/** Grouping buckets used by the schematic map and the list view. */
-export const INFRA_TIME_BUCKETS = [5, 10, 15] as const;
-
-export const infraInBucket = (max: number, min = 0) =>
-  INFRASTRUCTURE.filter((o) => o.minutes > min && o.minutes <= max);
-
-/**
- * Normalised positions for the schematic SVG map (0–1 within the map frame).
- * Hand-placed so the diagram reads clearly; PLACEHOLDER coordinates, not real
- * geography — the map makes no claim about actual bearings.
- */
-export const INFRA_MAP_POSITIONS: Record<string, { x: number; y: number }> = {
-  school: { x: 0.2, y: 0.26 },
-  kindergarten: { x: 0.72, y: 0.2 },
-  gymnasium: { x: 0.14, y: 0.55 },
-  'art-school': { x: 0.09, y: 0.79 },
-  polyclinic: { x: 0.36, y: 0.12 },
-  hospital: { x: 0.5, y: 0.06 },
-  pharmacy: { x: 0.83, y: 0.36 },
-  dentist: { x: 0.9, y: 0.62 },
-  supermarket: { x: 0.63, y: 0.44 },
-  minimarket: { x: 0.47, y: 0.57 },
-  market: { x: 0.28, y: 0.9 },
-  'mall-1': { x: 0.86, y: 0.16 },
-  'mall-2': { x: 0.94, y: 0.44 },
-  'park-city': { x: 0.06, y: 0.36 },
-  square: { x: 0.24, y: 0.68 },
-  embankment: { x: 0.55, y: 0.86 },
-  fitness: { x: 0.7, y: 0.7 },
-  pool: { x: 0.34, y: 0.4 },
-  stadium: { x: 0.2, y: 0.08 },
-  coffee: { x: 0.52, y: 0.48 },
-  restaurant: { x: 0.66, y: 0.28 },
-  bakery: { x: 0.4, y: 0.66 },
-  'bus-stop': { x: 0.58, y: 0.34 },
-  'brt-stop': { x: 0.78, y: 0.52 },
-  railway: { x: 0.12, y: 0.16 },
-};

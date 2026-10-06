@@ -55,7 +55,7 @@ export default async function ParkingPage({ params }: PageProps) {
         trail={trail}
         image="parking"
         meta={[
-          { label: dict.parking.facts.spaces, value: String(PARKING.undergroundSpaces) },
+          { label: dict.parking.facts.spaces, value: String(PARKING.spaces) },
           { label: dict.parking.facts.storage, value: String(PARKING.storageRooms) },
           { label: dict.parking.facts.priceFrom, value: formatPrice(PARKING.spacePriceFrom, locale) },
           { label: dict.parking.facts.instalment, value: `${PARKING.instalmentMonths} ${dict.parking.facts.monthsUnit}` },

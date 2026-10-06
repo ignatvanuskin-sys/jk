@@ -3,16 +3,15 @@ import Link from 'next/link';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries/ru';
 import { BLOCKS } from '@/data/project';
-import { getLatestReport, OVERALL_PROGRESS } from '@/data/construction';
-import { formatIsoDate } from '@/lib/i18n/date';
+import { HANDOVER_YEAR } from '@/data/construction';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 
 /**
- * Construction progress teaser.
+ * Construction teaser.
  *
- * Only the three current percentages and the overall figure — the monthly photo
- * history lives on its own page. Showing the number without the evidence would
- * be a claim, so the block links straight to the reports.
+ * The house is delivered, so there is no percentage to show and none is
+ * invented. The block states the delivered status, lists the blocks it applies
+ * to and links to the page that carries the full status.
  */
 export function ConstructionPreview({
   locale,
@@ -38,48 +37,33 @@ export function ConstructionPreview({
         <div className="mt-12 grid gap-6 lg:grid-cols-[1fr_2fr] lg:items-start">
           <div className="rounded-sm border border-line bg-pine-deep p-7 text-paper">
             <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-paper/60">
-              {dict.construction.totalProgress}
+              {dict.construction.status}
             </p>
-            <p className="num mt-4 font-display text-6xl leading-none text-paper">
-              {OVERALL_PROGRESS}%
+            <p className="num mt-4 font-display text-4xl leading-none text-paper">
+              {dict.construction.delivered}
             </p>
-            <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-paper/20">
-              <span
-                className="block h-full rounded-full bg-clay-soft"
-                style={{ width: `${OVERALL_PROGRESS}%` }}
-              />
-            </div>
+            <p className="num mt-3 text-sm text-paper/70">
+              {dict.construction.deliveredValue}: {HANDOVER_YEAR}
+            </p>
             <p className="mt-5 text-xs leading-relaxed text-paper/70">
-              {dict.construction.cameraText}
+              {dict.construction.deliveredText}
             </p>
           </div>
 
-          <ul className="grid gap-6 sm:grid-cols-3">
-            {BLOCKS.map((block) => {
-              const report = getLatestReport(block.id);
-              return (
-                <li key={block.id} className="card p-6">
-                  <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-muted">
-                    {block.names[locale]}
-                  </p>
-                  <p className="num mt-3 font-display text-4xl leading-none text-ink">
-                    {report ? `${report.progress}%` : '—'}
-                  </p>
-                  <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-bone">
-                    <span
-                      className="block h-full rounded-full bg-pine"
-                      style={{ width: `${report?.progress ?? 0}%` }}
-                    />
-                  </div>
-                  <p className="num mt-4 text-xs text-muted">
-                    {dict.construction.reportDate}: {report ? formatIsoDate(report.month, locale, 'month') : '—'}
-                  </p>
-                </li>
-              );
-            })}
+          <ul className="grid gap-6 sm:grid-cols-2">
+            {BLOCKS.map((block) => (
+              <li key={block.id} className="card p-6">
+                <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-muted">
+                  {block.names[locale]}
+                </p>
+                <p className="mt-3 font-display text-2xl leading-none text-ink">
+                  {dict.construction.delivered}
+                </p>
+                <p className="num mt-4 text-xs text-muted">{block.delivery[locale]}</p>
+              </li>
+            ))}
           </ul>
         </div>
-
       </div>
     </section>
   );

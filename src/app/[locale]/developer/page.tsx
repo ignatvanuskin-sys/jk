@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation';
 
 import { isLocale, type Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/get-dictionary';
-import { PROJECT } from '@/data/project';
+import { CONTACTS } from '@/data/project';
+import { DEVELOPER } from '@/data/developer';
 import { PROJECT_DOCUMENTS } from '@/data/documents';
 import { getSeoCopy } from '@/content/seo';
 import { formatIsoDate } from '@/lib/i18n/date';
@@ -56,13 +57,14 @@ export default async function DeveloperPage({ params }: PageProps) {
         trail={trail}
         image="lobby"
         meta={[
-          { label: dict.developer.factsTitle, value: PROJECT.developerBrand },
-          { label: dict.contacts.requisitesTitle, value: PROJECT.developerBin },
+          { label: dict.developer.factsTitle, value: DEVELOPER.brand },
+          { label: dict.contacts.emailLabel, value: CONTACTS.email },
         ]}
       />
 
       <DeveloperSection locale={locale} dict={dict} />
 
+      {PROJECT_DOCUMENTS.length > 0 && (
       <section className="section bg-paper">
         <div className="shell grid gap-10 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
           <SectionHeading
@@ -87,6 +89,7 @@ export default async function DeveloperPage({ params }: PageProps) {
           </ul>
         </div>
       </section>
+      )}
     </>
   );
 }

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { isLocale, formatPrice, type Locale } from '@/i18n/config';
+import { isLocale, type Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/get-dictionary';
 import { COMMERCIAL } from '@/data/project';
 import { getSeoCopy } from '@/content/seo';
@@ -55,10 +55,8 @@ export default async function CommercialPage({ params }: PageProps) {
         trail={trail}
         image="commercial"
         meta={[
-          { label: dict.commercial.unitsLabel, value: String(COMMERCIAL.units) },
           { label: dict.commercial.areaLabel, value: `${COMMERCIAL.areaFrom}–${COMMERCIAL.areaTo} м²` },
-          { label: dict.commercial.ceilingLabel, value: `${COMMERCIAL.ceiling} м` },
-          { label: dict.commercial.priceLabel, value: formatPrice(COMMERCIAL.pricePerSqmFrom, locale) },
+          { label: dict.commercial.priceLabel, value: dict.common.onRequest },
         ]}
       />
 

@@ -8,10 +8,11 @@ import { PROJECT } from './project';
 /**
  * Audit 1.1 — one set of numbers.
  *
- * Every counter on the site (hero, home, catalogue, unit grid, floor plans,
- * state-programme) has to be derivable from the seed inventory and from nothing
- * else. The catalogue's default filter state is `status = available`, so its
- * "found" figure and the hero's availability figure must be the same number.
+ * Every counter on the site (hero, home, catalogue, unit grid, floor plans) has
+ * to be derivable from the seed inventory and from nothing else. This suite no
+ * longer asserts that the inventory equals the complex total: only blocks №10
+ * and №11 are on sale, so the inventory must be ≤ the complex total (346) and
+ * equal to `APARTMENTS.length`.
  */
 
 const DEFAULT_STATUS_FILTER: UnitStatus[] = ['available'];
@@ -20,10 +21,16 @@ const DEFAULT_STATUS_FILTER: UnitStatus[] = ['available'];
 const catalogueWithDefaults = () =>
   UNIT_SUMMARIES.filter((unit) => DEFAULT_STATUS_FILTER.includes(unit.status));
 
+/** The real published plan areas (dossier §3), 2 decimals. */
+const PUBLISHED_PLAN_AREAS = [46.23, 60.74, 86.07, 91.81, 104.69, 171.73];
+
 describe('inventory counters', () => {
-  it('keeps one total for the whole project', () => {
+  it('keeps the inventory total equal to the number of generated units', () => {
     expect(INVENTORY_STATS.total).toBe(APARTMENTS.length);
-    expect(INVENTORY_STATS.total).toBe(PROJECT.totalUnits);
+  });
+
+  it('never exceeds the complex total', () => {
+    expect(INVENTORY_STATS.total).toBeLessThanOrEqual(PROJECT.complexTotalUnits);
     expect(INVENTORY_STATS.available + INVENTORY_STATS.reserved + INVENTORY_STATS.sold).toBe(
       INVENTORY_STATS.total,
     );
@@ -58,6 +65,12 @@ describe('floor plans and finishing', () => {
     for (const plan of PLAN_SUMMARIES) {
       expect(APARTMENTS.some((unit) => unit.planId === plan.id)).toBe(true);
     }
+  });
+
+  it('derives each plan total to a real published area', () => {
+    const totals = FLOOR_PLANS.map((plan) => plan.totalArea).sort((a, b) => a - b);
+
+    expect(totals).toEqual(PUBLISHED_PLAN_AREAS);
   });
 
   it('keeps every apartment consistent with its plan', () => {

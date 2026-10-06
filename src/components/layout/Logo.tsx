@@ -1,7 +1,7 @@
 import { cn } from '@/lib/cn';
 
 /**
- * Brand mark — "Steppe Modern" identity for QONYS RESIDENCE.
+ * Brand mark — "Steppe Modern" identity for the project wordmark.
  *
  * Concept: a portal (the arched entrance groups of the complex) cut with three
  * vertical slots that read as the three blocks of stepped height, standing on a
@@ -45,7 +45,7 @@ export function Logo({
   className,
   compact = false,
 }: {
-  /** Full project name, e.g. "QONYS RESIDENCE". */
+  /** Full project name as shown in the header lockup. */
   brand: string;
   /** First word, used as the small second line. */
   shortName: string;

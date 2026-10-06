@@ -82,9 +82,7 @@ export default async function PrivacyPage({ params }: PageProps) {
             <h2 className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-clay">
               {dict.contacts.requisitesTitle}
             </h2>
-            <p className="num mt-3 text-sm text-ink-soft">
-              {PROJECT.developerLegalName} · БИН {PROJECT.developerBin}
-            </p>
+            <p className="num mt-3 text-sm text-ink-soft">{PROJECT.developerLegalName}</p>
             <p className="mt-2 text-sm">
               <a
                 href={CONTACTS.emailHref}

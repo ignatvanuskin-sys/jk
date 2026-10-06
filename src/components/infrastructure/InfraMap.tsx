@@ -20,6 +20,9 @@ export interface MapObject {
   id: string;
   category: InfraCategoryKey;
   label: string;
+  /** Distance/time exactly as the developer publishes it, pre-formatted. */
+  value: string;
+  /** Approximate minutes — schematic map placement only. */
   minutes: number;
   mode: 'walk' | 'transport';
 }
@@ -218,14 +221,14 @@ export function InfraMap({
                 x={CX}
                 y={CY - 6}
                 textAnchor="middle"
-                fontSize="15"
+                fontSize="14"
                 fontWeight="600"
                 fill="#fbfaf7"
               >
-                QONYS
+                ASYLYM
               </text>
               <text x={CX} y={CY + 12} textAnchor="middle" fontSize="11" fill="#c07a4e">
-                RESIDENCE
+                PARK 1
               </text>
             </g>
 
@@ -303,7 +306,7 @@ export function InfraMap({
                   {object.label}
                 </span>
                 <span className="num flex-none text-xs text-ink-soft">
-                  {object.minutes} {minutesLabel}
+                  {object.value}
                   <span className="ml-1.5 text-muted">
                     {object.mode === 'walk' ? walkLabel : transportLabel}
                   </span>

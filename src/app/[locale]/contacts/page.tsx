@@ -142,10 +142,13 @@ export default async function ContactsPage({ params }: PageProps) {
               <h2 className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-clay">
                 {dict.contacts.requisitesTitle}
               </h2>
-              <p className="num mt-3 text-sm text-ink-soft">
-                {PROJECT.developerLegalName} · БИН {PROJECT.developerBin}
+              <p className="mt-3 text-sm text-ink-soft">{PROJECT.developerLegalName}</p>
+              <p className="mt-2 text-xs text-muted">
+                {dict.contacts.requisitesNote}{' '}
+                <a href={CONTACTS.requestEmailHref} className="underline decoration-line underline-offset-4">
+                  {CONTACTS.requestEmail}
+                </a>
               </p>
-              <p className="mt-2 text-xs text-muted">{dict.contacts.requisitesNote}</p>
             </div>
 
           </div>

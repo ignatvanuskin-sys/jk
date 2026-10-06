@@ -59,7 +59,7 @@ export default async function ComplexPage({ params }: PageProps) {
         meta={[
           { label: dict.stats.items.floors, value: `${PROJECT.storeys.min}–${PROJECT.storeys.max}` },
           { label: dict.stats.items.units, value: String(INVENTORY_STATS.total) },
-          { label: dict.stats.items.parking, value: String(PARKING.undergroundSpaces) },
+          { label: dict.stats.items.parking, value: String(PARKING.spaces) },
           { label: dict.stats.items.delivery, value: PROJECT.delivery[locale] },
         ]}
         actions={
@@ -122,7 +122,7 @@ export default async function ComplexPage({ params }: PageProps) {
             <div>
               <dl className="grid grid-cols-2 gap-6">
                 {[
-                  { label: dict.parking.facts.spaces, value: PARKING.undergroundSpaces },
+                  { label: dict.parking.facts.spaces, value: PARKING.spaces },
                   { label: dict.parking.facts.storage, value: PARKING.storageRooms },
                 ].map((item) => (
                   <div key={item.label}>

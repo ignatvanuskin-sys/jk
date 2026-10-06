@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { isLocale, type Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/get-dictionary';
 import { PROJECT } from '@/data/project';
-import { INFRASTRUCTURE } from '@/data/infrastructure';
+import { INFRA_CAPTION, INFRASTRUCTURE, formatInfraDistance } from '@/data/infrastructure';
 import { getSeoCopy } from '@/content/seo';
 import { breadcrumbSchema, buildMetadata, fillSeoTokens } from '@/lib/seo';
 
@@ -94,11 +94,12 @@ export default async function LocationPage({ params }: PageProps) {
                 >
                   <span className="text-sm text-ink">{object.label[locale]}</span>
                   <span className="num flex-none text-xs text-muted">
-                    {object.minutes} {dict.common.minutes}
+                    {formatInfraDistance(object, locale)}
                   </span>
                 </li>
               ))}
           </ul>
+          <p className="mt-4 text-xs text-muted">{INFRA_CAPTION[locale]}</p>
         </div>
       </section>
     </>

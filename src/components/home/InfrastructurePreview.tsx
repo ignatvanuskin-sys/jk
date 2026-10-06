@@ -3,8 +3,10 @@ import Link from 'next/link';
 import type { Locale } from '@/i18n/config';
 import type { Dictionary } from '@/i18n/dictionaries/ru';
 import {
+  INFRA_CAPTION,
   INFRA_CATEGORIES,
   INFRASTRUCTURE,
+  formatInfraDistance,
   type InfraCategory,
 } from '@/data/infrastructure';
 import { SectionHeading } from '@/components/ui/SectionHeading';
@@ -28,6 +30,7 @@ export function InfrastructurePreview({
     id: object.id,
     category: object.category,
     label: object.label[locale],
+    value: formatInfraDistance(object, locale),
     minutes: object.minutes,
     mode: object.mode,
   }));
@@ -66,6 +69,7 @@ export function InfrastructurePreview({
           />
         </div>
 
+        <p className="mt-4 text-xs text-muted">{INFRA_CAPTION[locale]}</p>
       </div>
     </section>
   );

@@ -52,7 +52,8 @@ export function formatPrice(value: number, locale: Locale = defaultLocale): stri
 export function formatArea(value: number, locale: Locale = defaultLocale): string {
   const formatted = new Intl.NumberFormat(locale === 'en' ? 'en-US' : 'ru-RU', {
     minimumFractionDigits: 0,
-    maximumFractionDigits: 1,
+    // Two decimals: the published plan areas carry two (e.g. 46,23 m²).
+    maximumFractionDigits: 2,
   }).format(value);
   return `${formatted} ${locale === 'en' ? 'm²' : 'м²'}`;
 }

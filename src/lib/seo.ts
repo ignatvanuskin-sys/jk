@@ -158,8 +158,8 @@ export function apartmentComplexSchema(locale: Locale) {
     '@id': `${getSiteUrl()}/#complex`,
     name: PROJECT.name,
     url: absoluteUrl(localePath(locale)),
-    description: `${PROJECT.name} — ${PROJECT.totalUnits} apartments in ${PROJECT.city}. Handover ${PROJECT.delivery.en}.`,
-    numberOfAccommodationUnits: PROJECT.totalUnits,
+    description: `${PROJECT.name} — ${PROJECT.complexTotalUnits} apartments in ${PROJECT.city}. ${PROJECT.delivery.en}.`,
+    numberOfAccommodationUnits: PROJECT.complexTotalUnits,
     numberOfAvailableAccommodationUnits: undefined,
     petsAllowed: true,
     address: {
@@ -196,7 +196,7 @@ export function localBusinessSchema(locale: Locale) {
       addressRegion: PROJECT.district,
       addressCountry: 'KZ',
     },
-    openingHours: 'Mo-Sa 09:00-19:00, Su 10:00-17:00',
+    openingHours: 'Mo-Su 09:00-19:00',
     areaServed: { '@type': 'City', name: PROJECT.city },
   };
 }

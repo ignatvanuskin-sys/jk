@@ -14,7 +14,7 @@ import type { CardUnit } from './ApartmentCard';
 import { LeadButton } from '@/components/forms/LeadButton';
 
 export interface GridBlock {
-  id: 'a' | 'b' | 'c';
+  id: '10' | '11';
   floors: number;
   unitsPerFloor: number;
   name: string;
@@ -48,7 +48,7 @@ export function UnitGrid({
   locale: Locale;
   labels: UnitGridLabels;
 }) {
-  const [blockId, setBlockId] = useState<GridBlock['id']>(blocks[0]?.id ?? 'a');
+  const [blockId, setBlockId] = useState<GridBlock['id']>(blocks[0]?.id ?? '10');
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const block = blocks.find((b) => b.id === blockId) ?? blocks[0];

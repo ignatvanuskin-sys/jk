@@ -34,7 +34,7 @@ interface ApartmentsExplorerProps {
 
 const PAGE_SIZE = 12;
 const ROOM_OPTIONS = [1, 2, 3, 4] as const;
-const BLOCK_OPTIONS = ['a', 'b', 'c'] as const;
+const BLOCK_OPTIONS = ['10', '11'] as const;
 const STATUS_OPTIONS: UnitStatus[] = ['available', 'reserved', 'sold'];
 
 const numberFormat = (locale: Locale) => new Intl.NumberFormat(locale === 'en' ? 'en-US' : 'ru-RU');

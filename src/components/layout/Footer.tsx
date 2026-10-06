@@ -164,7 +164,14 @@ export function Footer({ locale, dict, whatsappHref, navItems }: FooterProps) {
             © {year} {PROJECT.developerLegalName}. {dict.footer.rights}
           </p>
           <p className="flex flex-wrap items-center gap-x-4 gap-y-2">
-            <span className="num">БИН {PROJECT.developerBin}</span>
+            <a
+              href={CONTACTS.site}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline-offset-4 transition-colors hover:text-paper hover:underline"
+            >
+              nak.kz
+            </a>
             <Link
               href={`/${locale}/privacy`}
               className="underline-offset-4 transition-colors hover:text-paper hover:underline"

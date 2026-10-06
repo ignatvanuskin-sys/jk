@@ -6,55 +6,63 @@
  * Nothing else in the codebase hard-codes a name, a price, an address or a
  * phone number — every page and component reads from `src/data/*`.
  *
- * Market grounding (verified, see research/kz-market.md):
- *   • Average new-build price in Kazakhstan, May 2025 — 521 596 ₸/m² (ERI)
- *   • Almaty new-build — 633 217 ₸/m²; Astana is comparably high (ERI)
- * The base price per m² used below sits inside that real range.
+ * SOURCE OF TRUTH: `docs/real-data-dossier.md` (Asylym Park 1 / NAK).
+ * Every fact below is confirmed by that dossier; anything it does not confirm
+ * is either omitted or flagged `is_demo`. Prices and availability are those the
+ * developer published as at 21 August 2026 (see `INVENTORY_UPDATED_AT`).
  *
- * NOTE FOR WHOEVER DEPLOYS THIS: the contacts and the company registration
- * details further down are configuration defaults. Point them at the real sales
- * office through the environment variables documented in README — or edit them
- * here — before the site goes public.
+ * NOTE FOR WHOEVER DEPLOYS THIS: this build demonstrates another developer's
+ * real project (see the risks section of the dossier). Before publishing under
+ * your own domain get NAK's consent, or restore a fictional identity and keep
+ * only the market figures real.
  */
 
 export const PROJECT = {
-  name: 'QONYS RESIDENCE',
-  shortName: 'QONYS',
-  developerLegalName: 'ТОО «QONYS Development»',
-  developerBrand: 'QONYS Development',
-  developerBin: '210340018927',
+  name: 'Асылым Парк 1',
+  shortName: 'Асылым Парк',
+  /** The name as it is written in each locale: Cyrillic in ru/kk, Latin in en. */
+  nameByLocale: { ru: 'Асылым Парк 1', kz: 'Асылым Парк 1', en: 'Asylym Park 1' },
+  developerLegalName: 'ТОО «Nur Astana Kurylys»',
+  developerBrand: 'NAK',
+  /** Year the developer was founded — years on the market are computed from it. */
+  developerFoundedYear: 2006,
 
   city: 'Astana',
   cityLocative: 'Astana',
   district: 'Esil district',
-  streetAddress: 'улица Сыганак, 25',
+  streetAddress: 'ул. Алихан Бокейхан, 18/1',
 
-  /** Class of housing — used in meta descriptions and structured data. */
-  housingClass: 'comfort',
-  storeys: { min: 9, max: 12 },
-  totalUnits: 214,
+  /** II class of housing — business class. */
+  housingClass: 'business',
+  storeys: { min: 9, max: 9 },
 
-  /** PLACEHOLDER handover date. */
+  /**
+   * Total apartments in the COMPLEX (all ten blocks of Asylym Park 1). This is a
+   * distinct figure from the sales inventory size: only blocks №10 and №11 are
+   * currently on sale, and `INVENTORY_STATS.total` never exceeds this number.
+   */
+  complexTotalUnits: 346,
+
+  /** The house is delivered — handover was in 2024. */
   delivery: {
-    iso: '2027-12-31',
-    ru: 'IV квартал 2027 года',
-    kz: '2027 жылдың IV тоқсаны',
-    en: 'Q4 2027',
+    iso: '2024-12-31',
+    ru: 'дом сдан в 2024 году',
+    kz: 'үй 2024 жылы тапсырылды',
+    en: 'delivered in 2024',
   },
 
-  /** PLACEHOLDER deadline for the whole project (three phases). */
-  salesOfficeOpened: '2026-02-01',
+  /** Date the developer's sales office opened (dossier §3). */
+  salesOfficeOpened: '2024-01-01',
 
-  /** Base price per square metre, in KZT. See the market note above. */
-  basePricePerSqm: 520_000,
+  /** Minimum published price per square metre, in KZT (August 2026). */
+  basePricePerSqm: 498_000,
 
-  /** Discount applied to the cheapest possible unit — shown as "от …" */
-  minPriceFloorFactor: 0.97,
+  /** Published price per m² by room type (August 2026, dossier §3 table). */
+  pricePerSqmByRooms: { 1: 533_000, 2: 508_000, 3: 510_000, 4: 498_000 } as Record<
+    1 | 2 | 3 | 4,
+    number
+  >,
 
-  /** Style-programme cap that a unit price must stay under (7-20-25, Astana). */
-  stateProgramPriceCap: 25_000_000,
-
-  /** Area used in the "от ₸ за м²" line: the base price. */
   currency: 'KZT',
 
   /** Every project image is a 3D visualisation, not a photograph of a built house. */
@@ -62,42 +70,50 @@ export const PROJECT = {
 } as const;
 
 /**
- * Sales contacts.
+ * Sales contacts (dossier §3).
  *
  * Override without touching code by setting NEXT_PUBLIC_SALES_PHONE /
  * NEXT_PUBLIC_WHATSAPP / NEXT_PUBLIC_SALES_EMAIL in .env.local, or in the
  * environment settings of the hosting provider.
  */
-const PHONE_DISPLAY = process.env.NEXT_PUBLIC_SALES_PHONE ?? '+7 (700) 123-45-67';
-const PHONE_E164 = (process.env.NEXT_PUBLIC_WHATSAPP ?? '77001234567').replace(/\D/g, '');
-const EMAIL = process.env.NEXT_PUBLIC_SALES_EMAIL ?? 'sales@qonys.kz';
+const PHONE_DISPLAY = process.env.NEXT_PUBLIC_SALES_PHONE ?? '+7 706 699 95 00';
+const PHONE_E164 = (process.env.NEXT_PUBLIC_WHATSAPP ?? '77066999500').replace(/\D/g, '');
+const EMAIL = process.env.NEXT_PUBLIC_SALES_EMAIL ?? 'info@nak.kz';
 
 export const CONTACTS = {
   phoneDisplay: PHONE_DISPLAY,
   phoneHref: `tel:+${PHONE_E164}`,
   whatsappNumber: PHONE_E164,
   email: EMAIL,
+  /** Second published address for document requests. */
+  requestEmail: 'request@nak.kz',
+  requestEmailHref: 'mailto:request@nak.kz',
   emailHref: `mailto:${EMAIL}`,
+  site: 'https://nak.kz',
+  instagram: 'https://instagram.com/nak.holding',
+  /** 2GIS company card. */
+  mapUrl: 'https://2gis.kz/astana/firm/70000001077133651',
   /** Pre-filled WhatsApp message — the pattern that converts best in KZ. */
   whatsappMessage: {
-    ru: `Здравствуйте! Интересует квартира в ЖК ${PROJECT.name}. Хотел(а) бы узнать стоимость и доступные планировки.`,
-    kz: `Сәлеметсіз бе! ${PROJECT.name} ТҮК-дегі пәтер қызықтырады. Құны мен қолжетімді жоспарларды білгім келеді.`,
-    en: `Hello! I am interested in an apartment at ${PROJECT.name}. I would like to know the price and the available floor plans.`,
+    ru: `Здравствуйте! Интересует квартира в ЖК ${PROJECT.nameByLocale.ru}. Хотел(а) бы узнать стоимость и доступные планировки.`,
+    kz: `Сәлеметсіз бе! ${PROJECT.nameByLocale.kz} ТҮК-дегі пәтер қызықтырады. Құны мен қолжетімді жоспарларды білгім келеді.`,
+    en: `Hello! I am interested in an apartment at ${PROJECT.nameByLocale.en}. I would like to know the price and the available floor plans.`,
   },
   office: {
-    /** PLACEHOLDER — see the on-page notice in the contacts section. */
+    /** Confirmed address of the sales office (dossier §3). */
+    address: 'ул. Алихан Бокейхан, 16, Есиль район, Астана, Z05T0E6',
     hours: {
-      ru: 'Пн–Сб: 09:00–19:00, Вс: 10:00–17:00',
-      kz: 'Дс–Сб: 09:00–19:00, Жс: 10:00–17:00',
-      en: 'Mon–Sat: 09:00–19:00, Sun: 10:00–17:00',
+      ru: 'Ежедневно: 09:00–19:00',
+      kz: 'Күн сайын: 09:00–19:00',
+      en: 'Daily: 09:00–19:00',
     },
   },
 } as const;
 
-/** Blocks of the complex. Areas and floor counts are PLACEHOLDER values. */
+/** Blocks of the complex. Only blocks №10 and №11 are in sales. */
 export interface Block {
-  id: 'a' | 'b' | 'c';
-  /** Latin letter used in unit ids and in the unit grid. */
+  id: '10' | '11';
+  /** Number used in unit ids and in the unit grid. */
   letter: string;
   floors: number;
   unitsPerFloor: number;
@@ -109,31 +125,22 @@ export interface Block {
 
 export const BLOCKS: Block[] = [
   {
-    id: 'a',
-    letter: 'A',
-    floors: 12,
+    id: '10',
+    letter: '10',
+    floors: 9,
     unitsPerFloor: 6,
-    names: { ru: 'Корпус A', kz: 'A корпусы', en: 'Block A' },
-    delivery: { ru: 'IV кв. 2027', kz: '2027 ж. IV тоқсан', en: 'Q4 2027' },
+    names: { ru: 'Корпус №10', kz: '№10 корпус', en: 'Block 10' },
+    delivery: { ru: 'сдан в 2024', kz: '2024 ж. тапсырылды', en: 'delivered 2024' },
     status: 'selling',
   },
   {
-    id: 'b',
-    letter: 'B',
-    floors: 12,
+    id: '11',
+    letter: '11',
+    floors: 9,
     unitsPerFloor: 6,
-    names: { ru: 'Корпус B', kz: 'B корпусы', en: 'Block B' },
-    delivery: { ru: 'IV кв. 2027', kz: '2027 ж. IV тоқсан', en: 'Q4 2027' },
+    names: { ru: 'Корпус №11', kz: '№11 корпус', en: 'Block 11' },
+    delivery: { ru: 'сдан в 2024', kz: '2024 ж. тапсырылды', en: 'delivered 2024' },
     status: 'selling',
-  },
-  {
-    id: 'c',
-    letter: 'C',
-    floors: 10,
-    unitsPerFloor: 7,
-    names: { ru: 'Корпус C', kz: 'C корпусы', en: 'Block C' },
-    delivery: { ru: 'II кв. 2028', kz: '2028 ж. II тоқсан', en: 'Q2 2028' },
-    status: 'soon',
   },
 ];
 
@@ -143,53 +150,41 @@ export const getBlock = (id: Block['id']): Block | undefined =>
 export const getBlockByLetter = (letter: string): Block | undefined =>
   BLOCKS.find((block) => block.letter.toLowerCase() === letter.toLowerCase());
 
-/** Parking and storage inventory — PLACEHOLDER figures. */
+/**
+ * Parking — the dossier confirms the parking is SURFACE. Specific counts and
+ * prices for parking or storage are not published by the developer, so the
+ * figures below are demo placeholders flagged `is_demo` and must not be
+ * presented as fact.
+ */
 export const PARKING = {
-  undergroundSpaces: 168,
+  type: 'surface' as const,
+  is_demo: true,
+  /** Demo space count — not published by the developer. */
+  spaces: 168,
+  /** Demo storage count — not published by the developer. */
   storageRooms: 34,
-  /** PLACEHOLDER price for one space, in KZT. */
+  /** Demo price for one space, in KZT. */
   spacePriceFrom: 4_200_000,
   storagePriceFrom: 1_800_000,
   instalmentMonths: 18,
 } as const;
 
-/** Commercial ground-floor units — PLACEHOLDER figures. */
+/**
+ * Commercial ground-floor units. The dossier confirms areas of 44,71–233,48 m²
+ * and "price on request"; the unit count, ceiling height and feature list are
+ * not published, so no price per m² is claimed.
+ */
 export const COMMERCIAL = {
-  units: 9,
-  areaFrom: 42,
-  areaTo: 138,
-  pricePerSqmFrom: 780_000,
-  ceiling: 3.9,
+  areaFrom: 44.71,
+  areaTo: 233.48,
+  /** No published price — shown as "on request". */
+  pricePerSqmFrom: null,
+  /** Not published by the developer. */
+  is_demo: true,
   features: [
-    {
-      ru: 'Отдельный вход с улицы',
-      kz: 'Көше жағынан бөлек кіреберіс',
-      en: 'Separate entrance from the street',
-    },
-    {
-      ru: 'Витрины на главный фасад',
-      kz: 'Басты қасбетке витриналар',
-      en: 'Shopfronts onto the main facade',
-    },
-    {
-      ru: 'Высота потолков 3,9 м',
-      kz: 'Төбе биіктігі 3,9 м',
-      en: '3.9 m ceiling height',
-    },
-    {
-      ru: 'Электрическая мощность до 30 кВт',
-      kz: 'Электр қуаты 30 кВт-қа дейін',
-      en: 'Electrical capacity up to 30 kW',
-    },
-    {
-      ru: 'Отдельная вентиляция под общепит',
-      kz: 'Қоғамдық тамақтануға бөлек желдету',
-      en: 'Dedicated ventilation for food service',
-    },
-    {
-      ru: 'Парковка перед входом',
-      kz: 'Кіреберіс алдында тұрақ',
-      en: 'Parking in front of the entrance',
-    },
+    { ru: 'Отдельный вход с улицы', kz: 'Көше жағынан бөлек кіреберіс', en: 'Separate entrance from the street' },
+    { ru: 'Витрины на главный фасад', kz: 'Басты қасбетке витриналар', en: 'Shopfronts onto the main facade' },
+    { ru: 'Помещения на первых этажах', kz: 'Бірінші қабаттағы үй-жайлар', en: 'Ground-floor units' },
+    { ru: 'Свободная планировка под арендатора', kz: 'Жалға алушыға арналған еркін жоспар', en: 'Layout adaptable for an occupier' },
   ],
 } as const;

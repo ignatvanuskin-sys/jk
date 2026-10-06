@@ -15,7 +15,7 @@ export function buildCalcPrograms(locale: Locale): CalcProgram[] {
     provider: program.provider,
     rate: program.rate,
     minDown: program.minDownPercent,
-    maxTerm: program.maxTermYears,
+    maxTerm: program.maxTermYears ?? 15,
     priceCap: program.priceCap,
     caveat: program.caveat?.[locale],
     verified: program.sourceIds.length > 0,
@@ -25,8 +25,8 @@ export function buildCalcPrograms(locale: Locale): CalcProgram[] {
 /** Defaults for the calculator, derived from the actual inventory. */
 export const CALCULATOR_DEFAULTS = {
   price: 25_000_000,
-  priceMin: 15_000_000,
-  priceMax: 70_000_000,
+  priceMin: 24_000_000,
+  priceMax: 90_000_000,
 } as const;
 
 export const INVENTORY_PRICE_RANGE = {

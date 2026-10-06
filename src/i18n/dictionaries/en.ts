@@ -3,13 +3,14 @@ import type { Dictionary } from './ru';
 /**
  * English dictionary — for expatriate buyers, investors and relocating families.
  * Same keys and same array lengths as `ru` (enforced by the Dictionary type).
+ * Every fact matches `docs/real-data-dossier.md` (Asylym Park 1 / NAK).
  */
 const en: Dictionary = {
   meta: {
-    siteName: 'QONYS RESIDENCE',
-    siteShort: 'QONYS',
-    developer: 'QONYS Development',
-    tagline: 'Comfort-class residential complex in Astana',
+    siteName: 'Asylym Park 1',
+    siteShort: 'Asylym Park',
+    developer: 'NAK',
+    tagline: 'Business-class residential complex in Astana',
   },
 
   common: {
@@ -132,21 +133,21 @@ const en: Dictionary = {
   },
 
   hero: {
-    badge: 'Sales open · Block 3',
+    badge: 'On sale · blocks 10 and 11',
     title: 'A home where the thinking',
     titleAccent: 'is already done',
     subtitle:
-      'Comfort-class on the left bank of the Esil. A car-free courtyard, heated underground parking, 3-metre ceilings and full-height glazing in the living rooms. Handover — Q4 2027.',
+      'Business class on the left bank of the Esil. The house was delivered in 2024; sales continue in blocks 10 and 11: 9 storeys, 3-metre ceilings, pre-finishing, surface parking and a secured courtyard with CCTV.',
     priceLabel: 'Apartments',
-    priceValue: 'from ₸62,400,000',
-    priceNote: 'from ₸520,000 per m²',
+    priceValue: 'from ₸24,640,590',
+    priceNote: 'from ₸498,000 per m²',
     deliveryLabel: 'Handover',
-    deliveryValue: 'Q4 2027',
+    deliveryValue: 'delivered in 2024',
     addressLabel: 'Address',
-    addressValue: 'Astana, Esil district',
+    addressValue: 'Astana, Esil district, 18/1 Alikhan Bokeikhan St',
     scrollHint: 'Scroll down',
     imageAlt:
-      'Main facade of the QONYS RESIDENCE residential complex at dusk: five sections, full-height glazing, lit entrances',
+      'Main facade of the Asylym Park 1 residential complex: 9 storeys, full-height glazing, lit entrance groups',
   },
 
   stats: {
@@ -165,54 +166,54 @@ const en: Dictionary = {
 
   about: {
     eyebrow: 'The complex',
-    title: 'Three blocks, one car-free courtyard',
-    lead: 'QONYS RESIDENCE is three blocks of 9 to 12 storeys arranged around a courtyard with no cars. Ground floors are given to commercial units; underground there is heated parking and storage rooms.',
-    body: 'The project has 214 apartments, from compact one-room units to four-room homes with two bathrooms. Every apartment is handed over with pre-finishing — floor screed, plastered walls, wiring and plumbing, and a glazed balcony.',
+    title: 'Nine storeys, a secured courtyard',
+    lead: 'Asylym Park 1 is a complex of 10 houses in Astana’s Esil district. Every house was delivered in 2024; sales currently run in the 9-storey blocks 10 and 11.',
+    body: 'The complex has 346 apartments from 37.17 to 184.64 m². Apartments are handed over with pre-finishing: floor screed, plastered walls, wiring and plumbing, and a glazed balcony. Ceilings are 3.0 m.',
     links: {
       architecture: 'Architecture and materials',
       courtyard: 'Courtyard and landscaping',
       parking: 'Parking and storage',
     },
     highlights: [
-      'Car-free courtyard: parking is underground only',
-      '3.0 m ceilings in apartments, 3.6 m in the lobby',
-      'Full-height glazing in living rooms and on balconies',
-      'Commercial units on the ground floor: pharmacy, coffee shop, grocery',
+      'Business class (class II): cast-in-place frame technology',
+      '3.0 m ceilings, pre-finishing',
+      'Surface parking and a secured courtyard with CCTV',
+      'Delivered in 2024 — apartments can be viewed in person',
     ],
   },
 
   benefits: {
     eyebrow: 'Advantages',
     title: 'Seven decisions you notice every day',
-    lead: 'No "comfort" and no "quality" — only what can be checked in the project documentation and seen in the courtyard.',
+    lead: 'No "comfort" and no "quality" — only what can be checked in the developer’s description and seen in the courtyard.',
     items: [
       {
-        title: 'A courtyard without cars',
-        text: 'Vehicle access is closed by a barrier and a guarded post. Cars go underground — children play in the courtyard, not between parked cars.',
+        title: 'A secured courtyard',
+        text: 'A CCTV-monitored territory with playgrounds and a sports area. Vehicle access is arranged from the street.',
       },
       {
-        title: 'Underground parking, 168 spaces',
-        text: 'Heated parking under the whole courtyard. Two ramps, and a lift that takes you straight up to your floor. Plus 34 storage rooms.',
+        title: 'Surface parking',
+        text: 'Parking is on the surface. Spaces and storage rooms are sold separately from the apartment; a manager confirms the terms.',
       },
       {
         title: '3.0 metre ceilings',
-        text: 'Floor to slab is 3.0 m — 20–30 cm above the comfort-class standard. Windows start at 900 mm, so daylight reaches deep into the room.',
+        text: 'Floor to slab is 3.0 m.',
       },
       {
         title: 'Full-height glazing',
-        text: 'Living rooms get floor-to-ceiling glazing; bedrooms get full-height windows with double-glazed units and concealed reveals.',
+        text: 'Double-glazed units and triple-glazed bay windows.',
       },
       {
-        title: 'Ventilated facade',
-        text: 'Porcelain stoneware and clinker tiles on an aluminium sub-frame. The facade does not need repainting every five years and does not fade.',
+        title: 'Fibre-cement facade',
+        text: 'Fibre-cement panels with aluminium, granite and clinker brick inserts.',
       },
       {
-        title: 'Step-free access',
-        text: 'Entrances without steps, door openings from 950 mm wide, and two lifts per entrance — one sized for a pram or a bicycle.',
+        title: 'Two lifts',
+        text: 'A goods lift and a passenger lift serve the building.',
       },
       {
-        title: 'CCTV and 24/7 security',
-        text: 'Cameras in the courtyard, car park, entrances and lobby. Access control for the block and the territory. Footage archived for 30 days.',
+        title: 'CCTV',
+        text: 'Cameras in the courtyard and at the entrances. The courtyard is secured.',
       },
     ],
   },
@@ -220,7 +221,7 @@ const en: Dictionary = {
   apartments: {
     eyebrow: 'Apartments',
     title: 'Apartment catalogue',
-    lead: 'Available units across three blocks. Prices are for full payment and depend on the floor and the view.',
+    lead: 'Available units in blocks 10 and 11. The price depends on the apartment type and area. Confirm availability by phone.',
     resultsFound: 'Found',
     resultsUnit: 'apartments',
     resultsFoundOne: 'Found',
@@ -273,7 +274,7 @@ const en: Dictionary = {
     card: {
       pricePerSqm: 'per m²',
       planLabel: 'Floor plan',
-      bookNote: 'Reservation holds 3 working days, free of charge',
+      bookNote: 'Reservation — ₸1,000,000',
       lastChance: 'Last one in this layout',
     },
     detail: {
@@ -311,13 +312,13 @@ const en: Dictionary = {
     legendSold: 'Sold',
     selectFloorHint: 'Select a floor to reveal its units',
     floorLabel: 'floor',
-    hint: 'Statuses are updated daily by the sales team. Confirm availability by phone before travelling.',
+    hint: 'Statuses are updated by the sales team. Confirm availability by phone before travelling.',
   },
 
   floorplans: {
     eyebrow: 'Floor plans',
     title: 'Floor plans and areas',
-    lead: 'Every layout in the complex, from compact one-room units to panoramic four-room homes. Select an image to open the plan enlarged, check room dimensions and zoom into individual zones.',
+    lead: 'Every layout type, from one-room to four-room homes. Areas from 37.17 to 184.64 m². Select an image to open the plan enlarged, check room dimensions and zoom into individual zones.',
     tabsLabel: 'Layout type',
     plan: 'Layout',
     room: 'room',
@@ -355,37 +356,37 @@ const en: Dictionary = {
 
   architecture: {
     eyebrow: 'Architecture',
-    title: 'A facade that will never need repainting',
-    lead: 'A monolithic frame with a ventilated facade. Below is what you see from the street and from inside.',
+    title: 'A facade of fibre cement and glass',
+    lead: 'The project uses cast-in-place frame technology. Below is what the developer confirms.',
     items: [
       {
         title: 'Structure',
-        text: 'Cast-in-place reinforced concrete frame with beam-free slabs. Layouts inside the apartment are free — only the external walls and the stair-lift core are load-bearing.',
+        text: 'Cast-in-place frame technology; walls are aerated concrete blocks, insulation is mineral wool.',
       },
       {
         title: 'Facade',
-        text: '600×1200 porcelain stoneware and clinker tiles on an aluminium sub-frame with a ventilated cavity. Warm sand tones with graphite accents.',
+        text: 'Fibre-cement panels with aluminium, granite and clinker brick inserts.',
       },
       {
-        title: 'Windows and balconies',
-        text: '70 mm PVC profiles, double-glazed units with a low-emissivity coating. Balconies are glazed and insulated, and sit outside the facade plane.',
-      },
-      {
-        title: 'Entrance groups',
-        text: 'A 3.6 m lobby, porcelain stoneware floors, concealed lighting, plus a pram store and bicycle parking right at the door.',
+        title: 'Windows and bay glazing',
+        text: 'Double-glazed units and triple-glazed bay windows.',
       },
       {
         title: 'Lifts',
-        text: 'Two passenger lifts per entrance, manufactured by Otis, travelling at 1.6 m/s. One is oversized for prams and furniture.',
+        text: 'A goods lift and a passenger lift serve the building.',
       },
       {
-        title: 'Building services',
-        text: 'Natural supply and exhaust ventilation, with air-conditioning units concealed on the facade — no condenser units bolted to the walls.',
+        title: 'Heating',
+        text: 'Central heating.',
+      },
+      {
+        title: 'Territory',
+        text: 'A secured courtyard with CCTV, playgrounds and a sports area.',
       },
     ],
     imageCaptions: {
-      facade: 'Facade detail: porcelain stoneware and living-room glazing',
-      lobby: 'Entrance group: a 3.6 m lobby',
+      facade: 'Facade detail: fibre-cement panels and living-room glazing',
+      lobby: 'The building entrance group',
       night: 'Facade lighting in the evening',
     },
   },
@@ -393,45 +394,45 @@ const en: Dictionary = {
   courtyard: {
     eyebrow: 'Courtyard',
     title: 'A courtyard you will actually walk out into',
-    lead: 'Everything inside the complex is pedestrian. Cars are underground, so a child can be left twenty metres away and still be safe.',
+    lead: 'The territory inside the complex has CCTV, playgrounds and a sports area; the courtyard is secured.',
     zones: [
       {
-        title: 'Playgrounds',
-        text: 'Two playgrounds by age: 2–5 and 6–12. Rubber surfacing, plus canopies for sun and rain.',
+        title: 'Playground',
+        text: 'A playground in the complex courtyard.',
       },
       {
-        title: 'Sports zone',
-        text: 'Pull-up bars, parallel bars, a calisthenics area and a table tennis table. A separate volleyball court.',
+        title: 'Sports area',
+        text: 'A separate area for sport and exercise.',
       },
       {
-        title: 'Promenade',
-        text: '800 metres of internal paths around the courtyard perimeter. Lighting along the whole route, benches every 25 metres.',
+        title: 'Secured courtyard',
+        text: 'The courtyard is secured, with CCTV across the territory.',
       },
       {
         title: 'Landscaping',
-        text: 'Large-caliper trees with soil prepared for wintering. Irrigated lawn that does not burn out by August.',
+        text: 'Landscaping and courtyard improvement per the developer’s project.',
       },
       {
         title: 'Places to sit',
-        text: 'Three pergolas with benches, a barbecue area bookable in advance, and a dog-walking area.',
+        text: 'Places to rest for residents in the courtyard.',
       },
       {
         title: 'Lighting and security',
-        text: 'Courtyard lighting up to 200 lux along the routes, perimeter CCTV, and a panic button at the security post.',
+        text: 'Territory lighting and CCTV.',
       },
     ],
     captions: {
-      courtyard: 'Car-free courtyard: playground, planting and walking paths',
-      playground: 'Playground for ages 6–12 with rubber surfacing',
-      sport: 'Sports zone with calisthenics area and table tennis',
-      landscape: 'Promenade around the perimeter of the courtyard',
+      courtyard: 'The complex courtyard: playground and planting',
+      playground: 'The courtyard playground',
+      sport: 'The sports area',
+      landscape: 'Courtyard improvement',
     },
   },
 
   infrastructure: {
     eyebrow: 'Neighbourhood',
     title: 'What is nearby',
-    lead: 'Amenities are grouped by walking time. Distances are measured from the main entrance to the complex.',
+    lead: 'Amenities are grouped by distance and travel time. The values are per the developer’s data.',
     categories: {
       education: 'Education',
       medicine: 'Healthcare',
@@ -451,48 +452,53 @@ const en: Dictionary = {
   location: {
     eyebrow: 'Location',
     title: 'Everything you need is close',
-    lead: 'The complex sits on the left bank of the Esil. Below is travel time to the points that actually drive the choice of a district.',
+    lead: 'Asylym Park 1 sits in Astana’s Esil district, on the left bank. Below is the distance and travel time to the key points, per the developer’s data.',
     address: 'Address',
-    addressValue: 'Astana, Esil district, left bank of the Esil river',
+    addressValue: 'Astana, Esil district, 18/1 Alikhan Bokeikhan St',
     routes: [
-      { label: 'To the city centre (Baiterek)', time: '15 min' },
-      { label: 'To the Esil embankment', time: '9 min' },
-      { label: 'To school', time: '5 min walk' },
-      { label: 'To kindergarten', time: '4 min walk' },
-      { label: 'To the nearest shopping centre', time: '7 min by car' },
-      { label: 'To the polyclinic', time: '8 min by car' },
-      { label: 'To the international airport', time: '40 min by car' },
-      { label: 'To the railway station', time: '20 min by car' },
+      { label: 'To the Botanical garden and Triumphal Arch', time: '1 km' },
+      { label: 'To the bank of the Ishim river', time: '20 minutes on foot' },
+      { label: 'To schools No. 45, No. 75 and lyceum No. 76', time: '1 km' },
+      { label: 'To the kindergartens', time: '1 km' },
+      { label: 'To Abu Dhabi Plaza and Expo 2017 malls', time: '5–10 minutes' },
+      { label: 'To the Nur-Sultan-1 rail terminal', time: '11.5 km' },
+      { label: 'To the Nurly Zhol rail station', time: '≈9 km' },
+      { label: 'To the international airport', time: '16 minutes' },
     ],
-    routeHint: 'Travel times are approximate, at average traffic.',
+    routeHint: 'Distances and travel times are per the developer’s data.',
     mapPlaceholder:
       'The district diagram is schematic. Ask the sales office for the exact address and the most convenient route.',
     transportTitle: 'Public transport',
-    transportText: 'A bus stop is a 4-minute walk away, with three routes passing through the district.',
+    transportText: 'The bus stop is 195 metres away: routes 15, 15A, 28, 35, 46, 52, 54, 70, every 8–10 minutes.',
   },
 
   construction: {
     eyebrow: 'Construction',
-    title: 'Construction progress by month',
-    lead: 'Reports per block: completion percentage and the list of works completed. Updated monthly; the report date is shown on each card.',
+    title: 'The building has been delivered',
+    lead: 'Asylym Park 1 was delivered in 2024. Completion percentages, a photo log and a camera are not published: the building is already finished.',
     filterAll: 'All blocks',
     progress: 'Completion',
     worksDone: 'Works completed',
-    nextWorks: 'Planned for next month',
+    nextWorks: 'Planned',
     reportDate: 'Report date',
     cameraTitle: 'Live site camera',
-    cameraText:
-      'The live feed from the site will appear here once the camera is connected. Until then, follow the progress through the photo reports.',
-    totalProgress: 'Overall site completion',
+    cameraText: 'The building is delivered, so no live camera or construction photo log is published.',
+    totalProgress: 'Site status',
     stageLabel: 'Stage',
+    status: 'Status',
+    delivered: 'Delivered',
+    deliveredValue: 'Year delivered',
+    deliveredText: 'The complex was completed and put into operation in 2024. Sales continue in blocks 10 and 11.',
   },
 
   developer: {
     eyebrow: 'Developer',
     title: 'Who is building this',
-    lead: 'Background on the developer: what actually supports the claim that the building will be completed.',
+    lead: 'NAK (Nur Astana Kurylys LLP) has worked on the construction market since 2006. Its portfolio holds residential projects in Astana; only confirmed data is shown below.',
     factsTitle: 'The company in numbers',
-    projectsTitle: 'Completed projects',
+    projectsTitle: 'The developer’s projects',
+    housesUnit: 'houses',
+    unitsUnit: 'apartments',
     awardsTitle: 'Awards and certificates',
     guaranteesTitle: 'Buyer safeguards',
     guarantees: [
@@ -514,7 +520,10 @@ const en: Dictionary = {
   documents: {
     eyebrow: 'Documents',
     title: 'Documents and transparency',
-    lead: 'The documents the developer publishes openly. Select a document to see what it covers and request a copy.',
+    lead: 'The document section will appear once the developer discloses the pack for this project.',
+    emptyTitle: 'No documents published',
+    emptyText:
+      'The developer has not disclosed the document pack for this project. Request the documents from the sales office — we will pass the request to the developer.',
     types: {
       permit: 'Construction permit',
       guarantee: 'Single Operator guarantee',
@@ -536,8 +545,8 @@ const en: Dictionary = {
 
   parking: {
     eyebrow: 'Parking and storage',
-    title: 'A place for the car and a place for the rest',
-    lead: 'Heated underground parking under the whole courtyard, with storage rooms on the same level. Sold separately from the apartment, with a payment plan available.',
+    title: 'Surface parking and storage',
+    lead: 'The building has surface parking. Spaces and storage rooms are sold separately from the apartment.',
     facts: {
       spaces: 'Parking spaces',
       storage: 'Storage rooms',
@@ -548,37 +557,37 @@ const en: Dictionary = {
     },
     points: [
       {
-        title: 'Two separate ramps',
-        text: 'Separate entry and exit — no waiting for oncoming traffic. The barrier reads your plate.',
+        title: 'Surface parking',
+        text: 'The parking is located within the complex territory.',
       },
       {
-        title: 'A lift to your floor',
-        text: 'The lift goes from the car park up to the residential floors without stepping outside. A separate lift serves the storage rooms.',
+        title: 'Steps from the door',
+        text: 'No need to go down to an underground level.',
       },
       {
-        title: 'Heated and ventilated',
-        text: 'The car park is heated, so the car does not freeze and there is no ice on the ramp in winter.',
+        title: 'Separate storage',
+        text: 'A storage room is sold as a separate lot.',
       },
       {
-        title: 'Storage from 3 m²',
-        text: 'A lockable room of your own for seasonal items, a pram, bicycles and tools.',
+        title: 'Terms from a manager',
+        text: 'The sales office confirms the price and the payment schedule.',
       },
     ],
     disclaimer:
-      'The price of a space or storage room depends on its area and level. A sales manager confirms the exact price.',
+      'The price of a space or storage room depends on its location. A sales manager confirms the exact price.',
   },
 
   commercial: {
     eyebrow: 'Commercial units',
     title: 'Ground-floor units',
-    lead: 'Units with a separate street entrance and shopfronts onto the main facade. Suitable for a pharmacy, coffee shop, bakery, grocery, salon or service business.',
+    lead: 'Ground-floor units from 44.71 to 233.48 m² with a separate entrance and shopfronts. Price on request.',
     unitsLabel: 'Units',
     areaLabel: 'Areas',
     ceilingLabel: 'Ceilings',
-    priceLabel: 'Price from',
+    priceLabel: 'Price',
     featuresTitle: 'Already provided',
     disclaimer:
-      'The layout can be adapted for an occupier within the project. The commercial team confirms the terms.',
+      'The layout can be adapted for an owner within the project. The commercial team confirms the terms.',
   },
 
   purchase: {
@@ -587,28 +596,28 @@ const en: Dictionary = {
     lead: 'Four routes. A sales manager confirms the terms for a specific apartment — once calculated, they are fixed in the contract.',
     methods: [
       {
-        title: 'Full payment',
-        text: 'The largest discount off the base price — from 5% for a single payment. The contract and paperwork are completed on the day of the deal.',
-        meta: 'From 5% discount',
-        cta: 'Get a quote',
+        title: 'Bank CenterCredit mortgage',
+        text: 'With income confirmation: rate from 5% per year, 20% down payment, term up to 15 years, up to ₸80,000,000.',
+        meta: 'from 5%, 20% down, up to 15 years',
+        cta: 'Calculate the payment',
       },
       {
-        title: 'Mortgage',
-        text: 'We work with Otbasy Bank, Halyk Bank, Freedom Bank, Bank CenterCredit, ForteBank and Altyn Bank. One manager can submit your application to several banks at once.',
-        meta: 'From 7% under the state programme',
+        title: 'Mortgage without income proof',
+        text: 'Bank CenterCredit: rate from 6.5% per year, 30% down payment, term up to 15 years.',
+        meta: 'from 6.5%, 30% down, up to 15 years',
         cta: 'Calculate the payment',
       },
       {
         title: 'Developer payment plan',
-        text: 'Down payment from 20%. A fixed monthly payment until completion, with the balance settled by mortgage or cash at handover.',
-        meta: 'From 20% down, until handover',
-        cta: 'Get the payment schedule',
+        text: 'Down payment from 50% and 70%, unit reservation — ₸1,000,000, then a mortgage or payment.',
+        meta: 'down from 50% and 70%, reservation ₸1,000,000',
+        cta: 'Get the terms',
       },
       {
-        title: 'Trade-in',
-        text: 'Swap your existing apartment or car for a new apartment with a top-up payment. Valuation takes up to three working days.',
-        meta: 'Valuation in 3 working days',
-        cta: 'Value my property',
+        title: 'NAK Club',
+        text: 'The developer’s loyalty programme: 3% off the first purchase, 4% off the 2nd–3rd and 5% off the 4th–5th.',
+        meta: 'Discounts 3% / 4% / 5%',
+        cta: 'Learn the terms',
       },
     ],
     disclaimer:
@@ -616,8 +625,8 @@ const en: Dictionary = {
     stepsTitle: 'How the deal works',
     steps: [
       { title: '1. Selection', text: 'You pick an apartment in the catalogue or with a manager, and check the layout and the view.' },
-      { title: '2. Quote', text: 'The manager prepares a quote for your chosen payment route and holds the unit for 3 days.' },
-      { title: '3. Contract', text: 'You review the contract and sign the shared-construction agreement. Registration is mandatory.' },
+      { title: '2. Quote', text: 'The manager prepares a quote for your chosen payment route and holds the unit.' },
+      { title: '3. Contract', text: 'You review the purchase agreement and sign it.' },
       { title: '4. Payments', text: 'Payments follow the schedule. Every payment appears in the buyer’s personal account.' },
       { title: '5. Handover', text: 'Inspection against a checklist, snagging, then the keys are handed over.' },
     ],
@@ -626,7 +635,8 @@ const en: Dictionary = {
   mortgage: {
     eyebrow: 'Mortgage & plans',
     title: 'Payment calculator',
-    lead: 'Compare payments across state programmes and partner-bank mortgages. The calculator shows the monthly payment and the total interest.',
+    lead: 'Compare the developer payment plan with a Bank CenterCredit mortgage. The calculator shows the monthly payment and the total interest.',
+    discount: 'Discount',
     calculator: {
       price: 'Apartment price',
       down: 'Down payment',
@@ -649,9 +659,9 @@ const en: Dictionary = {
       cash: 'Cash purchase',
       instalment: 'Developer payment plan',
     },
-    tableTitle: 'Programme parameters used in the calculation',
+    tableTitle: 'Purchase terms published by the developer',
     tableNote:
-      'Rates and caps are shown as a guide. Check the current programme terms with the sales office and the partner bank.',
+      'Rates, down payments and terms are per the developer’s data as at 21 August 2026. Check the current terms with the sales office and the bank.',
     disclaimerTitle: 'Important',
     disclaimer:
       'The calculation is preliminary and for reference only. It is not a bank offer and does not account for fees, insurance or borrower eligibility requirements. Confirm exact terms with the sales office and your bank.',
@@ -669,31 +679,31 @@ const en: Dictionary = {
       },
       {
         q: 'Can I change the internal layout?',
-        a: 'Yes. Inside the apartment only the external walls and the stair-lift core are load-bearing, so partitions can be moved. Changes are agreed with the developer and documented under the current regulations.',
+        a: 'Inside the apartment only the external walls and the stair-lift core are load-bearing, so partitions can be moved. Changes are agreed with the developer and documented under the current regulations.',
       },
       {
         q: 'How much is parking, and how do I buy it?',
-        a: 'An underground parking space is sold separately from the apartment, either outright or on a payment plan. Storage rooms are also sold separately. The manager will confirm current prices.',
+        a: 'Parking is on the surface. A space and a storage room are sold separately from the apartment. The manager will confirm the exact prices.',
       },
       {
         q: 'What documents do I need for a mortgage?',
-        a: 'An ID, proof of income for the last 6–12 months, and — if you are applying under a state programme — a statement confirming you do not own housing. The full list depends on the bank.',
+        a: 'An ID and proof of income for the last 6–12 months. For a mortgage without income proof, Bank CenterCredit requests a different package. The full list depends on the bank.',
       },
       {
         q: 'When will the keys be handed over?',
-        a: 'Handover is scheduled for Q4 2027. Inspection follows a checklist; any snags are recorded in a report and fixed before you sign.',
+        a: 'The building was delivered in 2024, so the keys are handed over right after the deal. Inspection follows a checklist, and snags are recorded in a report.',
       },
       {
         q: 'What does the courtyard landscaping include?',
-        a: 'Two age-group playgrounds, a sports and calisthenics zone, walking paths around the perimeter, irrigated planting, three pergolas with benches, route lighting and CCTV.',
+        a: 'A secured courtyard with CCTV, playgrounds and a sports area, plus landscaping and territory lighting per the developer’s project.',
       },
       {
         q: 'Are commercial units for sale?',
-        a: 'Yes — ground-floor units with their own entrance and shopfronts are available. Areas and prices are in the "Commercial units" section.',
+        a: 'Yes — ground-floor units from 44.71 to 233.48 m² are available. Price on request.',
       },
       {
         q: 'How do I reserve an apartment?',
-        a: 'Send a request or call the sales office. A manager holds the unit for 3 working days free of charge, giving you time to check the documents and decide.',
+        a: 'Send a request or call the sales office. A unit reservation is ₸1,000,000; the manager fixes the terms for the specific lot.',
       },
     ],
   },
@@ -750,27 +760,27 @@ const en: Dictionary = {
   contacts: {
     eyebrow: 'Contacts',
     title: 'Sales office',
-    lead: 'The sales office is on site. You can drop in without an appointment — but with one, a manager meets you and shows you an apartment.',
+    lead: 'The sales office operates in Astana’s Esil district. You can drop in without an appointment — but with one, a manager meets you.',
     salesOffice: 'Sales office',
     addressLabel: 'Office address',
-    addressValue: 'Astana, Esil district',
-    addressPlaceholder: 'Ask a sales manager for the exact address and directions',
+    addressValue: '16 Alikhan Bokeikhan St, Esil district, Astana, Z05T0E6',
+    addressPlaceholder: 'The developer’s sales office in Astana’s Esil district.',
     hoursLabel: 'Opening hours',
-    hoursValue: 'Mon–Sat: 09:00–19:00, Sun: 10:00–17:00',
+    hoursValue: 'Daily: 09:00–19:00',
     phoneLabel: 'Phone',
     whatsappLabel: 'WhatsApp',
     emailLabel: 'E-mail',
     requisitesTitle: 'Company details',
     requisitesNote:
-      'Full company details — BIN, legal entity name and bank details — are provided by the sales office on request.',
+      'Full company details and documents are provided by the sales office on request. Document requests go to the developer’s email.',
     visitTitle: 'Book a viewing',
-    visitText: 'A manager meets you at the sales office, walks you through the model and floor plans, and takes you to the site.',
+    visitText: 'A manager meets you at the sales office, walks you through the floor plans and takes you to the site.',
     transportLabel: 'Getting here',
-    transportText: 'By car — the entrance is from the main street. By public transport — a 4-minute walk from the stop.',
+    transportText: 'By public transport — the stop is 195 metres away: routes 15, 15A, 28, 35, 46, 52, 54, 70.',
   },
 
   footer: {
-    about: 'A comfort-class residential complex in Astana. Three blocks, 214 apartments, handover Q4 2027.',
+    about: 'Asylym Park 1, a business-class residential complex in Astana. 10 houses, 346 apartments, delivered in 2024.',
     navTitle: 'Sections',
     buyersTitle: 'For buyers',
     contactsTitle: 'Contacts',
@@ -779,9 +789,9 @@ const en: Dictionary = {
     consent: 'Personal data consent',
     disclaimerTitle: 'Disclaimer',
     disclaimer:
-      'Information on this site is for reference only and does not constitute a public offer. Shared-construction agreements are signed after the Single Operator guarantee is registered, or after permission is granted by the local executive body. Floor plans, areas and images are visualisations.',
+      'Information on this site is for reference only and does not constitute a public offer. Prices and availability are as at 21 August 2026. Floor plans, areas and images are visualisations.',
     rights: 'All rights reserved.',
-    madeWith: 'The official website of the QONYS RESIDENCE sales department.',
+    madeWith: 'The official website of the Asylym Park 1 residential complex.',
   },
 
   notFound: {

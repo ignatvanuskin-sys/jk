@@ -12,7 +12,7 @@ import { MediaImage } from '@/components/ui/MediaImage';
  * "About the complex" — the block that turns the hero's promise into numbers.
  *
  * Note the copy rule applied here: every highlight is a checkable statement
- * ("3.0 m ceilings", "parking only underground"), never an adjective.
+ * ("3.0 m ceilings", "surface parking"), never an adjective.
  */
 export function AboutComplex({
   locale,
@@ -25,7 +25,7 @@ export function AboutComplex({
     { label: dict.stats.items.units, value: String(INVENTORY_STATS.total) },
     { label: dict.stats.items.floors, value: `${PROJECT.storeys.min}–${PROJECT.storeys.max}` },
     { label: dict.stats.items.area, value: `${INVENTORY_STATS.minArea}–${INVENTORY_STATS.maxArea} м²` },
-    { label: dict.stats.items.parking, value: String(PARKING.undergroundSpaces) },
+    { label: dict.stats.items.parking, value: String(PARKING.spaces) },
   ];
 
   return (

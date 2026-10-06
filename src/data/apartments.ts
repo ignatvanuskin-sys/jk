@@ -1,18 +1,23 @@
 /**
  * Apartment inventory.
  *
- * The complete sales inventory of the complex — 214 apartments across blocks A,
- * B and C — modelled in one place. Every unit is produced by a deterministic,
- * seeded generator, so a unit's number, area, price, status, finishing and view are
- * identical on the server, in the browser and in the generated JSON-LD: the
- * catalogue, the unit grid and the structured data can never drift apart.
+ * The sales inventory of the complex — the units on sale in blocks №10 and №11
+ * (9 floors each) — modelled in one place. Every unit is produced by a
+ * deterministic, seeded generator, so a unit's number, area, price, status,
+ * finishing and view are identical on the server, in the browser and in the
+ * generated JSON-LD: the catalogue, the unit grid and the structured data can
+ * never drift apart.
+ *
+ * SOURCE OF TRUTH: `docs/real-data-dossier.md`. The blocks, floor count, unit
+ * areas (from the published floor plans) and the price per m² per room type are
+ * the developer's published data (as at 21 August 2026). The per-unit numbers,
+ * floors, statuses and views are NOT published by the developer — the dossier
+ * flags them as demo and they are generated inside the real boundaries of the
+ * building: blocks №10–11, 9 floors, real areas and real price per m².
  *
  * This module is the single source of truth for every consumer. Pages and
  * components read `APARTMENTS`, `UNIT_SUMMARIES`, `INVENTORY_STATS`,
  * `FEATURED_UNITS` and the lookup helpers, and none of them hard-codes a unit.
- * Connecting the developer's CRM means replacing `buildInventory()` with a
- * fetch/API call, or swapping `APARTMENTS` for the live feed — the shape below
- * stays the same.
  */
 
 import { BLOCKS, PROJECT, type Block } from './project';
@@ -24,11 +29,11 @@ export type ViewKind = 'courtyard' | 'city' | 'steppe' | 'park';
 export type FinishingKind = 'pre' | 'clean' | 'turnkey';
 
 export interface Apartment {
-  /** Stable id used in URLs, e.g. `a-03-2`. */
+  /** Stable id used in URLs, e.g. `10-03-2`. */
   id: string;
   /** Sales number shown to the buyer, e.g. `204`. */
   number: string;
-  blockId: 'a' | 'b' | 'c';
+  blockId: '10' | '11';
   blockLetter: string;
   floor: number;
   rooms: 1 | 2 | 3 | 4;
@@ -47,7 +52,7 @@ export interface Apartment {
   finishing: FinishingKind;
   /** Sold on a developer payment plan. */
   installment: boolean;
-  /** Price sits under the state-programme cap for this city. */
+  /** Price sits under a state-programme cap for this city. */
   stateProgram: boolean;
   /** Position on the landing, 1-based, left to right. */
   position: number;
@@ -68,52 +73,33 @@ function mulberry32(seed: number) {
 
 /* ── Plan distribution per block and floor band ───────────────────────────── */
 
-const PATTERNS: Record<'a' | 'b' | 'c', string[][]> = {
-  a: [
-    ['1A', '1B', '2A', '2C', '3A', '2A'],
-    ['1A', '2A', '2C', '3A', '2C', '1B'],
-    ['1B', '2A', '3A', '4A', '2C', '2A'],
-    ['2A', '2C', '3A', '4A', '3A', '2C'],
+const PATTERNS: Record<'10' | '11', string[][]> = {
+  '10': [
+    ['1A', '2A', '2C', '3A', '3C', '4A'],
+    ['2A', '2C', '3A', '3C', '4A', '1A'],
+    ['1A', '2A', '3A', '3C', '2C', '4A'],
+    ['2A', '2C', '1A', '3A', '3C', '4A'],
   ],
-  b: [
-    ['1A', '2A', '1B', '2C', '2A', '3A'],
-    ['1B', '2A', '2C', '2A', '3A', '2C'],
-    ['2A', '2C', '3A', '3A', '4A', '2C'],
-    ['1B', '2C', '3A', '3A', '4A', '2A'],
-  ],
-  c: [
-    ['1A', '1B', '2A', '2C', '2A', '3A', '3A'],
-    ['1A', '2A', '2C', '2A', '3A', '3A', '4A'],
-    ['1B', '2A', '2C', '3A', '2C', '3A', '2C'],
-    ['2A', '2C', '3A', '3A', '4A', '2C', '3A'],
+  '11': [
+    ['1A', '2A', '2C', '3A', '3C', '4A'],
+    ['2C', '3A', '1A', '2A', '4A', '3C'],
+    ['2A', '1A', '2C', '3C', '4A', '3A'],
+    ['3A', '2C', '2A', '1A', '3C', '4A'],
   ],
 };
 
 /** Views by position on the landing — edges see the city, the middle sees the yard. */
 const VIEWS_6: ViewKind[] = ['city', 'courtyard', 'courtyard', 'park', 'steppe', 'city'];
-const VIEWS_7: ViewKind[] = ['city', 'courtyard', 'courtyard', 'park', 'courtyard', 'steppe', 'city'];
-
-const VIEW_FACTOR: Record<ViewKind, number> = {
-  courtyard: 1.0,
-  steppe: 1.015,
-  park: 1.03,
-  city: 1.045,
-};
 
 /** Blocks are numbered in the hundreds so numbers are recognisable on the phone. */
-const NUMBER_OFFSET: Record<'a' | 'b' | 'c', number> = { a: 0, b: 200, c: 400 };
-
-const roundTo = (value: number, step: number) => Math.round(value / step) * step;
+const NUMBER_OFFSET: Record<'10' | '11', number> = { '10': 0, '11': 200 };
 
 /* ── Sales model: status, finishing, bathrooms, payment plan ──────────────── */
 
 /**
- * Where a unit sits in the sales cycle.
- *
- * Blocks in active sales (A and B) have been on the market long enough for the
- * lower floors — the first to be released and the easiest to sell — to carry
- * noticeably more sold stock, with demand tapering off with height. A block that
- * has only just opened (C) is almost entirely free. `roll` is the unit's own
+ * Where a unit sits in the sales cycle. Blocks №10 and №11 are both in active
+ * sales, so the lower floors — released first and easiest to sell — carry more
+ * sold stock, with demand tapering off with height. `roll` is the unit's own
  * deterministic draw in [0, 1).
  */
 function statusFor(block: Block, floor: number, roll: number): UnitStatus {
@@ -127,20 +113,14 @@ function statusFor(block: Block, floor: number, roll: number): UnitStatus {
   return 'available';
 }
 
-/** Every demo apartment is handed over with the documented pre-finishing. */
+/** Every unit is handed over with the documented pre-finishing. */
 function finishingFor(): FinishingKind {
   return 'pre';
 }
 
-/**
- * Bathroom count is a property of the layout: one-room homes have a single
- * bathroom, three- and four-room homes have two, and the two-room homes split —
- * the larger "Classic" plan (from 55 m²) includes a guest WC, the compact one
- * does not.
- */
-function bathroomsFor(rooms: 1 | 2 | 3 | 4, area: number): number {
+function bathroomsFor(rooms: 1 | 2 | 3 | 4): number {
   if (rooms === 1) return 1;
-  if (rooms === 2) return area >= 55 ? 2 : 1;
+  if (rooms === 2) return 1;
   return 2;
 }
 
@@ -151,7 +131,6 @@ function buildInventory(): Apartment[] {
 
   for (const block of BLOCKS) {
     const patterns = PATTERNS[block.id];
-    const views = block.unitsPerFloor === 7 ? VIEWS_7 : VIEWS_6;
 
     for (let floor = 1; floor <= block.floors; floor += 1) {
       const pattern = patterns[floor % patterns.length];
@@ -164,15 +143,15 @@ function buildInventory(): Apartment[] {
         // One independent draw per unit keeps the whole inventory reproducible.
         const roll = mulberry32(block.letter.charCodeAt(0) * 100_000 + floor * 137 + pos * 17)();
 
-        const view = views[pos] ?? 'courtyard';
+        const view = VIEWS_6[pos] ?? 'courtyard';
 
-        const floorFactor =
-          PROJECT.minPriceFloorFactor +
-          ((floor - 1) / Math.max(1, block.floors - 1)) * (1.06 - PROJECT.minPriceFloorFactor);
-        const price = roundTo(
-          plan.totalArea * PROJECT.basePricePerSqm * floorFactor * VIEW_FACTOR[view],
-          1_000,
-        );
+        // The price is the developer's published price per m² for this room
+        // type (dossier §3) — not a modelled figure. The published prices are
+        // exactly `area × price per m²` (24 640 590 = 46,23 × 533 000), so the
+        // multiplication is kept unrounded and the figure matches the source to
+        // the tenge.
+        const pricePerSqm = PROJECT.pricePerSqmByRooms[plan.rooms];
+        const price = Math.round(plan.totalArea * pricePerSqm);
 
         const status = statusFor(block, floor, roll);
         // The panoramic four-room homes on the top floors are the most expensive
@@ -180,7 +159,7 @@ function buildInventory(): Apartment[] {
         const installment = !(plan.rooms === 4 && floor >= block.floors - 2);
 
         units.push({
-          id: `${block.letter.toLowerCase()}-${String(floor).padStart(2, '0')}-${pos + 1}`,
+          id: `${block.letter}-${String(floor).padStart(2, '0')}-${pos + 1}`,
           number: String((floor - 1) * block.unitsPerFloor + pos + 1 + NUMBER_OFFSET[block.id]),
           blockId: block.id,
           blockLetter: block.letter,
@@ -190,16 +169,18 @@ function buildInventory(): Apartment[] {
           area: plan.totalArea,
           livingArea: plan.livingArea,
           kitchenArea: plan.kitchenArea,
-          bathrooms: bathroomsFor(plan.rooms, plan.totalArea),
+          bathrooms: bathroomsFor(plan.rooms),
           balconies: plan.layout.filter((r) => r.outside).length,
           ceiling: 3.0,
           price,
-          pricePerSqm: roundTo(price / plan.totalArea, 100),
+          pricePerSqm,
           status,
           view,
           finishing: finishingFor(),
           installment,
-          stateProgram: price < PROJECT.stateProgramPriceCap,
+          // The developer confirmed the complex does not use the state
+          // subsidy programme, so no unit is flagged as programme-eligible.
+          stateProgram: false,
           position: pos + 1,
         });
       }
@@ -214,9 +195,8 @@ export const APARTMENTS: Apartment[] = buildInventory();
 /**
  * The projection the catalogue ships to the browser.
  *
- * Sending all 214 full `Apartment` objects would roughly double the page
- * payload; the cards, the filters and the unit grid need exactly these fields,
- * so this is the boundary between "the data model" and "what the client sees".
+ * The cards, the filters and the unit grid need exactly these fields, so this is
+ * the boundary between "the data model" and "what the client sees".
  */
 export type UnitSummary = Pick<
   Apartment,
@@ -257,10 +237,9 @@ export const UNIT_SUMMARIES: UnitSummary[] = APARTMENTS.map((unit) => ({
 
 /**
  * The room mix shown on the home page: all four layouts are represented (1-, 2-,
- * 3- and 4-room) plus two extra family-sized lots, so the teaser runs from the
- * cheapest available entry point up to the panoramic top floor. Units are picked
- * from available stock only, preferring a new floor and a view not shown yet, and
- * the result is ordered from the least to the most expensive.
+ * 3- and 4-room) plus two extra family-sized lots. Units are picked from
+ * available stock only, preferring a new floor and a view not shown yet, and the
+ * result is ordered from the least to the most expensive.
  */
 const FEATURED_ROOMS: Array<Apartment['rooms']> = [1, 2, 3, 4, 2, 3];
 
@@ -276,7 +255,6 @@ function selectFeatured(): Apartment[] {
   for (const rooms of FEATURED_ROOMS) {
     const free = (unit: Apartment) => unit.rooms === rooms && !chosen.includes(unit);
 
-    // A fresh floor with an unseen view first, then a fresh floor, then anything.
     const pick =
       pool.find((u) => free(u) && !usedFloors.has(u.floor) && !usedViews.has(u.view)) ??
       pool.find((u) => free(u) && !usedFloors.has(u.floor)) ??
@@ -296,13 +274,11 @@ export const FEATURED_UNITS: Apartment[] = selectFeatured();
 /**
  * The date the prices and the availability figures are valid for.
  *
- * Without it "от 20,2 млн ₸" and "128 в продаже" read as permanent guarantees:
- * a visitor has no way to tell whether the number is from this morning or from
- * last spring, and neither does the sales team once the price list moves. An
- * audit of the public site flagged exactly this. Update it together with
- * `buildInventory()` — every week on a live project.
+ * Without it "от 24,6 млн ₸" and "128 в продаже" read as permanent guarantees.
+ * The dossier records the developer's prices and availability as at
+ * 21 August 2026, so that is the date shown everywhere prices appear.
  */
-export const INVENTORY_UPDATED_AT = '2026-10-05';
+export const INVENTORY_UPDATED_AT = '2026-08-21';
 
 /* ── Derived aggregates, computed once ────────────────────────────────────── */
 
@@ -343,7 +319,7 @@ export const getUnitsForBlockFloor = (blockId: string, floor: number): Apartment
     (a, b) => a.position - b.position,
   );
 
-/** Floors that exist in a block, descending — used by the unit grid layout. */
+/** Floors that exist in a block, ascending — used by the unit grid layout. */
 export const getBlockFloors = (blockId: string): number[] =>
   Array.from({ length: BLOCKS.find((b) => b.id === blockId)?.floors ?? 0 }, (_, i) => i + 1);
 

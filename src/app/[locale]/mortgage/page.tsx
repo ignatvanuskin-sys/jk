@@ -91,7 +91,7 @@ export default async function MortgagePage({ params }: PageProps) {
                     <div className="flex flex-wrap gap-x-8 gap-y-4">
                       <div>
                         <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-muted">
-                          {dict.mortgage.calculator.rate}
+                          {program.rateIsDiscount ? dict.mortgage.discount : dict.mortgage.calculator.rate}
                         </p>
                         <p className="num mt-1.5 font-display text-2xl leading-none text-clay">
                           {program.rate}%
@@ -102,8 +102,8 @@ export default async function MortgagePage({ params }: PageProps) {
                           {dict.mortgage.calculator.down}
                         </p>
                         <p className="num mt-1.5 font-display text-2xl leading-none text-ink">
-                          {program.minDownPercentFinished !== undefined
-                            ? `${program.minDownPercentFinished}–${program.minDownPercent}%`
+                          {program.minDownPercentAlt !== undefined
+                            ? `${program.minDownPercent}–${program.minDownPercentAlt}%`
                             : `${program.minDownPercent}%`}
                         </p>
                       </div>
@@ -112,7 +112,9 @@ export default async function MortgagePage({ params }: PageProps) {
                           {dict.mortgage.calculator.term}
                         </p>
                         <p className="num mt-1.5 font-display text-2xl leading-none text-ink">
-                          {program.maxTermYears} {dict.mortgage.calculator.termUnit}
+                          {program.maxTermYears
+                            ? `${program.maxTermYears} ${dict.mortgage.calculator.termUnit}`
+                            : '—'}
                         </p>
                       </div>
                       {program.priceCap !== undefined && (
@@ -145,6 +147,10 @@ export default async function MortgagePage({ params }: PageProps) {
                       {program.caveat[locale]}
                     </p>
                   )}
+
+                  <p className="num mt-4 text-[0.6875rem] text-muted">
+                    {dict.common.updated}: {formatIsoDate(program.verified_at, locale)}
+                  </p>
 
                   {program.sourceIds.length > 0 && (
                     <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2 border-t border-line-soft pt-4">

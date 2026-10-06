@@ -4,9 +4,11 @@ import { notFound } from 'next/navigation';
 import { isLocale, type Locale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/get-dictionary';
 import {
+  INFRA_CAPTION,
   INFRA_CATEGORIES,
   INFRA_BY_CATEGORY,
   INFRASTRUCTURE,
+  formatInfraDistance,
   type InfraCategory,
 } from '@/data/infrastructure';
 import { getSeoCopy } from '@/content/seo';
@@ -50,6 +52,7 @@ export default async function InfrastructurePage({ params }: PageProps) {
     id: object.id,
     category: object.category,
     label: object.label[locale],
+    value: formatInfraDistance(object, locale),
     minutes: object.minutes,
     mode: object.mode,
   }));
@@ -91,6 +94,7 @@ export default async function InfrastructurePage({ params }: PageProps) {
             emptyLabel={dict.apartments.emptyText}
             objectsCountLabel={dict.infrastructure.objectsCount}
           />
+          <p className="mt-4 text-xs text-muted">{INFRA_CAPTION[locale]}</p>
         </div>
       </section>
 
@@ -115,7 +119,7 @@ export default async function InfrastructurePage({ params }: PageProps) {
                     >
                       <span>{object.label[locale]}</span>
                       <span className="num flex-none text-xs text-muted">
-                        {object.minutes} {dict.common.minutes}
+                        {formatInfraDistance(object, locale)}
                       </span>
                     </li>
                   ))}
